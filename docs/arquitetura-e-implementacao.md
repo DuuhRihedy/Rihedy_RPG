@@ -1,7 +1,7 @@
 # 🏗️ Hub RPG — Arquitetura e Implementação
 
 > **Criado em:** 2026-03-19
-> **Status:** Plano inicial
+> **Status:** Fases 1-3 concluídas
 
 ---
 
@@ -57,10 +57,6 @@
 | **Corpo/UI** | `"Inter"` | system-ui, sans-serif | 400-600 |
 | **Código/Stats** | `"JetBrains Mono"` | monospace | 400 |
 
-> **Cinzel** = fonte medieval/épica, perfeita para RPG
-> **Inter** = fonte UI moderna, altamente legível
-> **JetBrains Mono** = stats, fichas, dados numéricos
-
 ### Escala Tipográfica (Ratio 1.25)
 
 ```
@@ -89,21 +85,6 @@
 --space-16: 64px
 ```
 
-### Bordas e Sombras
-
-```css
---radius-sm: 4px;
---radius-md: 8px;
---radius-lg: 12px;
---radius-xl: 16px;
-
---shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
---shadow-md: 0 4px 12px rgba(0,0,0,0.4);
---shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
---shadow-glow-gold: 0 0 12px rgba(200,168,78,0.3);
---shadow-glow-red: 0 0 12px rgba(204,0,0,0.3);
-```
-
 ---
 
 ## 📐 Layout — Estrutura Principal
@@ -125,453 +106,175 @@
 │  🗺️ Mapas        │  │                      │    │
 │  ⚙️ Config       │  └──────────────────────┘    │
 │                   │                              │
-│  ─────────────   │  ┌───────┐  ┌───────┐       │
-│  3.5 | 5e        │  │ PANEL │  │ PANEL │       │
-│  (toggle)        │  └───────┘  └───────┘       │
+│  ─────────────   │                              │
+│  3.5 | 5e        │                              │
+│  (toggle)        │                              │
 └──────────────────────────────────────────────────┘
 ```
 
-### Sidebar
+---
 
-- **Fixa** no desktop (240px), **colapsável** para ícones (64px)
-- **Drawer** no mobile (overlay com backdrop)
-- Logo + nome no topo
-- Navegação principal no centro
-- **Toggle de edição** (3.5 / 5e) na parte inferior
-- Indicador visual da edição ativa (cor muda: vermelho escuro = 3.5, azul = 5e)
+## 🏛️ Arquitetura Real — Estrutura de Pastas
 
-### Header
+```
+VTT/
+├── GEMINI.md                      ← Memória do projeto
+├── package.json                   ← Dependências
+├── prisma.config.ts               ← Config Prisma 7 (better-sqlite3 adapter)
+├── dev.db                         ← SQLite database
+│
+├── app/                           ← FRONTEND — Páginas (App Router)
+│   ├── layout.tsx / layout.css    ← Layout raiz (sidebar + header)
+│   ├── globals.css                ← Design system completo (tokens, componentes)
+│   ├── page.tsx                   ← Dashboard
+│   ├── campanhas/                 ← CRUD campanhas
+│   │   ├── page.tsx               ← Lista de campanhas
+│   │   └── [id]/page.tsx          ← Detalhe da campanha + sessões
+│   ├── npcs/                      ← CRUD NPCs
+│   │   ├── page.tsx               ← Lista de NPCs
+│   │   └── [id]/page.tsx          ← Ficha do NPC
+│   └── acervo/                    ← Acervo SRD
+│       ├── page.tsx               ← Hub de categorias (6 cards)
+│       ├── acervo.css             ← Estilos do módulo
+│       ├── spells/
+│       │   ├── page.tsx           ← Busca + filtros (nível, escola, classe)
+│       │   └── [index]/page.tsx   ← Detalhe da magia
+│       └── monsters/
+│           ├── page.tsx           ← Busca + filtros (tipo, CR)
+│           └── [index]/page.tsx   ← Ficha do monstro
+│
+├── components/                    ← FRONTEND — Componentes React
+│   └── layout/
+│       ├── Sidebar.tsx            ← Navegação + toggle edição
+│       └── Header.tsx             ← Breadcrumb
+│
+├── lib/                           ← BACKEND — Lógica servidor
+│   ├── db.ts                      ← Prisma Client singleton (better-sqlite3)
+│   └── actions/                   ← Server Actions por domínio
+│       ├── campaigns.ts           ← CRUD campanhas
+│       ├── npcs.ts                ← CRUD NPCs + atributos
+│       ├── sessions.ts            ← CRUD sessões + dashboard stats
+│       └── srd.ts                 ← Busca acervo SRD (spells, monsters, filtros)
+│
+├── prisma/                        ← DATABASE
+│   ├── schema.prisma              ← 17 modelos (campanha + SRD)
+│   ├── seed.ts                    ← Dados de exemplo (campanhas, NPCs, sessões)
+│   └── import-srd.ts             ← Script importação 5e API (1265 registros)
+│
+├── public/                        ← Assets estáticos
+└── docs/                          ← Documentação
+    ├── visao-do-projeto.md
+    ├── pesquisa-completa.md
+    └── arquitetura-e-implementacao.md ← Este documento
+```
 
-- Breadcrumb de navegação
-- Barra de busca global (Ctrl+K)
-- Indicador de sessão de IA (tokens restantes)
-- Notificações
+### Decisão Arquitetural
 
-### Content Area
+**Next.js fullstack com Server Actions** — sem backend separado (NestJS).
 
-- **Responsivo** — adapta de 1 coluna (mobile) a grid (desktop)
-- Máximo 1200px de largura para leitura confortável
+- Server Actions rodam 100% no servidor, nunca no cliente
+- Cada domínio tem seu arquivo em `lib/actions/`
+- Prisma Client singleton em `lib/db.ts` com better-sqlite3 adapter
+- **Quando precisar de API externa** (mobile, Talespire), aí sim criamos um backend separado
 
 ---
 
-## 🗂️ Páginas e Módulos
+## 🗄️ Banco de Dados — Schema Real (Prisma 7 + SQLite)
 
-### 1. Dashboard (Página Inicial)
+### Modelos de Campanha (10 modelos)
 
-```
-┌─────────────────────────────────────────────┐
-│ Bem-vindo, Mestre                     ⚙️    │
-├─────────────────────────────────────────────┤
-│                                             │
-│  ┌─────────┐ ┌─────────┐ ┌─────────┐      │
-│  │Campanhas│ │ NPCs    │ │ Sessões │      │
-│  │  active │ │  total  │ │ recente │      │
-│  │    3    │ │   127   │ │ há 2d   │      │
-│  └─────────┘ └─────────┘ └─────────┘      │
-│                                             │
-│  ┌──── Campanha Ativa ──────────────────┐  │
-│  │ ⚔️ A Queda de Waterdeep              │  │
-│  │ Sessão 23 · Último jogo: 15/03       │  │
-│  │ [Continuar]  [Ver Sessões]           │  │
-│  └──────────────────────────────────────┘  │
-│                                             │
-│  ┌── Últimas Notas ─┐ ┌── IA Rápida ────┐ │
-│  │ • NPC encontrado  │ │ Pergunte algo   │ │
-│  │ • Item coletado   │ │ sobre regras... │ │
-│  │ • Plot hook       │ │ [3.5] [5e]      │ │
-│  └───────────────────┘ └─────────────────┘ │
-└─────────────────────────────────────────────┘
-```
+| Modelo | Campos chave | Relações |
+|---|---|---|
+| `Campaign` | name, description, edition, status | Sessions, CampaignNpc, Notes, StoryArcs |
+| `Session` | number, title, date, notes, aiRecap, durationMin | Campaign, Events, SessionNpc |
+| `Npc` | name, race, class, level, alignment, status, type | NpcAttributes, Items, Relations, Campaigns, Sessions |
+| `NpcAttributes` | str, dex, con, intl, wis, cha, hp, ac | Npc (1:1) |
+| `Item` | name, type, description, weight, value, magical | Npc |
+| `Relation` | type, description | origin Npc ↔ target Npc |
+| `CampaignNpc` | — | Npc ↔ Campaign (M:M) |
+| `SessionNpc` | — | Npc ↔ Session (M:M) |
+| `Note` | title, content, private | Campaign |
+| `Event` | description, type | Session |
+| `StoryArc` | title, description, status | Campaign |
+| `ChatHistory` | question, answer, context, tokensUsed | — |
 
-### 2. Campanhas
+### Modelos SRD — Acervo de Regras (6 modelos)
 
-- Lista de campanhas (ativa/arquivada)
-- Cada campanha: sessões, NPCs vinculados, notas, arcos narrativos
-- Timeline visual de sessões
-- Notas privadas (GM-only)
+| Modelo | Registros | Campos chave |
+|---|---|---|
+| `SrdSpell` | 319 | name, level, school, components, description, classes, damageType |
+| `SrdMonster` | 334 | name, size, type, AC, HP, CR, XP, 6 attrs, actions (JSON), legendaryActions (JSON) |
+| `SrdClass` | 12 | name, hitDie, proficiencies (JSON), savingThrows, spellcasting (JSON) |
+| `SrdFeat` | 1 | name, description, prerequisites (JSON) |
+| `SrdEquipment` | 237 | name, category, cost, weight, damage (JSON), properties (JSON) |
+| `SrdMagicItem` | 362 | name, category, rarity, description, requiresAttunement |
 
-### 3. NPCs
+**Total: 1.265 registros importados** da API dnd5eapi.co (OGL + CC-BY-4.0)
 
-- Grid/lista de NPCs com imagem, nome, status
-- Ficha completa: atributos, skills, itens, história, relações
-- Tags: aliado/neutro/inimigo, vivo/morto
-- Vinculação a campanhas
-
-### 4. Acervo / Busca de Regras
-
-- Input de texto: "Como funciona grapple no 3.5?"
-- Toggle: buscar no 3.5 / 5e / ambos
-- Resultado com citação de fonte (livro, página)
-- Histórico de buscas
-- Navegação por categorias: Spells, Feats, Monsters, Classes, Equipment
-
-### 5. Assistente IA
-
-- Chat com o Gemini Flash 2.5
-- Contexto da campanha ativa injetado
-- Comandos rápidos:
-  - `/npc` — Gerar NPC
-  - `/recap` — Resumir sessão
-  - `/regra` — Buscar regra
-  - `/plot` — Analisar plot threads
-
-### 6. Sessões
-
-- Notas de cada sessão
-- Recap gerado por IA
-- Timeline de eventos
-- NPCs encontrados nesta sessão
+> ⚠️ **Pendente:** Tradução PT-BR como idioma principal e importação SRD 3.5 (Andargor MySQL)
 
 ---
 
-## 🗄️ Banco de Dados — Schema Prisma
+## 🔧 Stack Técnica
 
-```prisma
-// ── Campanhas ──────────────────────
+| Componente | Tecnologia | Versão |
+|---|---|---|
+| **Framework** | Next.js (React) | 15.x (App Router) |
+| **Linguagem** | TypeScript | 5.x |
+| **Estilização** | CSS puro (vanilla) | — |
+| **ORM** | Prisma | 7.5 |
+| **Banco** | SQLite (via better-sqlite3) | — |
+| **Driver** | @prisma/adapter-better-sqlite3 | — |
+| **Fontes** | Cinzel (títulos) + Inter (corpo) + JetBrains Mono (stats) | Google Fonts |
 
-model Campanha {
-  id          String   @id @default(cuid())
-  nome        String
-  descricao   String?
-  edicao      String   @default("3.5") // "3.5" | "5e"
-  status      String   @default("ativa") // "ativa" | "pausada" | "encerrada"
-  imagemUrl   String?
-  criadoEm    DateTime @default(now())
-  atualizadoEm DateTime @updatedAt
+### Scripts npm
 
-  sessoes     Sessao[]
-  npcs        NpcCampanha[]
-  notas       Nota[]
-  arcos       ArcoNarrativo[]
-}
-
-// ── Sessões ────────────────────────
-
-model Sessao {
-  id          String   @id @default(cuid())
-  numero      Int
-  titulo      String?
-  data        DateTime?
-  notas       String?  // Notas do mestre (markdown)
-  recapIA     String?  // Recap gerado pela IA
-  duracaoMin  Int?
-  criadoEm    DateTime @default(now())
-
-  campanhaId  String
-  campanha    Campanha @relation(fields: [campanhaId], references: [id])
-  eventos     Evento[]
-  npcsPresentes NpcSessao[]
-}
-
-// ── NPCs ───────────────────────────
-
-model Npc {
-  id          String   @id @default(cuid())
-  nome        String
-  raca        String?
-  classe      String?
-  nivel       Int?
-  alinhamento String?
-  descricao   String?  // Descrição física e de personalidade
-  historia    String?  // Backstory
-  notas       String?  // Notas privadas do mestre
-  imagemUrl   String?
-  status      String   @default("vivo") // "vivo" | "morto" | "desaparecido"
-  tipo        String   @default("neutro") // "aliado" | "neutro" | "inimigo"
-  edicao      String   @default("3.5")
-  criadoEm    DateTime @default(now())
-  atualizadoEm DateTime @updatedAt
-
-  atributos   NpcAtributos?
-  itens       Item[]
-  relacoes    Relacao[]     @relation("npcOrigem")
-  relacoesInv Relacao[]     @relation("npcDestino")
-  campanhas   NpcCampanha[]
-  sessoes     NpcSessao[]
-}
-
-model NpcAtributos {
-  id    String @id @default(cuid())
-  str   Int    @default(10)
-  dex   Int    @default(10)
-  con   Int    @default(10)
-  int_  Int    @default(10)   @map("int")
-  wis   Int    @default(10)
-  cha   Int    @default(10)
-  hp    Int    @default(10)
-  ca    Int    @default(10)
-  npcId String @unique
-  npc   Npc    @relation(fields: [npcId], references: [id])
-}
-
-// ── Itens ──────────────────────────
-
-model Item {
-  id        String @id @default(cuid())
-  nome      String
-  tipo      String // "arma" | "armadura" | "pocao" | "magico" | "outro"
-  descricao String?
-  peso      Float?
-  valor     String? // "150 gp"
-  magico    Boolean @default(false)
-
-  npcId     String?
-  npc       Npc?    @relation(fields: [npcId], references: [id])
-}
-
-// ── Relações entre NPCs ────────────
-
-model Relacao {
-  id          String @id @default(cuid())
-  tipo        String // "aliado" | "inimigo" | "familia" | "mestre" | "servo"
-  descricao   String?
-
-  origemId    String
-  origem      Npc    @relation("npcOrigem", fields: [origemId], references: [id])
-  destinoId   String
-  destino     Npc    @relation("npcDestino", fields: [destinoId], references: [id])
-}
-
-// ── Tabelas de Junção ──────────────
-
-model NpcCampanha {
-  npcId      String
-  npc        Npc      @relation(fields: [npcId], references: [id])
-  campanhaId String
-  campanha   Campanha  @relation(fields: [campanhaId], references: [id])
-
-  @@id([npcId, campanhaId])
-}
-
-model NpcSessao {
-  npcId    String
-  npc      Npc    @relation(fields: [npcId], references: [id])
-  sessaoId String
-  sessao   Sessao @relation(fields: [sessaoId], references: [id])
-
-  @@id([npcId, sessaoId])
-}
-
-// ── Notas e Eventos ────────────────
-
-model Nota {
-  id         String   @id @default(cuid())
-  titulo     String
-  conteudo   String   // Markdown
-  privada    Boolean  @default(true) // GM-only
-  criadoEm   DateTime @default(now())
-
-  campanhaId String
-  campanha   Campanha @relation(fields: [campanhaId], references: [id])
-}
-
-model Evento {
-  id        String @id @default(cuid())
-  descricao String
-  tipo      String // "combate" | "social" | "exploracao" | "lore" | "plot"
-
-  sessaoId  String
-  sessao    Sessao @relation(fields: [sessaoId], references: [id])
-}
-
-model ArcoNarrativo {
-  id         String  @id @default(cuid())
-  titulo     String
-  descricao  String?
-  status     String  @default("ativo") // "ativo" | "resolvido" | "abandonado"
-
-  campanhaId String
-  campanha   Campanha @relation(fields: [campanhaId], references: [id])
-}
-
-// ── SRD (Acervo de Regras) ─────────
-
-model SrdSpell {
-  id          String @id @default(cuid())
-  nome        String
-  nivel       Int
-  escola      String
-  classes     String  // "Wizard,Sorcerer,Cleric"
-  tempo       String  // Casting time
-  alcance     String  // Range
-  componentes String  // V, S, M
-  duracao     String  // Duration
-  descricao   String  // Description (full text)
-  edicao      String  // "3.5" | "5e"
-  fonte       String  // "PHB p.123" ou "SRD"
-}
-
-model SrdFeat {
-  id          String @id @default(cuid())
-  nome        String
-  tipo        String  // "General" | "Fighter" | "Metamagic" | "Epic"
-  prerequisito String?
-  descricao   String
-  edicao      String
-  fonte       String
-}
-
-model SrdMonster {
-  id          String @id @default(cuid())
-  nome        String
-  tipo        String  // "Aberration" | "Beast" | "Dragon" etc.
-  cr          String  // Challenge Rating
-  hp          String
-  ca          Int
-  descricao   String
-  habilidades String? // JSON ou texto
-  edicao      String
-  fonte       String
-}
-
-model SrdClasse {
-  id          String @id @default(cuid())
-  nome        String
-  hitDie      String  // "d8"
-  descricao   String
-  features    String  // JSON ou texto
-  edicao      String
-  fonte       String
-}
-
-// ── Histórico de Chat IA ───────────
-
-model ChatHistorico {
-  id         String   @id @default(cuid())
-  pergunta   String
-  resposta   String
-  contexto   String?   // Qual campanha/NPC estava ativo
-  tokensUsados Int?
-  criadoEm   DateTime @default(now())
-}
-```
-
----
-
-## 🏛️ Arquitetura de Pastas
-
-```
-hub-rpg/
-├── apps/
-│   ├── web/                          ← Next.js Frontend
-│   │   ├── app/
-│   │   │   ├── layout.tsx            ← Layout principal (sidebar + content)
-│   │   │   ├── page.tsx              ← Dashboard
-│   │   │   ├── campanhas/
-│   │   │   │   ├── page.tsx          ← Lista de campanhas
-│   │   │   │   └── [id]/
-│   │   │   │       ├── page.tsx      ← Detalhe da campanha
-│   │   │   │       └── sessoes/
-│   │   │   ├── npcs/
-│   │   │   │   ├── page.tsx          ← Lista/grid de NPCs
-│   │   │   │   └── [id]/page.tsx     ← Ficha do NPC
-│   │   │   ├── acervo/
-│   │   │   │   ├── page.tsx          ← Busca de regras
-│   │   │   │   ├── spells/
-│   │   │   │   ├── feats/
-│   │   │   │   ├── monsters/
-│   │   │   │   └── classes/
-│   │   │   ├── assistente/
-│   │   │   │   └── page.tsx          ← Chat IA
-│   │   │   └── configuracoes/
-│   │   ├── components/
-│   │   │   ├── layout/
-│   │   │   │   ├── Sidebar.tsx
-│   │   │   │   ├── Header.tsx
-│   │   │   │   └── EditionToggle.tsx
-│   │   │   ├── campanha/
-│   │   │   ├── npc/
-│   │   │   ├── acervo/
-│   │   │   ├── assistente/
-│   │   │   └── ui/                   ← Componentes reutilizáveis
-│   │   ├── styles/
-│   │   │   ├── globals.css           ← Design tokens + reset
-│   │   │   ├── layout.css
-│   │   │   └── components/
-│   │   └── lib/
-│   │       ├── api.ts                ← Client HTTP para backend
-│   │       └── utils.ts
-│   │
-│   └── api/                          ← NestJS Backend
-│       ├── src/
-│       │   ├── app.module.ts
-│       │   ├── campanhas/
-│       │   │   ├── campanhas.controller.ts
-│       │   │   ├── campanhas.service.ts
-│       │   │   └── campanhas.module.ts
-│       │   ├── npcs/
-│       │   ├── sessoes/
-│       │   ├── acervo/
-│       │   │   ├── acervo.controller.ts
-│       │   │   ├── acervo.service.ts
-│       │   │   └── srd-import.service.ts  ← Importar dados SRD
-│       │   ├── ia/
-│       │   │   ├── ia.controller.ts
-│       │   │   ├── ia.service.ts          ← Wrapper do Gemini
-│       │   │   └── rag.service.ts         ← RAG: busca + contexto
-│       │   └── prisma/
-│       │       ├── prisma.service.ts
-│       │       └── prisma.module.ts
-│       └── prisma/
-│           ├── schema.prisma
-│           ├── seed.ts                ← Seed com dados SRD
-│           └── migrations/
-│
-├── packages/
-│   └── shared/                       ← Tipos compartilhados
-│       └── types/
-│
-├── data/
-│   ├── srd-3.5/                      ← Dados SRD 3.5 (MySQL/Markdown)
-│   └── srd-5e/                       ← Cache da API 5e
-│
-├── prisma/
-│   └── hub-rpg.db                    ← SQLite database
-│
-├── GEMINI.md
-├── docs/
-│   ├── visao-do-projeto.md
-│   ├── pesquisa-completa.md
-│   └── arquitetura-e-implementacao.md ← Este documento
-│
-└── package.json                      ← Monorepo (npm workspaces ou turborepo)
-```
+| Script | Comando | O que faz |
+|---|---|---|
+| `npm run dev` | `next dev` | Dev server local |
+| `npm run build` | `next build` | Build produção |
+| `npm run seed` | `npx tsx prisma/seed.ts` | Seed dados exemplo |
+| `npm run db:push` | `npx prisma db push` | Aplicar schema |
+| `npm run db:studio` | `npx prisma studio` | GUI do banco |
+| `npm run srd:import` | `npx tsx prisma/import-srd.ts` | Importar SRD 5e API |
 
 ---
 
 ## 🚀 Fases de Implementação
 
-### Fase 1 — Fundação (Sprint 1-2)
+### ✅ Fase 1 — Fundação (Concluída)
 
-| Tarefa | Prioridade |
+| Tarefa | Status |
 |---|---|
-| Inicializar monorepo (Next.js + NestJS) | 🔴 |
-| Configurar Prisma + SQLite | 🔴 |
-| Criar design system CSS (tokens, reset, componentes base) | 🔴 |
-| Layout principal: Sidebar + Header + Content Area | 🔴 |
-| Dashboard (página inicial estática) | 🟡 |
+| Inicializar Next.js + TypeScript | ✅ |
+| Configurar Prisma 7 + SQLite + better-sqlite3 | ✅ |
+| Design system CSS completo (Underdark Mode) — `globals.css` | ✅ |
+| Layout: Sidebar + Header + Content Area | ✅ |
+| Dashboard com stats dinâmicos | ✅ |
 
-### Fase 2 — CRUD Core (Sprint 3-4)
+### ✅ Fase 2 — CRUD Core (Concluída)
 
-| Tarefa | Prioridade |
+| Tarefa | Status |
 |---|---|
-| CRUD Campanhas (criar, listar, editar, arquivar) | 🔴 |
-| CRUD NPCs (criar, listar, ficha completa) | 🔴 |
-| CRUD Sessões (vinculadas a campanhas) | 🔴 |
-| Notas com Markdown | 🟡 |
-| Upload de imagens para NPCs | 🟡 |
+| CRUD Campanhas (criar, listar, detalhe, editar, deletar) | ✅ |
+| CRUD NPCs (criar, listar, ficha com atributos) | ✅ |
+| CRUD Sessões (vinculadas a campanhas) | ✅ |
+| Seed com dados de exemplo (3 campanhas, 5 NPCs, 31 sessões) | ✅ |
+| Server Actions separados por domínio | ✅ |
 
-### Fase 3 — Acervo SRD (Sprint 5-6)
+### ✅ Fase 3 — Acervo SRD (Concluída)
 
-| Tarefa | Prioridade |
+| Tarefa | Status |
 |---|---|
-| Importar SRD 3.5 para SQLite (seed) | 🔴 |
-| Importar/cachear SRD 5e (da API) | 🔴 |
-| Busca full-text (FTS5) no acervo | 🔴 |
-| Navegação por categorias (Spells, Feats, Monsters) | 🟡 |
-| Toggle de edição (3.5 / 5e) | 🟡 |
+| Schema SRD (6 modelos: Spell, Monster, Class, Feat, Equipment, MagicItem) | ✅ |
+| Script de importação da API dnd5eapi.co (1265 registros) | ✅ |
+| Página hub do acervo (6 categorias com contagem) | ✅ |
+| Busca de spells com filtros (nível, escola, classe) | ✅ |
+| Ficha de spell (casting time, range, componentes, descrição) | ✅ |
+| Busca de monsters com filtros (tipo, CR) | ✅ |
+| Ficha de monster (stats, ações, habilidades, lendárias) | ✅ |
 
-### Fase 4 — Assistente IA (Sprint 7-8)
+### 🔜 Fase 4 — Assistente IA (Próxima)
 
 | Tarefa | Prioridade |
 |---|---|
@@ -581,15 +284,16 @@ hub-rpg/
 | Gerar NPC com IA | 🟡 |
 | Gerar recap de sessão com IA | 🟡 |
 
-### Fase 5 — Polish (Sprint 9-10)
+### ⏳ Fase 5 — Polish + VTT
 
 | Tarefa | Prioridade |
 |---|---|
+| Tradução SRD para PT-BR (banco fixo) | 🔴 |
+| Importar SRD 3.5 (Andargor MySQL) | 🔴 |
 | Plot Thread Tracking | 🟡 |
 | Campaign Health dashboard | 🟡 |
 | Export PDF (sourcebook da campanha) | 🟡 |
-| Notes Decipher (importar notas com IA) | 🟡 |
-| Relações entre NPCs (grafo visual) | 🟢 |
+| Integração Talespire (Symbiotes) | 🟢 |
 
 ---
 

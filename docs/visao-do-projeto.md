@@ -1,8 +1,8 @@
 # 🎲 Hub RPG — Visão do Projeto
 
-> **Status:** Fase de Pesquisa e Definição
+> **Status:** Fase 3 Concluída (Acervo SRD)
 > **Criado em:** 2026-03-19
-> **Autor:** Mestre com 17 anos de experiência em RPG
+> **Autor:** Eduardo Rihedy — Mestre com 17 anos de experiência em RPG
 
 ---
 
@@ -14,7 +14,7 @@
 
 1. **Acervo Inteligente de Regras** — Consulta rápida com IA em todo o conteúdo de D&D 3.5 e 5e (200+ livros)
 2. **Gerenciador de Campanhas** — Salvar aventuras, histórias, arcos narrativos, sessões
-3. **Banco de NPCs** — Personagens com fichas, itens, imagens, relações, histórico
+3. **Banco de NPCs** — Personagens com fichas, itens, imagens, relações
 4. **Assistente de IA** — Responder dúvidas de regras, localizar informações em livros específicos (Gemini Flash 2.5 Free)
 5. **[FUTURO] VTT** — Mesa virtual com mapas, tokens, fog of war, etc.
 
@@ -30,6 +30,8 @@
 | **VTT externo** | Talespire (integração) | Symbiotes + WebSocket permitem integrar com o Hub |
 | **VTT alternativo** | Multiverse Designer (brasileiro) | Visual Unreal Engine, Criteria scripting, Player grátis |
 | **Foco inicial** | Hub de gestão, NÃO o VTT | Até a WotC (Project Sigil) falhou no VTT 3D |
+| **SRD em português** | PT-BR como idioma principal | Dados SRD traduzidos no banco, EN como referência |
+| **Stack** | Next.js + Prisma + SQLite + CSS puro | TypeScript fullstack, Server Actions, sem backend separado |
 
 ---
 
@@ -68,19 +70,27 @@
 
 ---
 
-## 📋 Próximos Passos
+## 📋 Progresso
 
-- [x] Pesquisa de mercado completa ✅
-- [x] Análise de ferramentas com IA ✅
-- [x] Análise de viabilidade e custos ✅
-- [x] Análise de plataformas brasileiras ✅
-- [x] Análise de integração com Talespire ✅
-- [x] Decisão: suportar D&D 3.5 + 5e ✅
-- [x] Decisão: usar Gemini Flash 2.5 Free ✅
-- [ ] Definir tech stack
-- [ ] Definir arquitetura do banco de dados
-- [ ] Definir modelo de IA (RAG)
-- [ ] Criar protótipo do Hub
+### ✅ Concluído
+- [x] Pesquisa de mercado completa
+- [x] Análise de ferramentas com IA
+- [x] Análise de viabilidade e custos
+- [x] Análise de plataformas brasileiras
+- [x] Análise de integração com Talespire
+- [x] Decisão: suportar D&D 3.5 + 5e
+- [x] Decisão: usar Gemini Flash 2.5 Free
+- [x] Definir tech stack (Next.js + Prisma + SQLite + CSS puro)
+- [x] Definir arquitetura do banco de dados
+- [x] **Fase 1** — Fundação: Next.js, design system Underdark, layout sidebar + header + dashboard
+- [x] **Fase 2** — CRUD Core: Prisma 7, campanhas, NPCs, sessões, seed com dados
+- [x] **Fase 3** — Acervo SRD: Importação 5e (1265 registros), páginas de busca com filtros
+
+### 🔜 Próximo
+- [ ] Traduzir acervo SRD para português (PT-BR como idioma principal)
+- [ ] Importar SRD 3.5 (Andargor MySQL/Markdown repos)
+- [ ] **Fase 4** — Assistente IA (Gemini Flash 2.5, RAG, consulta de regras)
+- [ ] **Fase 5** — Integração VTT (Talespire Symbiotes)
 
 ---
 

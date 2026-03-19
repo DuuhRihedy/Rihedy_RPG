@@ -60,7 +60,11 @@ VTT/
 │   ├── globals.css                ← Design system (tokens, componentes)
 │   ├── page.tsx                   ← Dashboard
 │   ├── campanhas/                 ← Páginas de campanhas
-│   └── npcs/                      ← Páginas de NPCs
+│   ├── npcs/                      ← Páginas de NPCs
+│   └── acervo/                    ← Acervo SRD
+│       ├── page.tsx               ← Hub de categorias (6 cards)
+│       ├── spells/                ← Busca + detalhe de magias
+│       └── monsters/              ← Busca + detalhe de monstros
 │
 ├── components/                    ← FRONTEND — Componentes React
 │   └── layout/                    ← Sidebar, Header
@@ -70,12 +74,14 @@ VTT/
 │   ├── actions/                   ← Server Actions por domínio
 │   │   ├── campaigns.ts           ← CRUD campanhas
 │   │   ├── npcs.ts                ← CRUD NPCs
-│   │   └── sessions.ts            ← CRUD sessões + dashboard stats
+│   │   ├── sessions.ts            ← CRUD sessões + dashboard stats
+│   │   └── srd.ts                 ← Busca acervo SRD
 │   └── services/                  ← [Futuro] Lógica de negócio (IA, RAG)
 │
 ├── prisma/                        ← DATABASE — Schema e seed
-│   ├── schema.prisma              ← Modelos do banco
-│   └── seed.ts                    ← Dados de exemplo
+│   ├── schema.prisma              ← 17 modelos (campanha + SRD)
+│   ├── seed.ts                    ← Dados de exemplo
+│   └── import-srd.ts             ← Importação SRD 5e API
 │
 ├── public/                        ← Assets estáticos
 └── docs/                          ← Documentação
