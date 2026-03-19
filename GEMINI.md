@@ -1,0 +1,208 @@
+# GEMINI.md — Memória do Projeto Hub RPG
+
+> **Última atualização:** 2026-03-19
+> **Objetivo:** Preservar todo o contexto do projeto entre conversas
+
+---
+
+## 🎯 Sobre o Projeto
+
+**Hub RPG** — Centro de comando pessoal para gerenciamento de campanhas de RPG com inteligência artificial.
+
+**Criador:** Mestre de RPG com 17 anos de experiência, foco em D&D 3.5.
+
+### Objetivo Principal
+Criar um hub personalizado que combine:
+- Acervo inteligente de regras D&D 3.5 + 5e com busca por IA
+- Gerenciador de campanhas (aventuras, sessões, arcos, notas)
+- Banco de NPCs com fichas completas, itens, imagens, relações
+- Assistente IA para regras, worldbuilding e gestão de campanha
+- [Futuro] VTT integrado ou conexão com VTT externo (Talespire)
+
+### O Que NÃO É
+- Não é um VTT 3D (pelo menos não na V1)
+- Não é uma cópia das ferramentas existentes
+- Não é pago — custo zero é requisito
+
+---
+
+## 🧠 Decisões Tomadas
+
+| Data | Decisão | Detalhe |
+|---|---|---|
+| 2026-03-19 | Edições suportadas | D&D 3.5 + 5e |
+| 2026-03-19 | IA principal | Gemini Flash 2.5 Free (250 req/dia, 1M context) |
+| 2026-03-19 | Custo alvo | $0 total |
+| 2026-03-19 | VTT externo | Talespire (integração via Symbiotes) |
+| 2026-03-19 | VTT alternativo | Multiverse Designer (visual, cutscenes) |
+| 2026-03-19 | Foco inicial | Hub de gestão, NÃO VTT 3D |
+| 2026-03-19 | SRD em português | Dados SRD traduzidos em PT-BR como idioma principal, EN como referência. Tradução fixa no banco, sem API externa |
+| 2026-03-19 | Idioma da documentação | Português |
+| 2026-03-19 | Frontend | Next.js + React + TypeScript |
+| 2026-03-19 | Backend | NestJS + TypeScript |
+| 2026-03-19 | Estilização | CSS puro (TailwindCSS só se necessário) |
+| 2026-03-19 | Banco de dados | SQLite (início) → PostgreSQL (se necessário) |
+| 2026-03-19 | ORM | Prisma |
+
+---
+
+## 📁 Estrutura de Documentos
+
+```
+VTT/
+├── GEMINI.md                      ← Este arquivo (memória do projeto)
+├── package.json                   ← Dependências (Next.js, Prisma, etc.)
+├── prisma.config.ts               ← Config Prisma 7
+├── dev.db                         ← SQLite database
+│
+├── app/                           ← FRONTEND — Páginas (App Router)
+│   ├── layout.tsx / layout.css    ← Layout raiz (sidebar + header)
+│   ├── globals.css                ← Design system (tokens, componentes)
+│   ├── page.tsx                   ← Dashboard
+│   ├── campanhas/                 ← Páginas de campanhas
+│   └── npcs/                      ← Páginas de NPCs
+│
+├── components/                    ← FRONTEND — Componentes React
+│   └── layout/                    ← Sidebar, Header
+│
+├── lib/                           ← BACKEND — Lógica servidor
+│   ├── db.ts                      ← Prisma Client (conexão)
+│   ├── actions/                   ← Server Actions por domínio
+│   │   ├── campaigns.ts           ← CRUD campanhas
+│   │   ├── npcs.ts                ← CRUD NPCs
+│   │   └── sessions.ts            ← CRUD sessões + dashboard stats
+│   └── services/                  ← [Futuro] Lógica de negócio (IA, RAG)
+│
+├── prisma/                        ← DATABASE — Schema e seed
+│   ├── schema.prisma              ← Modelos do banco
+│   └── seed.ts                    ← Dados de exemplo
+│
+├── public/                        ← Assets estáticos
+└── docs/                          ← Documentação
+    ├── visao-do-projeto.md
+    ├── pesquisa-completa.md
+    └── arquitetura-e-implementacao.md
+```
+
+---
+
+## 📊 Pesquisa Realizada (Resumo)
+
+### Mercado Analisado
+- **Gerenciadores de campanha:** LegendKeeper, World Anvil, Kanka, Obsidian Portal, Chronica
+- **Ferramentas com IA:** Chronicle RPG, LoreKeeper.ai, Quest Portal, Tabletop Arc, Archivist AI
+- **Mapas com IA:** Dungeon Alchemist, Constructo, tt-rpg.app, DunGen, Inkarnate
+- **VTTs 3D:** Talespire, Multiverse Designer (🇧🇷), Constructo
+- **Plataformas BR:** Multiverse Designer, RPGpédia, Firecast/RRPG, HubRPG, Sessão Virtual
+- **D&D Digital oficial:** Project Sigil (ENCERRADO out/2025)
+
+### Conclusão da Pesquisa
+1. Nenhuma ferramenta combina Hub + IA de Regras D&D 3.5
+2. Nenhuma suporta D&D 3.5 com IA
+3. Nenhuma BR oferece IA para regras
+4. Personalização total é rara
+5. Custo zero é possível com Gemini Flash 2.5
+
+### Fontes de Dados SRD
+
+**3.5 (OGL):**
+- Andargor MySQL/XML (ENWorld) — tabelas: classes, feats, spells, monsters, skills, powers, equipment, magic_items
+- Markdown repos no GitHub (katekorsaro, Obsidian Community)
+- d20srd.org, dndtools.org
+
+**5e (OGL + CC-BY-4.0):**
+- dnd5eapi.co — REST API gratuita sem autenticação
+- Open5e — API + conteúdo OGL de terceiros
+- 5e-database no GitHub
+
+---
+
+## 🔧 Stack Técnica
+
+### Frontend
+- **Framework:** Next.js (React)
+- **Linguagem:** TypeScript
+- **Estilização:** CSS puro (vanilla) como padrão. TailwindCSS só se necessário (usuário não é fã por causa de bugs)
+- **Abordagem:** HTML e CSS "grosso" — priorizar marcação semântica e CSS direto
+
+### Backend
+- **Framework:** NestJS (Node.js)
+- **Linguagem:** TypeScript
+- **Banco de dados:** SQLite (migração para PostgreSQL se necessário)
+- **ORM:** Prisma
+
+### IA
+- **Modelo:** Gemini Flash 2.5 Free
+- **Limites:** 250 req/dia, 250K tokens/min, 1M context window
+- **Estratégia:** RAG sobre SRD indexado localmente
+- **Embeddings:** Gemini text-embedding-004 (gratuito)
+- **Banco vetorial:** ChromaDB ou LanceDB (local, gratuito)
+
+---
+
+## 🎮 Integração VTT
+
+### Talespire (preferência)
+- **Symbiotes:** Extensões web (HTML/CSS/JS) que rodam dentro do Talespire
+- **WebSocket:** Interface Plugin não-oficial para controle externo
+- **URL Scheme:** Links diretos (talespire://dice/4d6)
+- **Preço:** ~$25 USD (compra única)
+
+### Multiverse Designer (alternativa BR)
+- **Engine:** Unreal Engine (visual ultra-realista)
+- **Player Edition:** GRÁTIS
+- **GM Edition:** $40-90 (compra única)
+- **Criteria:** Linguagem de scripting para implementar regras RPG
+- **Cutscenes:** Editor cinematográfico com lip-sync
+- **Sem API** — não integrável externamente
+- **Requisitos:** i7-7700HQ, GTX 1070 (8GB VRAM), 8GB RAM, 100GB disco
+- **Status:** Early Access, reviews Mixed (60%), comunidade pequena
+
+### PC do Usuário
+- **CPU:** i5-13400 (notebook)
+- **GPU:** RTX 3050 (6GB VRAM)
+- **RAM:** 16GB
+- **Veredicto Multiverse:** Roda mas com limitações (VRAM abaixo do mínimo de 8GB)
+- **Veredicto Talespire:** Roda tranquilo
+
+---
+
+## 🗂️ Histórico de Conversas
+
+| Data | Tópicos | Decisões |
+|---|---|---|
+| 2026-03-19 | Pesquisa inicial: VTTs, D&D 3.5 acervo, ferramentas existentes | Dual 3.5 + 5e, Hub antes de VTT |
+| 2026-03-19 | Chronicle RPG, LoreKeeper, Quest Portal aprofundados | Features inspiradoras identificadas |
+| 2026-03-19 | Viabilidade, Gemini Flash 2.5, custos, plataformas BR | Custo $0 confirmado, Gemini Free suficiente |
+| 2026-03-19 | Multiverse Designer detalhado | Alternativa visual, mas Talespire melhor pra integração |
+| 2026-03-19 | Consolidação de documentação | 2 docs: visao-do-projeto.md + pesquisa-completa.md |
+| 2026-03-19 | Definição de stack | Next.js + NestJS + Prisma + SQLite + CSS puro |
+| 2026-03-19 | Arquitetura e implementação | Design system, schema DB, roadmap 5 fases definido |
+| 2026-03-19 | Fase 1 concluída | Monorepo, Next.js, design system Underdark, layout sidebar + header + dashboard |
+| 2026-03-19 | Fase 2 — CRUD Core | Prisma 7 + SQLite + better-sqlite3 adapter, Server Actions, páginas Campanhas/NPCs/Sessões, seed com dados |
+| 2026-03-19 | Fase 3 — Acervo SRD | Importação 5e API (1265 registros: 319 spells, 334 monsters, 12 classes, 237 equip, 362 magic items), páginas de busca com filtros |
+
+---
+
+## 📌 Regras do Projeto
+
+1. **Toda documentação em português** — nomes de arquivos em português
+2. **Custos devem ser zero** — usar ferramentas e APIs gratuitas
+3. **D&D 3.5 é prioridade** — é o sistema principal do mestre
+4. **Hub primeiro, VTT depois** — foco em gestão e IA antes de mesa virtual
+5. **Gemini Flash 2.5 Free** como IA principal
+6. **GEMINI.md sempre atualizado** — memória viva do projeto
+
+---
+
+## 🚨 Regras de Comunicação (OBRIGATÓRIO)
+
+1. **SEMPRE responder em português** — No chat, na documentação, nos comentários. Variáveis e código em inglês.
+2. **NUNCA abrir o browser subagent** sem o usuário pedir explicitamente para testar/ver algo. Só abrir se o usuário disser algo como "testa", "abre", "mostra no browser", "veja como ficou".
+3. **Código e nomes técnicos** permanecem em inglês (variáveis, componentes, imports).
+4. **Nomes de arquivos de documentação** em português.
+5. **SEMPRE fechar o dev server** (e qualquer instância) após testar. Não deixar processos rodando para evitar conflitos de porta.
+
+---
+
+> 📝 **Este arquivo deve ser lido no início de cada nova conversa sobre o projeto.**

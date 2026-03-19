@@ -1,0 +1,292 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// ── Campanhas ──────────────────────
+
+model Campaign {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  edition     String   @default("3.5")
+  status      String   @default("active")
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sessions    Session[]
+  npcs        CampaignNpc[]
+  notes       Note[]
+  arcs        StoryArc[]
+}
+
+// ── Sessões ────────────────────────
+
+model Session {
+  id          String   @id @default(cuid())
+  number      Int
+  title       String?
+  date        DateTime?
+  notes       String?
+  aiRecap     String?
+  durationMin Int?
+  createdAt   DateTime @default(now())
+
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  events      Event[]
+  npcsPresent SessionNpc[]
+}
+
+// ── NPCs ───────────────────────────
+
+model Npc {
+  id          String   @id @default(cuid())
+  name        String
+  race        String?
+  class       String?
+  level       Int?
+  alignment   String?
+  description String?
+  backstory   String?
+  gmNotes     String?
+  imageUrl    String?
+  status      String   @default("alive")
+  type        String   @default("neutral")
+  edition     String   @default("3.5")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  attributes  NpcAttributes?
+  items       Item[]
+  relationsFrom Relation[] @relation("relationOrigin")
+  relationsTo   Relation[] @relation("relationTarget")
+  campaigns   CampaignNpc[]
+  sessions    SessionNpc[]
+}
+
+model NpcAttributes {
+  id    String @id @default(cuid())
+  str   Int    @default(10)
+  dex   Int    @default(10)
+  con   Int    @default(10)
+  intl  Int    @default(10)
+  wis   Int    @default(10)
+  cha   Int    @default(10)
+  hp    Int    @default(10)
+  ac    Int    @default(10)
+  npcId String @unique
+  npc   Npc    @relation(fields: [npcId], references: [id], onDelete: Cascade)
+}
+
+// ── Itens ──────────────────────────
+
+model Item {
+  id          String  @id @default(cuid())
+  name        String
+  type        String
+  description String?
+  weight      Float?
+  value       String?
+  magical     Boolean @default(false)
+
+  npcId       String?
+  npc         Npc?    @relation(fields: [npcId], references: [id], onDelete: SetNull)
+}
+
+// ── Relações entre NPCs ────────────
+
+model Relation {
+  id          String @id @default(cuid())
+  type        String
+  description String?
+
+  originId    String
+  origin      Npc    @relation("relationOrigin", fields: [originId], references: [id], onDelete: Cascade)
+  targetId    String
+  target      Npc    @relation("relationTarget", fields: [targetId], references: [id], onDelete: Cascade)
+}
+
+// ── Tabelas de Junção ──────────────
+
+model CampaignNpc {
+  npcId      String
+  npc        Npc      @relation(fields: [npcId], references: [id], onDelete: Cascade)
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@id([npcId, campaignId])
+}
+
+model SessionNpc {
+  npcId     String
+  npc       Npc     @relation(fields: [npcId], references: [id], onDelete: Cascade)
+  sessionId String
+  session   Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@id([npcId, sessionId])
+}
+
+// ── Notas ──────────────────────────
+
+model Note {
+  id         String   @id @default(cuid())
+  title      String
+  content    String
+  private    Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+// ── Eventos ────────────────────────
+
+model Event {
+  id          String @id @default(cuid())
+  description String
+  type        String
+
+  sessionId   String
+  session     Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+// ── Arcos Narrativos ───────────────
+
+model StoryArc {
+  id          String @id @default(cuid())
+  title       String
+  description String?
+  status      String @default("active")
+
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+// ── Histórico de Chat IA ───────────
+
+model ChatHistory {
+  id          String   @id @default(cuid())
+  question    String
+  answer      String
+  context     String?
+  tokensUsed  Int?
+  createdAt   DateTime @default(now())
+}
+
+// ══════════════════════════════════════
+// ── ACERVO SRD ───────────────────────
+// ══════════════════════════════════════
+
+model SrdSpell {
+  id            String  @id @default(cuid())
+  index         String  @unique
+  name          String
+  edition       String  @default("5e")
+  level         Int
+  school        String
+  castingTime   String
+  range         String
+  components    String  // "V, S, M"
+  material      String?
+  duration      String
+  concentration Boolean @default(false)
+  ritual        Boolean @default(false)
+  description   String  // texto completo
+  higherLevel   String? // texto higher level
+  classes       String  // "Wizard, Sorcerer" — join para filtro
+  damageType    String?
+  areaOfEffect  String? // JSON: { type, size }
+  source        String  @default("SRD")
+}
+
+model SrdMonster {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  edition         String  @default("5e")
+  size            String
+  type            String
+  alignment       String?
+  armorClass      Int
+  hitPoints       Int
+  hitDice         String
+  speed           String  // JSON: { walk, fly, swim, ... }
+  str             Int
+  dex             Int
+  con             Int
+  intl            Int
+  wis             Int
+  cha             Int
+  challengeRating Float
+  xp              Int
+  languages       String?
+  senses          String? // JSON
+  proficiencies   String? // JSON
+  damageImmunities    String?
+  damageResistances   String?
+  damageVulnerabilities String?
+  conditionImmunities String?
+  specialAbilities String? // JSON
+  actions          String? // JSON
+  legendaryActions String? // JSON
+  reactions        String? // JSON
+  imageUrl         String?
+  source           String @default("SRD")
+}
+
+model SrdClass {
+  id            String @id @default(cuid())
+  index         String @unique
+  name          String
+  edition       String @default("5e")
+  hitDie        Int
+  proficiencies String? // JSON
+  savingThrows  String? // "INT, WIS"
+  spellcasting  String? // JSON
+  subclasses    String? // JSON
+  classLevels   String? // JSON
+  source        String @default("SRD")
+}
+
+model SrdFeat {
+  id            String @id @default(cuid())
+  index         String @unique
+  name          String
+  edition       String @default("5e")
+  description   String
+  prerequisites String? // JSON
+  source        String @default("SRD")
+}
+
+model SrdEquipment {
+  id            String @id @default(cuid())
+  index         String @unique
+  name          String
+  edition       String @default("5e")
+  category      String
+  cost          String? // "25 gp"
+  weight        Float?
+  description   String?
+  damage        String? // JSON: { dice, type }
+  armorClass    String? // JSON
+  properties    String? // JSON
+  source        String @default("SRD")
+}
+
+model SrdMagicItem {
+  id            String @id @default(cuid())
+  index         String @unique
+  name          String
+  edition       String @default("5e")
+  category      String
+  rarity        String
+  description   String
+  requiresAttunement Boolean @default(false)
+  source        String @default("SRD")
+}
