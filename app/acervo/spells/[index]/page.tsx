@@ -1,4 +1,14 @@
 import { getSpell } from "@/lib/actions/srd";
+import {
+  translateSchool,
+  translateCastingTime,
+  translateRange,
+  translateDuration,
+  translateDamageType,
+  translateClassList,
+  translateSpellLevel,
+  uiLabels,
+} from "@/lib/translations";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import "../../acervo.css";
@@ -11,11 +21,10 @@ export default async function SpellDetailPage({ params }: { params: Params }) {
 
   if (!spell) notFound();
 
-  function levelLabel(lvl: number) {
-    if (lvl === 0) return "Cantrip";
-    const suffixes: Record<number, string> = { 1: "st", 2: "nd", 3: "rd" };
-    return `${lvl}${suffixes[lvl] || "th"}-level`;
-  }
+  const namePtBr = spell.namePtBr || spell.name;
+  const descPtBr = spell.descriptionPtBr || spell.description;
+  const higherPtBr = spell.higherLevelPtBr || spell.higherLevel;
+  const materialPtBr = spell.materialPtBr || spell.material;
 
   return (
     <div className="page-container">
@@ -25,36 +34,41 @@ export default async function SpellDetailPage({ params }: { params: Params }) {
           <span className="badge badge-5e">D&D {spell.edition}</span>
           <span className="badge" style={{ background: "var(--bg-tertiary)" }}>{spell.source}</span>
         </div>
-        <h1 className="spell-detail-title">{spell.name}</h1>
+        <h1 className="spell-detail-title">{namePtBr}</h1>
+        {spell.namePtBr && (
+          <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", marginBottom: "var(--space-1)" }}>
+            {spell.name}
+          </p>
+        )}
         <p style={{ color: "var(--text-muted)", fontStyle: "italic" }}>
-          {levelLabel(spell.level)} {spell.school}
+          {translateSpellLevel(spell.level)} — {translateSchool(spell.school)}
           {spell.ritual && " (ritual)"}
         </p>
 
         <div className="spell-detail-meta">
           <div className="spell-meta-item">
-            <span className="spell-meta-label">Casting Time</span>
-            <span className="spell-meta-value">{spell.castingTime}</span>
+            <span className="spell-meta-label">{uiLabels.castingTime}</span>
+            <span className="spell-meta-value">{translateCastingTime(spell.castingTime)}</span>
           </div>
           <div className="spell-meta-item">
-            <span className="spell-meta-label">Range</span>
-            <span className="spell-meta-value">{spell.range}</span>
+            <span className="spell-meta-label">{uiLabels.range}</span>
+            <span className="spell-meta-value">{translateRange(spell.range)}</span>
           </div>
           <div className="spell-meta-item">
-            <span className="spell-meta-label">Components</span>
+            <span className="spell-meta-label">{uiLabels.components}</span>
             <span className="spell-meta-value">{spell.components}</span>
           </div>
           <div className="spell-meta-item">
-            <span className="spell-meta-label">Duration</span>
+            <span className="spell-meta-label">{uiLabels.duration}</span>
             <span className="spell-meta-value">
-              {spell.concentration && "Concentration, "}
-              {spell.duration}
+              {spell.concentration && `${uiLabels.concentration}, `}
+              {translateDuration(spell.duration)}
             </span>
           </div>
           {spell.damageType && (
             <div className="spell-meta-item">
-              <span className="spell-meta-label">Damage</span>
-              <span className="spell-meta-value">{spell.damageType}</span>
+              <span className="spell-meta-label">{uiLabels.damage}</span>
+              <span className="spell-meta-value">{translateDamageType(spell.damageType)}</span>
             </div>
           )}
         </div>
@@ -62,38 +76,38 @@ export default async function SpellDetailPage({ params }: { params: Params }) {
 
       <div className="card" style={{ marginBottom: "var(--space-4)" }}>
         <div className="card-header">
-          <span className="card-title">📖 Descrição</span>
+          <span className="card-title">📖 {uiLabels.description}</span>
         </div>
-        <p className="spell-description">{spell.description}</p>
+        <p className="spell-description">{descPtBr}</p>
       </div>
 
-      {spell.higherLevel && (
+      {higherPtBr && (
         <div className="card" style={{ marginBottom: "var(--space-4)" }}>
           <div className="card-header">
-            <span className="card-title">⬆️ Em Níveis Superiores</span>
+            <span className="card-title">⬆️ {uiLabels.higherLevel}</span>
           </div>
-          <p className="spell-description">{spell.higherLevel}</p>
+          <p className="spell-description">{higherPtBr}</p>
         </div>
       )}
 
-      {spell.material && (
+      {materialPtBr && (
         <div className="card" style={{ marginBottom: "var(--space-4)" }}>
           <div className="card-header">
-            <span className="card-title">🧪 Material</span>
+            <span className="card-title">🧪 {uiLabels.material}</span>
           </div>
           <p style={{ color: "var(--text-secondary)", fontSize: "var(--text-sm)" }}>
-            {spell.material}
+            {materialPtBr}
           </p>
         </div>
       )}
 
       <div className="card">
         <div className="card-header">
-          <span className="card-title">⚔️ Classes</span>
+          <span className="card-title">⚔️ {uiLabels.classes}</span>
         </div>
         <div style={{ display: "flex", gap: "var(--space-2)", flexWrap: "wrap" }}>
           {spell.classes.split(", ").map((cls) => (
-            <span key={cls} className="badge badge-gold">{cls}</span>
+            <span key={cls} className="badge badge-gold">{translateClassList(cls)}</span>
           ))}
         </div>
       </div>

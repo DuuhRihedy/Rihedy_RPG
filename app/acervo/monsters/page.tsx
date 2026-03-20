@@ -1,4 +1,5 @@
 import { searchMonsters, getMonsterFilters } from "@/lib/actions/srd";
+import { translateSize, translateCreatureType, translateAlignment, creatureTypesMap } from "@/lib/translations";
 import Link from "next/link";
 import "../acervo.css";
 
@@ -39,14 +40,16 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
         <select name="type" className="input select" defaultValue={type ?? ""}>
           <option value="">Todos os tipos</option>
           {filters.types.map((t) => (
-            <option key={t} value={t}>{t}</option>
+            <option key={t} value={t}>
+              {creatureTypesMap[t] || creatureTypesMap[t.toLowerCase()] || t}
+            </option>
           ))}
         </select>
         <input
           name="cr_min"
           type="number"
           className="input"
-          placeholder="CR mín"
+          placeholder="ND mín"
           defaultValue={params.cr_min}
           min="0"
           max="30"
@@ -57,7 +60,7 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
           name="cr_max"
           type="number"
           className="input"
-          placeholder="CR máx"
+          placeholder="ND máx"
           defaultValue={params.cr_max}
           min="0"
           max="30"
@@ -71,9 +74,9 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
       <div className="card">
         <div className="monster-header">
           <span>Nome</span>
-          <span>CR</span>
-          <span>HP</span>
-          <span>AC</span>
+          <span>ND</span>
+          <span>PV</span>
+          <span>CA</span>
           <span>XP</span>
         </div>
         <div className="monster-list">
@@ -85,9 +88,17 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
             monsters.map((mon) => (
               <Link key={mon.id} href={`/acervo/monsters/${mon.index}`} className="monster-row">
                 <div className="monster-info">
-                  <span className="monster-name">{mon.name}</span>
+                  <span className="monster-name">
+                    {mon.namePtBr || mon.name}
+                    {mon.namePtBr && (
+                      <span style={{ color: "var(--text-muted)", fontSize: "var(--text-xs)", marginLeft: "var(--space-2)" }}>
+                        {mon.name}
+                      </span>
+                    )}
+                  </span>
                   <span className="monster-meta">
-                    {mon.size} {mon.type}{mon.alignment ? ` · ${mon.alignment}` : ""}
+                    {translateSize(mon.size)} {translateCreatureType(mon.type)}
+                    {mon.alignment ? ` · ${translateAlignment(mon.alignment)}` : ""}
                   </span>
                 </div>
                 <span className="monster-stat"><strong>{mon.challengeRating}</strong></span>

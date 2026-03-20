@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cinzel, Inter, JetBrains_Mono } from "next/font/google";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
+import { ChatSidebar } from "@/components/layout/ChatSidebar";
 import "./globals.css";
 import "./layout.css";
 
@@ -49,6 +50,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
+          <ChatSidebar />
         </div>
       </body>
     </html>

@@ -187,6 +187,7 @@ model SrdSpell {
   id            String  @id @default(cuid())
   index         String  @unique
   name          String
+  namePtBr      String? // nome traduzido PT-BR
   edition       String  @default("5e")
   level         Int
   school        String
@@ -194,11 +195,14 @@ model SrdSpell {
   range         String
   components    String  // "V, S, M"
   material      String?
+  materialPtBr  String? // material traduzido PT-BR
   duration      String
   concentration Boolean @default(false)
   ritual        Boolean @default(false)
-  description   String  // texto completo
-  higherLevel   String? // texto higher level
+  description   String  // texto completo EN
+  descriptionPtBr String? // descrição traduzida PT-BR
+  higherLevel   String? // texto higher level EN
+  higherLevelPtBr String? // higher level traduzido PT-BR
   classes       String  // "Wizard, Sorcerer" — join para filtro
   damageType    String?
   areaOfEffect  String? // JSON: { type, size }
@@ -209,6 +213,7 @@ model SrdMonster {
   id              String  @id @default(cuid())
   index           String  @unique
   name            String
+  namePtBr        String? // nome traduzido PT-BR
   edition         String  @default("5e")
   size            String
   type            String
@@ -232,10 +237,14 @@ model SrdMonster {
   damageResistances   String?
   damageVulnerabilities String?
   conditionImmunities String?
-  specialAbilities String? // JSON
-  actions          String? // JSON
-  legendaryActions String? // JSON
-  reactions        String? // JSON
+  specialAbilities    String? // JSON EN
+  specialAbilitiesPtBr String? // JSON PT-BR
+  actions              String? // JSON EN
+  actionsPtBr          String? // JSON PT-BR
+  legendaryActions     String? // JSON EN
+  legendaryActionsPtBr String? // JSON PT-BR
+  reactions            String? // JSON EN
+  reactionsPtBr        String? // JSON PT-BR
   imageUrl         String?
   source           String @default("SRD")
 }
@@ -255,38 +264,44 @@ model SrdClass {
 }
 
 model SrdFeat {
-  id            String @id @default(cuid())
-  index         String @unique
-  name          String
-  edition       String @default("5e")
-  description   String
-  prerequisites String? // JSON
-  source        String @default("SRD")
+  id              String @id @default(cuid())
+  index           String @unique
+  name            String
+  namePtBr        String? // nome traduzido PT-BR
+  edition         String @default("5e")
+  description     String
+  descriptionPtBr String? // descrição traduzida PT-BR
+  prerequisites   String? // JSON
+  source          String @default("SRD")
 }
 
 model SrdEquipment {
-  id            String @id @default(cuid())
-  index         String @unique
-  name          String
-  edition       String @default("5e")
-  category      String
-  cost          String? // "25 gp"
-  weight        Float?
-  description   String?
-  damage        String? // JSON: { dice, type }
-  armorClass    String? // JSON
-  properties    String? // JSON
-  source        String @default("SRD")
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String? // nome traduzido PT-BR
+  edition         String  @default("5e")
+  category        String
+  cost            String? // "25 gp"
+  weight          Float?
+  description     String?
+  descriptionPtBr String? // descrição traduzida PT-BR
+  damage          String? // JSON: { dice, type }
+  armorClass      String? // JSON
+  properties      String? // JSON
+  source          String  @default("SRD")
 }
 
 model SrdMagicItem {
-  id            String @id @default(cuid())
-  index         String @unique
-  name          String
-  edition       String @default("5e")
-  category      String
-  rarity        String
-  description   String
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String? // nome traduzido PT-BR
+  edition         String  @default("5e")
+  category        String
+  rarity          String
+  description     String
+  descriptionPtBr String? // descrição traduzida PT-BR
   requiresAttunement Boolean @default(false)
-  source        String @default("SRD")
+  source          String @default("SRD")
 }

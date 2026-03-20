@@ -6,7 +6,10 @@ export async function searchSpells(query?: string, level?: number, school?: stri
   const where: Record<string, unknown> = {};
 
   if (query) {
-    where.name = { contains: query };
+    where.OR = [
+      { name: { contains: query } },
+      { namePtBr: { contains: query } },
+    ];
   }
   if (level !== undefined && level >= 0) {
     where.level = level;
@@ -49,7 +52,10 @@ export async function searchMonsters(query?: string, type?: string, crMin?: numb
   const where: Record<string, unknown> = {};
 
   if (query) {
-    where.name = { contains: query };
+    where.OR = [
+      { name: { contains: query } },
+      { namePtBr: { contains: query } },
+    ];
   }
   if (type) {
     where.type = type;
@@ -68,6 +74,7 @@ export async function searchMonsters(query?: string, type?: string, crMin?: numb
       id: true,
       index: true,
       name: true,
+      namePtBr: true,
       size: true,
       type: true,
       alignment: true,
@@ -106,4 +113,83 @@ export async function getSrdStats() {
   ]);
 
   return { spells, monsters, classes, feats, equipment, magicItems };
+}
+
+// ── Equipamentos ──────────────────────
+
+export async function searchEquipment(query?: string, category?: string) {
+  const where: Record<string, unknown> = {};
+  if (query) {
+    where.OR = [
+      { name: { contains: query } },
+      { namePtBr: { contains: query } },
+    ];
+  }
+  if (category) where.category = category;
+
+  return prisma.srdEquipment.findMany({
+    where,
+    orderBy: [{ category: "asc" }, { name: "asc" }],
+    take: 100,
+  });
+}
+
+export async function getEquipment(index: string) {
+  return prisma.srdEquipment.findUnique({ where: { index } });
+}
+
+export async function getEquipmentFilters() {
+  const cats = await prisma.srdEquipment.findMany({
+    select: { category: true },
+    distinct: ["category"],
+    orderBy: { category: "asc" },
+  });
+  return { categories: cats.map((c) => c.category) };
+}
+
+// ── Itens Mágicos ─────────────────────
+
+export async function searchMagicItems(query?: string, rarity?: string, category?: string) {
+  const where: Record<string, unknown> = {};
+  if (query) {
+    where.OR = [
+      { name: { contains: query } },
+      { namePtBr: { contains: query } },
+    ];
+  }
+  if (rarity) where.rarity = rarity;
+  if (category) where.category = category;
+
+  return prisma.srdMagicItem.findMany({
+    where,
+    orderBy: [{ rarity: "asc" }, { name: "asc" }],
+    take: 100,
+  });
+}
+
+export async function getMagicItem(index: string) {
+  return prisma.srdMagicItem.findUnique({ where: { index } });
+}
+
+export async function getMagicItemFilters() {
+  const [rarities, cats] = await Promise.all([
+    prisma.srdMagicItem.findMany({ select: { rarity: true }, distinct: ["rarity"], orderBy: { rarity: "asc" } }),
+    prisma.srdMagicItem.findMany({ select: { category: true }, distinct: ["category"], orderBy: { category: "asc" } }),
+  ]);
+  return {
+    rarities: rarities.map((r) => r.rarity),
+    categories: cats.map((c) => c.category),
+  };
+}
+
+// ── Classes ───────────────────────────
+
+export async function getClasses() {
+  return prisma.srdClass.findMany({
+    orderBy: { name: "asc" },
+  });
+}
+
+export async function getClass(index: string) {
+  return prisma.srdClass.findUnique({ where: { index } });
 }

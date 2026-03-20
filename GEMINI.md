@@ -1,7 +1,8 @@
 # GEMINI.md — Memória do Projeto Hub RPG
 
-> **Última atualização:** 2026-03-19
+> **Última atualização:** 2026-03-20
 > **Objetivo:** Preservar todo o contexto do projeto entre conversas
+> **Status:** Fases 1-4 concluídas
 
 ---
 
@@ -37,6 +38,7 @@ Criar um hub personalizado que combine:
 | 2026-03-19 | VTT alternativo | Multiverse Designer (visual, cutscenes) |
 | 2026-03-19 | Foco inicial | Hub de gestão, NÃO VTT 3D |
 | 2026-03-19 | SRD em português | Dados SRD traduzidos em PT-BR como idioma principal, EN como referência. Tradução fixa no banco, sem API externa |
+| 2026-03-20 | PT-BR FIRST sempre | TODO conteúdo do hub é PT-BR primeiro, EN como referência. Se detectar algo em EN → traduzir para PT-BR |
 | 2026-03-19 | Idioma da documentação | Português |
 | 2026-03-19 | Frontend | Next.js + React + TypeScript |
 | 2026-03-19 | Backend | NestJS + TypeScript |
@@ -61,27 +63,53 @@ VTT/
 │   ├── page.tsx                   ← Dashboard
 │   ├── campanhas/                 ← Páginas de campanhas
 │   ├── npcs/                      ← Páginas de NPCs
+│   ├── assistente/                ← Assistente IA
+│   │   ├── page.tsx               ← Página do chat
+│   │   ├── AssistantChat.tsx      ← Componente client (chat interativo)
+│   │   └── assistente.css         ← Estilos
 │   └── acervo/                    ← Acervo SRD
 │       ├── page.tsx               ← Hub de categorias (6 cards)
 │       ├── spells/                ← Busca + detalhe de magias
-│       └── monsters/              ← Busca + detalhe de monstros
+│       ├── monsters/              ← Busca + detalhe de monstros
+│       ├── equipment/             ← Busca + detalhe de equipamentos
+│       ├── magic-items/           ← Busca + detalhe de itens mágicos
+│       ├── classes/               ← Listagem + detalhe de classes
+│       └── feats/                 ← Listagem de talentos (3.5+5e)
 │
 ├── components/                    ← FRONTEND — Componentes React
-│   └── layout/                    ← Sidebar, Header
+│   └── layout/                    ← Sidebar, Header, ChatSidebar (mini-chat)
 │
 ├── lib/                           ← BACKEND — Lógica servidor
 │   ├── db.ts                      ← Prisma Client (conexão)
+│   ├── translations.ts            ← Dicionários PT-BR (escolas, tipos, tamanhos, etc.)
 │   ├── actions/                   ← Server Actions por domínio
 │   │   ├── campaigns.ts           ← CRUD campanhas
 │   │   ├── npcs.ts                ← CRUD NPCs
 │   │   ├── sessions.ts            ← CRUD sessões + dashboard stats
-│   │   └── srd.ts                 ← Busca acervo SRD
-│   └── services/                  ← [Futuro] Lógica de negócio (IA, RAG)
+│   │   ├── srd.ts                 ← Busca acervo SRD (busca bilíngue EN+PT-BR)
+│   │   └── assistant.ts           ← Assistente IA (enviar msg, salvar NPC/recap)
+│   └── services/                  ← Lógica de negócio
+│       ├── gemini.ts              ← Client REST Gemini Flash 2.5 (sem SDK)
+│       └── ai-assistant.ts        ← RAG + prompts especializados
 │
 ├── prisma/                        ← DATABASE — Schema e seed
-│   ├── schema.prisma              ← 17 modelos (campanha + SRD)
+│   ├── schema.prisma              ← 17 modelos com colunas PT-BR (campanha + SRD)
 │   ├── seed.ts                    ← Dados de exemplo
-│   └── import-srd.ts             ← Importação SRD 5e API
+│   ├── import-srd.ts              ← Importação SRD 5e API
+│   ├── import-srd-35.ts           ← Importação feats 3.5 (hardcoded PT-BR)
+│   ├── import-spells-35.ts        ← Importação magias 3.5 nível 0-3 (PT-BR)
+│   ├── import-spells-35-hi.ts     ← Importação magias 3.5 nível 4-9 (PT-BR)
+│   ├── import-monsters-35.ts      ← Importação monstros 3.5 icônicos (PT-BR)
+│   ├── import-srd-35-bulk.ts      ← Importação em massa 3.5 (Foundry VTT D35E)
+│   ├── srd-35-data/               ← Dados brutos baixados do GitHub
+│   │   ├── monsters-parsed.json   ← 681 monstros (6.2MB)
+│   │   ├── spells.db              ← ~700 magias (3.5MB)
+│   │   └── feats.db               ← ~400 feats (1.8MB)
+│   ├── translate-srd.ts           ← Tradução hardcoded (EN → PT-BR, sem API)
+│   └── srd-pt-br/                 ← Nomes traduzidos (1253 entradas)
+│       ├── spell-names.ts         ← 319 magias 5e
+│       ├── monster-names.ts       ← 334 monstros 5e
+│       └── item-names.ts          ← 237 equip + 362 itens mágicos + 1 feat
 │
 ├── public/                        ← Assets estáticos
 └── docs/                          ← Documentação
@@ -187,6 +215,10 @@ VTT/
 | 2026-03-19 | Fase 1 concluída | Monorepo, Next.js, design system Underdark, layout sidebar + header + dashboard |
 | 2026-03-19 | Fase 2 — CRUD Core | Prisma 7 + SQLite + better-sqlite3 adapter, Server Actions, páginas Campanhas/NPCs/Sessões, seed com dados |
 | 2026-03-19 | Fase 3 — Acervo SRD | Importação 5e API (1265 registros: 319 spells, 334 monsters, 12 classes, 237 equip, 362 magic items), páginas de busca com filtros |
+| 2026-03-20 | Tradução SRD PT-BR | 1253 nomes traduzidos hardcoded (sem API), dicionários de sistema, UI PT-BR first |
+| 2026-03-20 | Fase 4 — Assistente IA | Gemini Flash 2.5 REST client, RAG sobre SRD, 3 modos (chat regras, gerar NPC, recap sessão), contexto campanha, página /assistente |
+| 2026-03-20 | Acervo expandido | Novas páginas: equipment, magic-items, classes, feats. Mini-chat sidebar. Funções translateCategory/translateClassName |
+| 2026-03-20 | Importação SRD 3.5 em massa | Fonte: Rughalt/D35E (Foundry VTT OGL). 682 magias, 689 monstros, 398 feats do 3.5. Total: 3034 registros no banco |
 
 ---
 
@@ -198,6 +230,7 @@ VTT/
 4. **Hub primeiro, VTT depois** — foco em gestão e IA antes de mesa virtual
 5. **Gemini Flash 2.5 Free** como IA principal
 6. **GEMINI.md sempre atualizado** — memória viva do projeto
+7. **🇧🇷 PT-BR FIRST** — TODO conteúdo é PT-BR primeiro, EN como referência. Se detectar QUALQUER coisa em inglês na UI, traduzir imediatamente. Termos de sistema via dicionários (`lib/translations.ts`), nomes/descrições via colunas no banco (`namePtBr`, `descriptionPtBr`).
 
 ---
 

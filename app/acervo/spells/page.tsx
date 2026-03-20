@@ -1,4 +1,5 @@
 import { searchSpells, getSpellFilters } from "@/lib/actions/srd";
+import { translateSchool, translateClassList, translateSpellLevel, schoolsMap, classesMap } from "@/lib/translations";
 import Link from "next/link";
 import "../acervo.css";
 
@@ -15,11 +16,6 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
     searchSpells(query, level, school, className),
     getSpellFilters(),
   ]);
-
-  function levelLabel(lvl: number) {
-    if (lvl === 0) return "Cantrip";
-    return `${lvl}`;
-  }
 
   return (
     <div className="page-container">
@@ -45,20 +41,20 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
           <option value="">Todos os níveis</option>
           {filters.levels.map((l) => (
             <option key={l} value={l}>
-              {l === 0 ? "Cantrip" : `Nível ${l}`}
+              {l === 0 ? "Truque" : `${l}º Nível`}
             </option>
           ))}
         </select>
         <select name="school" className="input select" defaultValue={school ?? ""}>
           <option value="">Todas as escolas</option>
           {filters.schools.map((s) => (
-            <option key={s} value={s}>{s}</option>
+            <option key={s} value={s}>{translateSchool(s)}</option>
           ))}
         </select>
         <select name="class" className="input select" defaultValue={className ?? ""}>
           <option value="">Todas as classes</option>
           {filters.classes.map((c) => (
-            <option key={c} value={c}>{c}</option>
+            <option key={c} value={c}>{classesMap[c] || c}</option>
           ))}
         </select>
         <button type="submit" className="btn btn-primary">Buscar</button>
@@ -80,10 +76,17 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
           ) : (
             spells.map((spell) => (
               <Link key={spell.id} href={`/acervo/spells/${spell.index}`} className="spell-row">
-                <span className="spell-name">{spell.name}</span>
-                <span className="spell-level">{levelLabel(spell.level)}</span>
-                <span className="spell-school">{spell.school}</span>
-                <span className="spell-classes">{spell.classes}</span>
+                <span className="spell-name">
+                  {spell.namePtBr || spell.name}
+                  {spell.namePtBr && (
+                    <span style={{ color: "var(--text-muted)", fontSize: "var(--text-xs)", marginLeft: "var(--space-2)" }}>
+                      {spell.name}
+                    </span>
+                  )}
+                </span>
+                <span className="spell-level">{translateSpellLevel(spell.level)}</span>
+                <span className="spell-school">{translateSchool(spell.school)}</span>
+                <span className="spell-classes">{translateClassList(spell.classes)}</span>
               </Link>
             ))
           )}

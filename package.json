@@ -10,7 +10,9 @@
     "seed": "npx tsx prisma/seed.ts",
     "db:push": "npx prisma db push",
     "db:studio": "npx prisma studio",
-    "srd:import": "npx tsx prisma/import-srd.ts"
+    "srd:import": "npx tsx prisma/import-srd.ts",
+    "srd:import-35": "npx tsx prisma/import-srd-35.ts",
+    "srd:translate": "npx tsx prisma/translate-srd.ts"
   },
   "prisma": {
     "seed": "npx tsx prisma/seed.ts"
