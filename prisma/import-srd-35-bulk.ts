@@ -4,12 +4,13 @@
 // Importa monstros, magias e feats do JSON/DB
 // ══════════════════════════════════════════════════════
 
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaNeon } from "@prisma/adapter-neon";
 import * as fs from "fs";
 import * as path from "path";
 
-const adapter = new PrismaBetterSqlite3({ url: "file:./dev.db" });
+const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 const DATA_DIR = path.join(__dirname, "srd-35-data");

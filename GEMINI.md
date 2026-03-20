@@ -1,6 +1,6 @@
 # GEMINI.md — Memória do Projeto Hub RPG
 
-> **Última atualização:** 2026-03-20
+> **Última atualização:** 2026-03-20 (migração Neon PostgreSQL)
 > **Objetivo:** Preservar todo o contexto do projeto entre conversas
 > **Status:** Fases 1-4 concluídas
 
@@ -43,7 +43,7 @@ Criar um hub personalizado que combine:
 | 2026-03-19 | Frontend | Next.js + React + TypeScript |
 | 2026-03-19 | Backend | NestJS + TypeScript |
 | 2026-03-19 | Estilização | CSS puro (TailwindCSS só se necessário) |
-| 2026-03-19 | Banco de dados | SQLite (início) → PostgreSQL (se necessário) |
+| 2026-03-19 | Banco de dados | ~~SQLite~~ → **Neon PostgreSQL** (migrado 2026-03-20) |
 | 2026-03-19 | ORM | Prisma |
 
 ---
@@ -55,7 +55,7 @@ VTT/
 ├── GEMINI.md                      ← Este arquivo (memória do projeto)
 ├── package.json                   ← Dependências (Next.js, Prisma, etc.)
 ├── prisma.config.ts               ← Config Prisma 7
-├── dev.db                         ← SQLite database
+├── .env                           ← DATABASE_URL (Neon PostgreSQL) + GEMINI_API_KEY
 │
 ├── app/                           ← FRONTEND — Páginas (App Router)
 │   ├── layout.tsx / layout.css    ← Layout raiz (sidebar + header)
@@ -162,8 +162,9 @@ VTT/
 ### Backend
 - **Framework:** NestJS (Node.js)
 - **Linguagem:** TypeScript
-- **Banco de dados:** SQLite (migração para PostgreSQL se necessário)
-- **ORM:** Prisma
+- **Banco de dados:** **Neon PostgreSQL** (serverless, free tier)
+- **ORM:** Prisma 7 + `@prisma/adapter-neon`
+- **Driver:** `@neondatabase/serverless`
 
 ### IA
 - **Modelo:** Gemini Flash 2.5 Free
@@ -219,6 +220,7 @@ VTT/
 | 2026-03-20 | Fase 4 — Assistente IA | Gemini Flash 2.5 REST client, RAG sobre SRD, 3 modos (chat regras, gerar NPC, recap sessão), contexto campanha, página /assistente |
 | 2026-03-20 | Acervo expandido | Novas páginas: equipment, magic-items, classes, feats. Mini-chat sidebar. Funções translateCategory/translateClassName |
 | 2026-03-20 | Importação SRD 3.5 em massa | Fonte: Rughalt/D35E (Foundry VTT OGL). 682 magias, 689 monstros, 398 feats do 3.5. Total: 3034 registros no banco |
+| 2026-03-20 | Migração Neon PostgreSQL | SQLite → Neon PostgreSQL (serverless). Todos os scripts migrados de better-sqlite3 para @prisma/adapter-neon. Dados re-importados e traduções aplicadas. |
 
 ---
 

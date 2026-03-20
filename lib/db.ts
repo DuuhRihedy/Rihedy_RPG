@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaNeon } from "@prisma/adapter-neon";
 
 function createPrismaClient() {
-  const adapter = new PrismaBetterSqlite3({
-    url: "file:./dev.db",
+  const adapter = new PrismaNeon({
+    connectionString: process.env.DATABASE_URL!,
   });
   return new PrismaClient({ adapter });
 }
