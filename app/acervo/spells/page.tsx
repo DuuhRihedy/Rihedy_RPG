@@ -3,6 +3,8 @@ import { translateSchool, translateClassList, translateSpellLevel, schoolsMap, c
 import Link from "next/link";
 import "../acervo.css";
 
+export const dynamic = 'force-dynamic';
+
 type SearchParams = Promise<{ [key: string]: string | undefined }>;
 
 export default async function SpellsPage({ searchParams }: { searchParams: SearchParams }) {

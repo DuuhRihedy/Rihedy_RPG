@@ -3,6 +3,8 @@ import { translateRarity, translateCategory } from "@/lib/translations";
 import Link from "next/link";
 import "../acervo.css";
 
+export const dynamic = 'force-dynamic';
+
 export default async function MagicItemsPage({
   searchParams,
 }: {

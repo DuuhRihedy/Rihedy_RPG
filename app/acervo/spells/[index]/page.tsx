@@ -13,6 +13,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import "../../acervo.css";
 
+export const dynamic = 'force-dynamic';
+
 type Params = Promise<{ index: string }>;
 
 export default async function SpellDetailPage({ params }: { params: Params }) {

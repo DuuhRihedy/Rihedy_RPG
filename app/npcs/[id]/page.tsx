@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import "../../campanhas/campanhas.css";
 
+export const dynamic = 'force-dynamic';
+
 function getModifier(score: number): string {
   const mod = Math.floor((score - 10) / 2);
   return mod >= 0 ? `+${mod}` : `${mod}`;

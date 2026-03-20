@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import "../campanhas.css";
 
+export const dynamic = 'force-dynamic';
+
 type Params = Promise<{ id: string }>;
 
 export default async function CampaignDetailPage({ params }: { params: Params }) {

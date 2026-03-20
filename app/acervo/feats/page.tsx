@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import "../acervo.css";
 
+export const dynamic = 'force-dynamic';
+
 export default async function FeatsPage({
   searchParams,
 }: {

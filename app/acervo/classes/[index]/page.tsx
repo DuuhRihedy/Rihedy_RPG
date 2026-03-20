@@ -4,6 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import "../../acervo.css";
 
+export const dynamic = 'force-dynamic';
+
 export default async function ClassDetailPage({
   params,
 }: {

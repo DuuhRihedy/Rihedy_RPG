@@ -2,6 +2,8 @@ import { getSrdStats } from "@/lib/actions/srd";
 import Link from "next/link";
 import "./acervo.css";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AcervoPage() {
   const stats = await getSrdStats();
 

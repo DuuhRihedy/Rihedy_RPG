@@ -3,6 +3,8 @@ import { translateSize, translateCreatureType, translateAlignment, creatureTypes
 import Link from "next/link";
 import "../acervo.css";
 
+export const dynamic = 'force-dynamic';
+
 type SearchParams = Promise<{ [key: string]: string | undefined }>;
 
 export default async function MonstersPage({ searchParams }: { searchParams: SearchParams }) {

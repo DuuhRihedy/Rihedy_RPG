@@ -2,6 +2,8 @@ import { getCampaigns, createCampaign } from "@/lib/actions/campaigns";
 import Link from "next/link";
 import "./campanhas.css";
 
+export const dynamic = 'force-dynamic';
+
 export default async function CampanhasPage() {
   const campaigns = await getCampaigns();
 

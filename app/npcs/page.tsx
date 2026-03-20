@@ -2,6 +2,8 @@ import { getNpcs, createNpc } from "@/lib/actions/npcs";
 import Link from "next/link";
 import "../campanhas/campanhas.css";
 
+export const dynamic = 'force-dynamic';
+
 const ALIGNMENTS = [
   "Lawful Good", "Neutral Good", "Chaotic Good",
   "Lawful Neutral", "True Neutral", "Chaotic Neutral",
