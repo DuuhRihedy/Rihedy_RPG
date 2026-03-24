@@ -92,17 +92,25 @@ async function searchSrdContext(query: string): Promise<string> {
         classes: { contains: detectedClass!, mode: "insensitive" },
         ...(detectedLevel !== null ? { level: detectedLevel } : {}),
       },
-      orderBy: { name: "asc" },
-      take: 30,
+      orderBy: [{ edition: "asc" }, { name: "asc" }], // 3.5 antes de 5e
+      take: 40,
     });
 
     if (spells.length > 0) {
-      chunks.push(
-        `[BUSCA DIRECIONADA] Magias de nível ${detectedLevel ?? "todos"} da classe ${detectedClass}: ${spells.length} encontradas\n` +
-        spells.map((s) =>
-          `• ${s.namePtBr || s.name} (${s.name}) [${s.edition}] — Escola: ${s.school} | Nível: ${s.level}`
-        ).join("\n"),
-      );
+      // Agrupar por edição, 3.5 primeiro
+      const spells35 = spells.filter((s) => s.edition === "3.5");
+      const spells5e = spells.filter((s) => s.edition === "5e");
+
+      let listing = `[BUSCA DIRECIONADA] Magias de nível ${detectedLevel ?? "todos"} da classe ${detectedClass}: ${spells.length} encontradas\n`;
+      if (spells35.length > 0) {
+        listing += `\n=== D&D 3.5 (${spells35.length} magias) ===\n` +
+          spells35.map((s) => `• ${s.namePtBr || s.name} (${s.name}) — Escola: ${s.school}`).join("\n");
+      }
+      if (spells5e.length > 0) {
+        listing += `\n\n=== D&D 5e (${spells5e.length} magias) ===\n` +
+          spells5e.map((s) => `• ${s.namePtBr || s.name} (${s.name}) — Escola: ${s.school}`).join("\n");
+      }
+      chunks.push(listing);
 
       // Adicionar detalhes das primeiras 5
       for (const s of spells.slice(0, 5)) {
@@ -354,6 +362,13 @@ async function getRecentHistory(limit: number = 4): Promise<GeminiMessage[]> {
 const SYSTEM_PROMPTS: Record<AssistantMode, string> = {
   chat: `Você é o Assistente do Hub RPG, um especialista em D&D 3.5 e 5e.
 
+PRIORIDADE DE EDIÇÃO:
+- D&D 3.5 é o SISTEMA PRINCIPAL do mestre. SEMPRE priorize regras e dados do 3.5.
+- Quando houver dados de AMBAS as edições, liste D&D 3.5 PRIMEIRO.
+- Se o usuário não especificar a edição, ASSUMA que é D&D 3.5.
+- Só responda exclusivamente com 5e se o usuário pedir explicitamente.
+- Quando listar magias, monstros ou itens de ambas as edições, SEPARE claramente com cabeçalhos "D&D 3.5" e "D&D 5e".
+
 REGRAS:
 - SEMPRE responda em português brasileiro (PT-BR)
 - Use terminologia oficial brasileira de D&D (Classe de Armadura = CA, Pontos de Vida = PV, Nível de Desafio = ND, etc.)
@@ -366,6 +381,8 @@ REGRAS:
 - Seja conciso mas completo`,
 
   npc: `Você é um gerador de NPCs para D&D. 
+
+PRIORIDADE: D&D 3.5 é o sistema principal. Gere NPCs usando regras do 3.5 por padrão (atributos 3d6, classes do 3.5, feats do 3.5). Só use 5e se o usuário pedir.
 
 REGRAS:
 - SEMPRE responda em PT-BR
@@ -396,6 +413,7 @@ FORMATO OBRIGATÓRIO (use exatamente assim):
 **Gancho de aventura:** [como os jogadores podem interagir]`,
 
   recap: `Você é um cronista de sessões de RPG.
+O sistema principal é D&D 3.5. Use terminologia e mecânicas do 3.5 nas referências.
 
 REGRAS:
 - SEMPRE responda em PT-BR
