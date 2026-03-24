@@ -227,7 +227,11 @@ export default async function EditNpcPage({ params }: { params: Params }) {
             {npc.items.map((item) => (
               <div key={item.id} className="quick-note" style={{ justifyContent: "space-between" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)" }}>
-                  <span>{item.magical ? "✨" : "🔧"}</span>
+                  {item.imageUrl ? (
+                    <img src={item.imageUrl} alt={item.name} style={{ width: 32, height: 32, borderRadius: "var(--radius-sm)", objectFit: "cover" }} />
+                  ) : (
+                    <span>{item.magical ? "✨" : "🔧"}</span>
+                  )}
                   <div>
                     <strong>{item.name}</strong>
                     <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginLeft: "var(--space-2)" }}>

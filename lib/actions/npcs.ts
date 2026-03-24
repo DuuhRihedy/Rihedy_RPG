@@ -132,6 +132,7 @@ export async function addItemToNpc(formData: FormData) {
   const value = formData.get("value") as string;
   const weight = formData.get("weight") as string;
   const magical = formData.get("magical") === "true";
+  const imageUrl = formData.get("itemImageUrl") as string;
 
   if (!npcId || !name?.trim()) return;
 
@@ -144,6 +145,7 @@ export async function addItemToNpc(formData: FormData) {
       value: value?.trim() || null,
       weight: weight ? parseFloat(weight) : null,
       magical,
+      imageUrl: imageUrl?.trim() || null,
     },
   });
 

@@ -94,7 +94,7 @@ export async function getAvailableNpcsForCampaign(campaignId: string) {
 
   return prisma.npc.findMany({
     where: { id: { notIn: linkedIds } },
-    select: { id: true, name: true, race: true, class: true, type: true },
+    select: { id: true, name: true, race: true, class: true, type: true, imageUrl: true },
     orderBy: { name: "asc" },
   });
 }

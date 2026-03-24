@@ -1,8 +1,9 @@
-import { getCampaign, updateCampaign, deleteCampaign } from "@/lib/actions/campaigns";
+import { getCampaign, updateCampaign, deleteCampaign, getAvailableNpcsForCampaign } from "@/lib/actions/campaigns";
 import { createSession, deleteSession } from "@/lib/actions/sessions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { DeleteButton } from "@/components/ui/DeleteButton";
+import ImportNpcPanel from "@/components/ImportNpcPanel";
 import "../campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -11,7 +12,10 @@ type Params = Promise<{ id: string }>;
 
 export default async function CampaignDetailPage({ params }: { params: Params }) {
   const { id } = await params;
-  const campaign = await getCampaign(id);
+  const [campaign, availableNpcs] = await Promise.all([
+    getCampaign(id),
+    getAvailableNpcsForCampaign(id),
+  ]);
 
   if (!campaign) notFound();
 
@@ -128,34 +132,12 @@ export default async function CampaignDetailPage({ params }: { params: Params })
 
         {/* Right — NPCs & Arcs */}
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-          {/* NPCs */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">👥 NPCs</span>
-              <Link href="/npcs" className="btn btn-ghost btn-sm">Ver todos →</Link>
-            </div>
-            {campaign.npcs.length === 0 ? (
-              <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", textAlign: "center", padding: "var(--space-4) 0" }}>
-                Nenhum NPC vinculado
-              </p>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-                {campaign.npcs.map(({ npc }) => (
-                  <Link key={npc.id} href={`/npcs/${npc.id}`} className="quick-note" style={{ textDecoration: "none" }}>
-                    <span className="quick-note-icon">
-                      {npc.type === "enemy" ? "💀" : npc.type === "ally" ? "🛡️" : "👤"}
-                    </span>
-                    <div className="quick-note-content">
-                      <div className="quick-note-text"><strong>{npc.name}</strong></div>
-                      <div className="quick-note-time">
-                        {[npc.race, npc.class, npc.level ? `Nv ${npc.level}` : null].filter(Boolean).join(" · ")}
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* NPCs — Import Panel */}
+          <ImportNpcPanel
+            campaignId={campaign.id}
+            availableNpcs={availableNpcs}
+            linkedNpcs={campaign.npcs}
+          />
 
           {/* Story Arcs */}
           <div className="card">
