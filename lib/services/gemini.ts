@@ -1,10 +1,10 @@
 // ══════════════════════════════════════════
 // Hub RPG — Gemini API Client (REST, sem SDK)
-// Modelo: gemini-2.0-flash (Free Tier)
+// Modelo: gemini-2.5-flash (Free Tier)
 // ══════════════════════════════════════════
 
 const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent";
 
 export interface GeminiMessage {
   role: "user" | "model";
