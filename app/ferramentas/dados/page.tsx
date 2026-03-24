@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { rollDice, rollD20, rollAbilityScores, diceStats } from "@/lib/engine/dice";
 import type { DiceResult } from "@/lib/engine/types";
-import "./ferramentas.css";
+import "../ferramentas.css";
 
 const QUICK_DICE = [
   { label: "d4", expr: "1d4" },

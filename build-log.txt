@@ -1,0 +1,51 @@
+
+> hub-rpg@0.1.0 build
+> next build
+
+Ôû▓ Next.js 16.2.0 (Turbopack)
+- Environments: .env
+
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 2.0s
+  Running TypeScript ...
+  Finished TypeScript in 3.5s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/8) ...
+  Generating static pages using 15 workers (2/8) 
+  Generating static pages using 15 workers (4/8) 
+  Generating static pages using 15 workers (6/8) 
+Ô£ô Generating static pages using 15 workers (8/8) in 236ms
+  Finalizing page optimization ...
+
+Route (app)
+Ôöî ãÆ /
+Ôö£ Ôùï /_not-found
+Ôö£ ãÆ /acervo
+Ôö£ ãÆ /acervo/classes
+Ôö£ ãÆ /acervo/classes/[index]
+Ôö£ ãÆ /acervo/equipment
+Ôö£ ãÆ /acervo/equipment/[index]
+Ôö£ ãÆ /acervo/feats
+Ôö£ ãÆ /acervo/magic-items
+Ôö£ ãÆ /acervo/magic-items/[index]
+Ôö£ ãÆ /acervo/monsters
+Ôö£ ãÆ /acervo/monsters/[index]
+Ôö£ ãÆ /acervo/spells
+Ôö£ ãÆ /acervo/spells/[index]
+Ôö£ ãÆ /api/health
+Ôö£ ãÆ /api/upload
+Ôö£ Ôùï /assistente
+Ôö£ ãÆ /campanhas
+Ôö£ ãÆ /campanhas/[id]
+Ôö£ ãÆ /campanhas/[id]/editar
+Ôö£ Ôùï /ferramentas/dados
+Ôö£ Ôùï /ferramentas/encontros
+Ôö£ Ôùï /ferramentas/gerador-npc
+Ôö£ ãÆ /npcs
+Ôö£ ãÆ /npcs/[id]
+Ôöö ãÆ /npcs/[id]/editar
+
+
+Ôùï  (Static)   prerendered as static content
+ãÆ  (Dynamic)  server-rendered on demand
+

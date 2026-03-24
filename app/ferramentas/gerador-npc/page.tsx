@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { generateNpc, SRD_CLASSES, SRD_RACES, getModifier } from "@/lib/engine";
 import type { Character } from "@/lib/engine/types";
-import "./ferramentas.css";
+import "../ferramentas.css";
 
 export default function NpcGeneratorPage() {
   const [level, setLevel] = useState(3);

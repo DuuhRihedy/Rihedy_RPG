@@ -4,7 +4,7 @@ import { useState } from "react";
 import { generateEncounter } from "@/lib/engine/generators/encounter";
 import { generateLoot } from "@/lib/engine/generators/loot";
 import type { Encounter, LootTable, EncounterDifficulty } from "@/lib/engine/types";
-import "./ferramentas.css";
+import "../ferramentas.css";
 
 const DIFFICULTIES: { value: EncounterDifficulty; label: string; color: string }[] = [
   { value: "easy", label: "Fácil", color: "var(--success)" },
