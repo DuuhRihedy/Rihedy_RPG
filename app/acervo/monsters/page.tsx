@@ -13,9 +13,10 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
   const type = params.type || undefined;
   const crMin = params.cr_min ? parseFloat(params.cr_min) : undefined;
   const crMax = params.cr_max ? parseFloat(params.cr_max) : undefined;
+  const edition = params.edition || undefined;
 
   const [monsters, filters] = await Promise.all([
-    searchMonsters(query, type, crMin, crMax),
+    searchMonsters(query, type, crMin, crMax, edition),
     getMonsterFilters(),
   ]);
 
@@ -39,6 +40,12 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
           placeholder="Buscar monstro..."
           defaultValue={query}
         />
+        <select name="edition" className="input select" defaultValue={edition ?? ""}>
+          <option value="">Todas as edições</option>
+          {filters.editions.map((e) => (
+            <option key={e} value={e}>D&D {e}</option>
+          ))}
+        </select>
         <select name="type" className="input select" defaultValue={type ?? ""}>
           <option value="">Todos os tipos</option>
           {filters.types.map((t) => (
@@ -91,6 +98,9 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
               <Link key={mon.id} href={`/acervo/monsters/${mon.index}`} className="monster-row">
                 <div className="monster-info">
                   <span className="monster-name">
+                    <span className={`badge badge-sm ${mon.edition === "3.5" ? "badge-35" : "badge-5e"}`} style={{ marginRight: "var(--space-2)" }}>
+                      {mon.edition}
+                    </span>
                     {mon.namePtBr || mon.name}
                     {mon.namePtBr && (
                       <span style={{ color: "var(--text-muted)", fontSize: "var(--text-xs)", marginLeft: "var(--space-2)" }}>

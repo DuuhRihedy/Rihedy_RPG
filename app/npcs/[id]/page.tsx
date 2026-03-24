@@ -1,6 +1,7 @@
 import { getNpc, deleteNpc } from "@/lib/actions/npcs";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { DeleteButton } from "@/components/ui/DeleteButton";
 import "../../campanhas/campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -18,7 +19,10 @@ export default async function NpcDetailPage({ params }: { params: Params }) {
 
   if (!npc) notFound();
 
-  const deleteAction = deleteNpc.bind(null, id);
+  const deleteAction = async () => {
+    "use server";
+    await deleteNpc(id);
+  };
   const attrs = npc.attributes;
 
   return (
@@ -48,11 +52,8 @@ export default async function NpcDetailPage({ params }: { params: Params }) {
           </p>
         </div>
         <div className="campaign-detail-actions">
-          <form action={deleteAction}>
-            <button type="submit" className="btn btn-ghost btn-sm" style={{ color: "var(--danger)" }}>
-              🗑️ Excluir
-            </button>
-          </form>
+          <Link href={`/npcs/${id}/editar`} className="btn btn-primary">✏️ Editar</Link>
+          <DeleteButton action={deleteAction} entityName={npc.name} />
         </div>
       </div>
 

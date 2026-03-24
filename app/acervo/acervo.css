@@ -57,7 +57,8 @@
 
 /* Search / Filter bar */
 
-.srd-search-bar {
+.srd-search-bar,
+.srd-filters {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
@@ -65,14 +66,81 @@
   align-items: center;
 }
 
-.srd-search-bar .input {
+.srd-search-bar .input,
+.srd-filters .input {
   flex: 1;
   min-width: 200px;
 }
 
-.srd-search-bar .select {
+.srd-search-bar .select,
+.srd-filters .select {
   min-width: 140px;
   max-width: 180px;
+}
+
+.breadcrumb-link {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: var(--space-2);
+  transition: color var(--transition-fast);
+}
+
+.breadcrumb-link:hover {
+  color: var(--dnd-gold);
+}
+
+.badge-sm {
+  font-size: 9px;
+  padding: 1px 5px;
+}
+
+/* SRD Result Cards */
+
+.srd-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-4);
+}
+
+.srd-result-card {
+  text-decoration: none;
+  animation: fadeIn 0.3s ease backwards;
+}
+
+.srd-result-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.srd-result-name {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.srd-result-meta {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.srd-result-sub {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: var(--space-2);
+}
+
+.srd-result-desc {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
 }
 
 /* Spell List */
@@ -90,11 +158,15 @@
   align-items: center;
   padding: var(--space-3) var(--space-4);
   text-decoration: none;
-  transition: background 0.15s;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius-sm);
 }
 
 .spell-row:hover {
   background: var(--bg-hover);
+  border-left-color: var(--dnd-gold);
+  padding-left: calc(var(--space-4) + 4px);
 }
 
 .spell-name {
@@ -151,11 +223,15 @@
   align-items: center;
   padding: var(--space-3) var(--space-4);
   text-decoration: none;
-  transition: background 0.15s;
+  transition: all var(--transition-fast);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius-sm);
 }
 
 .monster-row:hover {
   background: var(--bg-hover);
+  border-left-color: var(--dnd-red);
+  padding-left: calc(var(--space-4) + 4px);
 }
 
 .monster-info {
@@ -276,4 +352,27 @@
   .monster-detail-grid {
     grid-template-columns: 1fr;
   }
+  .srd-results {
+    grid-template-columns: 1fr;
+  }
+  .acervo-categories {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .srd-search-bar,
+  .srd-filters {
+    flex-direction: column;
+  }
+  .srd-search-bar .select,
+  .srd-filters .select {
+    max-width: 100%;
+  }
 }
+
+/* Stagger animations for results */
+.srd-result-card:nth-child(1) { animation-delay: 0.03s; }
+.srd-result-card:nth-child(2) { animation-delay: 0.06s; }
+.srd-result-card:nth-child(3) { animation-delay: 0.09s; }
+.srd-result-card:nth-child(4) { animation-delay: 0.12s; }
+.srd-result-card:nth-child(5) { animation-delay: 0.15s; }
+.srd-result-card:nth-child(6) { animation-delay: 0.18s; }
+

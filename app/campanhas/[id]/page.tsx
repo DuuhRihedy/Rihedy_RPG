@@ -1,7 +1,8 @@
 import { getCampaign, updateCampaign, deleteCampaign } from "@/lib/actions/campaigns";
-import { createSession } from "@/lib/actions/sessions";
+import { createSession, deleteSession } from "@/lib/actions/sessions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { DeleteButton } from "@/components/ui/DeleteButton";
 import "../campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -15,7 +16,10 @@ export default async function CampaignDetailPage({ params }: { params: Params })
   if (!campaign) notFound();
 
   const updateAction = updateCampaign.bind(null, id);
-  const deleteAction = deleteCampaign.bind(null, id);
+  const deleteAction = async () => {
+    "use server";
+    await deleteCampaign(id);
+  };
 
   return (
     <div className="page-container">
@@ -37,11 +41,8 @@ export default async function CampaignDetailPage({ params }: { params: Params })
           )}
         </div>
         <div className="campaign-detail-actions">
-          <form action={deleteAction}>
-            <button type="submit" className="btn btn-ghost btn-sm" style={{ color: "var(--danger)" }}>
-              🗑️ Excluir
-            </button>
-          </form>
+          <Link href={`/campanhas/${id}/editar`} className="btn btn-primary">✏️ Editar</Link>
+          <DeleteButton action={deleteAction} entityName={campaign.name} />
         </div>
       </div>
 
@@ -96,20 +97,30 @@ export default async function CampaignDetailPage({ params }: { params: Params })
               </p>
             ) : (
               <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-                {campaign.sessions.map((session) => (
-                  <div key={session.id} className="session-item">
-                    <div className="session-number">#{session.number}</div>
-                    <div className="session-info">
-                      <div className="session-title">
-                        {session.title || `Sessão ${session.number}`}
+                {campaign.sessions.map((session) => {
+                  const deleteSessionAction = async () => {
+                    "use server";
+                    await deleteSession(session.id, campaign.id);
+                  };
+                  return (
+                    <div key={session.id} className="session-item">
+                      <div className="session-number">#{session.number}</div>
+                      <div className="session-info">
+                        <div className="session-title">
+                          {session.title || `Sessão ${session.number}`}
+                        </div>
+                        <div className="session-meta">
+                          {session.date && new Date(session.date).toLocaleDateString("pt-BR")}
+                          {session.durationMin && ` · ${session.durationMin}min`}
+                        </div>
                       </div>
-                      <div className="session-meta">
-                        {session.date && new Date(session.date).toLocaleDateString("pt-BR")}
-                        {session.durationMin && ` · ${session.durationMin}min`}
-                      </div>
+                      <DeleteButton
+                        action={deleteSessionAction}
+                        entityName={session.title || `Sessão ${session.number}`}
+                      />
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>

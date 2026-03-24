@@ -1,8 +1,8 @@
 # GEMINI.md — Memória do Projeto Hub RPG
 
-> **Última atualização:** 2026-03-20 (migração Neon PostgreSQL)
+> **Última atualização:** 2026-03-23 (formulários editáveis + SRD 5e completo + VTT architecture)
 > **Objetivo:** Preservar todo o contexto do projeto entre conversas
-> **Status:** Fases 1-4 concluídas
+> **Status:** Fases 1-4 concluídas + Melhorias em andamento + Arquitetura VTT definida
 
 ---
 
@@ -61,8 +61,10 @@ VTT/
 │   ├── layout.tsx / layout.css    ← Layout raiz (sidebar + header)
 │   ├── globals.css                ← Design system (tokens, componentes)
 │   ├── page.tsx                   ← Dashboard
-│   ├── campanhas/                 ← Páginas de campanhas
-│   ├── npcs/                      ← Páginas de NPCs
+│   ├── campanhas/                 ← Páginas de campanhas + edição
+│   │   └── [id]/editar/           ← Edição de campanha (NPCs, notas, arcos)
+│   ├── npcs/                      ← Páginas de NPCs + edição
+│   │   └── [id]/editar/           ← Edição de NPC (backstory, itens, relações)
 │   ├── assistente/                ← Assistente IA
 │   │   ├── page.tsx               ← Página do chat
 │   │   ├── AssistantChat.tsx      ← Componente client (chat interativo)
@@ -83,9 +85,9 @@ VTT/
 │   ├── db.ts                      ← Prisma Client (conexão)
 │   ├── translations.ts            ← Dicionários PT-BR (escolas, tipos, tamanhos, etc.)
 │   ├── actions/                   ← Server Actions por domínio
-│   │   ├── campaigns.ts           ← CRUD campanhas
-│   │   ├── npcs.ts                ← CRUD NPCs
-│   │   ├── sessions.ts            ← CRUD sessões + dashboard stats
+│   │   ├── campaigns.ts           ← CRUD campanhas + vincular NPCs + notas + arcos
+│   │   ├── npcs.ts                ← CRUD NPCs + itens + relações
+│   │   ├── sessions.ts            ← CRUD sessões + update + dashboard stats
 │   │   ├── srd.ts                 ← Busca acervo SRD (busca bilíngue EN+PT-BR)
 │   │   └── assistant.ts           ← Assistente IA (enviar msg, salvar NPC/recap)
 │   └── services/                  ← Lógica de negócio
@@ -93,7 +95,7 @@ VTT/
 │       └── ai-assistant.ts        ← RAG + prompts especializados
 │
 ├── prisma/                        ← DATABASE — Schema e seed
-│   ├── schema.prisma              ← 17 modelos com colunas PT-BR (campanha + SRD)
+│   ├── schema.prisma              ← 25 modelos com colunas PT-BR (campanha + SRD completo)
 │   ├── seed.ts                    ← Dados de exemplo
 │   ├── import-srd.ts              ← Importação SRD 5e API
 │   ├── import-srd-35.ts           ← Importação feats 3.5 (hardcoded PT-BR)
@@ -115,7 +117,8 @@ VTT/
 └── docs/                          ← Documentação
     ├── visao-do-projeto.md
     ├── pesquisa-completa.md
-    └── arquitetura-e-implementacao.md
+    ├── arquitetura-e-implementacao.md
+    └── arquitetura-vtt-engine.md   ← Arquitetura VTT engine (rules, compendium, generators)
 ```
 
 ---
@@ -221,6 +224,11 @@ VTT/
 | 2026-03-20 | Acervo expandido | Novas páginas: equipment, magic-items, classes, feats. Mini-chat sidebar. Funções translateCategory/translateClassName |
 | 2026-03-20 | Importação SRD 3.5 em massa | Fonte: Rughalt/D35E (Foundry VTT OGL). 682 magias, 689 monstros, 398 feats do 3.5. Total: 3034 registros no banco |
 | 2026-03-20 | Migração Neon PostgreSQL | SQLite → Neon PostgreSQL (serverless). Todos os scripts migrados de better-sqlite3 para @prisma/adapter-neon. Dados re-importados e traduções aplicadas. |
+| 2026-03-23 | Melhorias Acervo + UI | Busca case-insensitive, filtro edição (3.5/5e), badges, delete com confirmação, dashboard funcional, micro-animações |
+| 2026-03-23 | Formulários editáveis | Páginas de edição: campanha (NPCs, notas, arcos) e NPC (backstory, atributos, itens, relações). Actions expandidas |
+| 2026-03-23 | SRD 5e completo | 8 novas tabelas: raças (9), sub-raças (4), subclasses (12), features (407), condições (15), skills (18), traits (38), idiomas (16). Total ~3550 registros |
+| 2026-03-23 | Importação 3.5 completa | Equipamentos (233), itens mágicos (635), classes (33), condições (38), raças (7). Total 3.5: 2715 registros. Total geral: ~4500 |
+| 2026-03-23 | Arquitetura VTT | Documento docs/arquitetura-vtt-engine.md: rules engine, character system, generators, importer. 6 fases planejadas |
 
 ---
 

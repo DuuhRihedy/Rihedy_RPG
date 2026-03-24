@@ -23,9 +23,10 @@ export interface AssistantResponse {
   context?: string;
 }
 
-// ─── RAG: Busca no SRD ──────────────────
+// ─── RAG: Busca Expandida no SRD ────────
 
 async function searchSrdContext(query: string): Promise<string> {
+  try {
   const terms = query
     .toLowerCase()
     .split(/\s+/)
@@ -34,15 +35,17 @@ async function searchSrdContext(query: string): Promise<string> {
   if (terms.length === 0) return "";
 
   const chunks: string[] = [];
+  const searchTerms = terms.slice(0, 4);
 
   // Buscar magias
-  for (const term of terms.slice(0, 3)) {
+  for (const term of searchTerms) {
     const spells = await prisma.srdSpell.findMany({
       where: {
         OR: [
-          { name: { contains: term } },
-          { namePtBr: { contains: term } },
-          { school: { contains: term } },
+          { name: { contains: term, mode: "insensitive" } },
+          { namePtBr: { contains: term, mode: "insensitive" } },
+          { school: { contains: term, mode: "insensitive" } },
+          { classes: { contains: term, mode: "insensitive" } },
         ],
       },
       take: 3,
@@ -50,24 +53,24 @@ async function searchSrdContext(query: string): Promise<string> {
 
     for (const s of spells) {
       chunks.push(
-        `[MAGIA] ${s.namePtBr || s.name} (${s.name})` +
+        `[MAGIA] ${s.namePtBr || s.name} (${s.name}) [${s.edition}]` +
           `\nNível: ${s.level} | Escola: ${s.school}` +
           `\nTempo: ${s.castingTime} | Alcance: ${s.range} | Duração: ${s.duration}` +
           `\nComponentes: ${s.components}${s.material ? ` (${s.material})` : ""}` +
-          `\nDescrição: ${s.descriptionPtBr || s.description}` +
-          (s.higherLevel ? `\nNíveis superiores: ${s.higherLevelPtBr || s.higherLevel}` : ""),
+          `\nDescrição: ${(s.descriptionPtBr || s.description).substring(0, 500)}` +
+          (s.higherLevel ? `\nNíveis superiores: ${(s.higherLevelPtBr || s.higherLevel).substring(0, 200)}` : ""),
       );
     }
   }
 
   // Buscar monstros
-  for (const term of terms.slice(0, 3)) {
+  for (const term of searchTerms) {
     const monsters = await prisma.srdMonster.findMany({
       where: {
         OR: [
-          { name: { contains: term } },
-          { namePtBr: { contains: term } },
-          { type: { contains: term } },
+          { name: { contains: term, mode: "insensitive" } },
+          { namePtBr: { contains: term, mode: "insensitive" } },
+          { type: { contains: term, mode: "insensitive" } },
         ],
       },
       take: 2,
@@ -75,24 +78,25 @@ async function searchSrdContext(query: string): Promise<string> {
 
     for (const m of monsters) {
       chunks.push(
-        `[MONSTRO] ${m.namePtBr || m.name} (${m.name})` +
+        `[MONSTRO] ${m.namePtBr || m.name} (${m.name}) [${m.edition}]` +
           `\nTamanho: ${m.size} | Tipo: ${m.type} | ND: ${m.challengeRating} (${m.xp} XP)` +
           `\nCA: ${m.armorClass} | PV: ${m.hitPoints} (${m.hitDice})` +
           `\nFOR ${m.str} DES ${m.dex} CON ${m.con} INT ${m.intl} SAB ${m.wis} CAR ${m.cha}` +
           `\nVelocidade: ${m.speed}` +
-          (m.specialAbilities ? `\nHabilidades: ${m.specialAbilitiesPtBr || m.specialAbilities}` : "") +
-          (m.actions ? `\nAções: ${m.actionsPtBr || m.actions}` : ""),
+          (m.specialAbilities ? `\nHabilidades: ${(m.specialAbilitiesPtBr || m.specialAbilities).substring(0, 400)}` : "") +
+          (m.actions ? `\nAções: ${(m.actionsPtBr || m.actions).substring(0, 400)}` : ""),
       );
     }
   }
 
   // Buscar equipamentos
-  for (const term of terms.slice(0, 2)) {
+  for (const term of searchTerms.slice(0, 2)) {
     const equip = await prisma.srdEquipment.findMany({
       where: {
         OR: [
-          { name: { contains: term } },
-          { namePtBr: { contains: term } },
+          { name: { contains: term, mode: "insensitive" } },
+          { namePtBr: { contains: term, mode: "insensitive" } },
+          { category: { contains: term, mode: "insensitive" } },
         ],
       },
       take: 2,
@@ -100,20 +104,92 @@ async function searchSrdContext(query: string): Promise<string> {
 
     for (const e of equip) {
       chunks.push(
-        `[EQUIPAMENTO] ${e.namePtBr || e.name} (${e.name})` +
+        `[EQUIPAMENTO] ${e.namePtBr || e.name} (${e.name}) [${e.edition}]` +
           `\nCategoria: ${e.category} | Custo: ${e.cost} | Peso: ${e.weight}` +
           (e.damage ? `\nDano: ${e.damage}` : "") +
-          (e.description ? `\nDescrição: ${e.descriptionPtBr || e.description}` : ""),
+          (e.properties ? `\nPropriedades: ${e.properties}` : "") +
+          (e.description ? `\nDescrição: ${(e.descriptionPtBr || e.description).substring(0, 300)}` : ""),
       );
     }
   }
 
-  return chunks.slice(0, 8).join("\n\n---\n\n");
+  // Buscar itens mágicos
+  for (const term of searchTerms.slice(0, 2)) {
+    const magicItems = await prisma.srdMagicItem.findMany({
+      where: {
+        OR: [
+          { name: { contains: term, mode: "insensitive" } },
+          { namePtBr: { contains: term, mode: "insensitive" } },
+          { category: { contains: term, mode: "insensitive" } },
+        ],
+      },
+      take: 2,
+    });
+
+    for (const mi of magicItems) {
+      chunks.push(
+        `[ITEM MÁGICO] ${mi.namePtBr || mi.name} (${mi.name}) [${mi.edition}]` +
+          `\nCategoria: ${mi.category} | Raridade: ${mi.rarity}` +
+          (mi.requiresAttunement ? " | Requer sintonização" : "") +
+          `\nDescrição: ${(mi.descriptionPtBr || mi.description).substring(0, 400)}`,
+      );
+    }
+  }
+
+  // Buscar feats/talentos
+  for (const term of searchTerms.slice(0, 2)) {
+    const feats = await prisma.srdFeat.findMany({
+      where: {
+        OR: [
+          { name: { contains: term, mode: "insensitive" } },
+          { namePtBr: { contains: term, mode: "insensitive" } },
+        ],
+      },
+      take: 2,
+    });
+
+    for (const f of feats) {
+      chunks.push(
+        `[TALENTO] ${f.namePtBr || f.name} (${f.name}) [${f.edition}]` +
+          `\nDescrição: ${(f.descriptionPtBr || f.description).substring(0, 400)}` +
+          (f.prerequisites ? `\nPré-requisitos: ${f.prerequisites}` : ""),
+      );
+    }
+  }
+
+  // Buscar classes
+  for (const term of searchTerms.slice(0, 2)) {
+    const classes = await prisma.srdClass.findMany({
+      where: {
+        OR: [
+          { name: { contains: term, mode: "insensitive" } },
+        ],
+      },
+      take: 1,
+    });
+
+    for (const c of classes) {
+      chunks.push(
+        `[CLASSE] ${c.name} [${c.edition}]` +
+          `\nDado de Vida: d${c.hitDie}` +
+          (c.savingThrows ? `\nSalvaguardas: ${c.savingThrows}` : "") +
+          (c.proficiencies ? `\nProficiências: ${c.proficiencies.substring(0, 300)}` : ""),
+      );
+    }
+  }
+
+  // Limitar contexto total para não exceder token limits
+  return chunks.slice(0, 12).join("\n\n---\n\n");
+  } catch (err) {
+    console.error("[searchSrdContext] Erro ao buscar SRD:", err);
+    return "";
+  }
 }
 
 // ─── Contexto de Campanha ───────────────
 
 async function getCampaignContext(campaignId: string): Promise<string> {
+  try {
   const campaign = await prisma.campaign.findUnique({
     where: { id: campaignId },
     include: {
@@ -153,6 +229,31 @@ async function getCampaignContext(campaignId: string): Promise<string> {
   }
 
   return ctx;
+  } catch (err) {
+    console.error("[getCampaignContext] Erro:", err);
+    return "";
+  }
+}
+
+// ─── Buscar Histórico do Chat ───────────
+
+async function getRecentHistory(limit: number = 4): Promise<GeminiMessage[]> {
+  try {
+    const recent = await prisma.chatHistory.findMany({
+      orderBy: { createdAt: "desc" },
+      take: limit,
+    });
+
+    const messages: GeminiMessage[] = [];
+    for (const msg of recent.reverse()) {
+      messages.push({ role: "user", parts: [{ text: msg.question }] });
+      messages.push({ role: "model", parts: [{ text: msg.answer }] });
+    }
+    return messages;
+  } catch (err) {
+    console.error("[getRecentHistory] Erro:", err);
+    return [];
+  }
 }
 
 // ─── Prompts do Sistema ─────────────────
@@ -168,6 +269,7 @@ REGRAS:
 - Formate a resposta com markdown (negrito, listas, tabelas quando útil)
 - Converta pés para metros (1 pé ≈ 0,3m, 5 pés = 1,5m, 30 pés = 9m)
 - Se houver uma campanha ativa, contextualize as respostas nela
+- Diferencie entre edições (3.5 e 5e) quando relevante
 - Seja conciso mas completo`,
 
   npc: `Você é um gerador de NPCs para D&D. 
@@ -239,8 +341,8 @@ export async function askAssistant(req: AssistantRequest): Promise<AssistantResp
     }
   }
 
-  // RAG: buscar no SRD (só para modo chat)
-  if (req.mode === "chat") {
+  // RAG: buscar no SRD (para chat e npc)
+  if (req.mode === "chat" || req.mode === "npc") {
     const srdCtx = await searchSrdContext(req.message);
     if (srdCtx) {
       systemPrompt += `\n\n--- DADOS DO SRD (use para responder) ---\n${srdCtx}`;
@@ -248,21 +350,30 @@ export async function askAssistant(req: AssistantRequest): Promise<AssistantResp
     }
   }
 
+  // Carregar histórico persistente se não houver history no request
+  const history = req.history && req.history.length > 0
+    ? req.history
+    : await getRecentHistory(4);
+
   const response = await callGemini(
     systemPrompt,
-    req.history || [],
+    history,
     req.message,
   );
 
-  // Salvar no histórico
-  await prisma.chatHistory.create({
-    data: {
-      question: req.message,
-      answer: response.text,
-      context: contextInfo.substring(0, 2000) || null,
-      tokensUsed: response.tokensUsed,
-    },
-  });
+  // Salvar no histórico (não impede resposta se falhar)
+  try {
+    await prisma.chatHistory.create({
+      data: {
+        question: req.message,
+        answer: response.text,
+        context: contextInfo.substring(0, 2000) || null,
+        tokensUsed: response.tokensUsed,
+      },
+    });
+  } catch (err) {
+    console.error("[askAssistant] Erro ao salvar histórico:", err);
+  }
 
   return {
     text: response.text,

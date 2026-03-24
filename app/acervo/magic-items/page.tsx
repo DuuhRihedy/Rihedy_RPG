@@ -8,11 +8,11 @@ export const dynamic = 'force-dynamic';
 export default async function MagicItemsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; rarity?: string; category?: string }>;
+  searchParams: Promise<{ q?: string; rarity?: string; category?: string; edition?: string }>;
 }) {
   const params = await searchParams;
   const [items, filters] = await Promise.all([
-    searchMagicItems(params.q, params.rarity, params.category),
+    searchMagicItems(params.q, params.rarity, params.category, params.edition),
     getMagicItemFilters(),
   ]);
 
@@ -29,13 +29,13 @@ export default async function MagicItemsPage({
     <div className="page-container">
       <div className="page-header">
         <div>
-          <Link href="/acervo" className="breadcrumb-link">← Acervo</Link>
-          <h1 className="page-title">✨ Itens Mágicos</h1>
-          <p className="page-subtitle">{items.length} itens encontrados</p>
+          <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>
+          <h1>✨ Itens Mágicos</h1>
+          <p>{items.length} itens encontrados</p>
         </div>
       </div>
 
-      <form className="srd-filters" action="/acervo/magic-items">
+      <form className="srd-search-bar card">
         <input
           type="text"
           name="q"
@@ -43,6 +43,12 @@ export default async function MagicItemsPage({
           placeholder="Buscar item mágico..."
           defaultValue={params.q || ""}
         />
+        <select name="edition" className="input select" defaultValue={params.edition || ""}>
+          <option value="">Todas as edições</option>
+          {filters.editions.map((e) => (
+            <option key={e} value={e}>D&D {e}</option>
+          ))}
+        </select>
         <select name="rarity" className="input select" defaultValue={params.rarity || ""}>
           <option value="">Todas as raridades</option>
           {filters.rarities.map((r) => (
@@ -59,21 +65,32 @@ export default async function MagicItemsPage({
       </form>
 
       <div className="srd-results">
-        {items.map((item) => (
-          <Link key={item.id} href={`/acervo/magic-items/${item.index}`} className="srd-result-card card card-interactive">
-            <div className="srd-result-header">
-              <h3 className="srd-result-name">{item.namePtBr || item.name}</h3>
-              <span className="badge" style={{ color: rarityColors[item.rarity] || "var(--text-secondary)", borderColor: rarityColors[item.rarity] || "var(--border-default)", background: "transparent", border: "1px solid" }}>
-                {translateRarity(item.rarity)}
-              </span>
-            </div>
-            <div className="srd-result-meta">
-              <span>{translateCategory(item.category)}</span>
-              {item.requiresAttunement && <span>🔮 Sintonização</span>}
-            </div>
-            <div className="srd-result-sub">{item.name}</div>
-          </Link>
-        ))}
+        {items.length === 0 ? (
+          <div className="card" style={{ textAlign: "center", padding: "var(--space-8)", color: "var(--text-muted)" }}>
+            Nenhum item mágico encontrado
+          </div>
+        ) : (
+          items.map((item) => (
+            <Link key={item.id} href={`/acervo/magic-items/${item.index}`} className="srd-result-card card card-interactive">
+              <div className="srd-result-header">
+                <h3 className="srd-result-name">{item.namePtBr || item.name}</h3>
+                <div style={{ display: "flex", gap: "var(--space-2)" }}>
+                  <span className={`badge badge-sm ${item.edition === "3.5" ? "badge-35" : "badge-5e"}`}>
+                    {item.edition}
+                  </span>
+                  <span className="badge" style={{ color: rarityColors[item.rarity] || "var(--text-secondary)", borderColor: rarityColors[item.rarity] || "var(--border-default)", background: "transparent", border: "1px solid" }}>
+                    {translateRarity(item.rarity)}
+                  </span>
+                </div>
+              </div>
+              <div className="srd-result-meta">
+                <span>{translateCategory(item.category)}</span>
+                {item.requiresAttunement && <span>🔮 Sintonização</span>}
+              </div>
+              <div className="srd-result-sub">{item.name}</div>
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );

@@ -1,10 +1,16 @@
 import { getDashboardStats } from "@/lib/actions/sessions";
+import { getSrdStats } from "@/lib/actions/srd";
 import Link from "next/link";
 
 export const dynamic = 'force-dynamic';
 
 export default async function DashboardPage() {
-  const stats = await getDashboardStats();
+  const [stats, srdStats] = await Promise.all([
+    getDashboardStats(),
+    getSrdStats(),
+  ]);
+
+  const totalSrd = srdStats.spells + srdStats.monsters + srdStats.classes + srdStats.feats + srdStats.equipment + srdStats.magicItems;
 
   return (
     <div className="dashboard">
@@ -43,10 +49,10 @@ export default async function DashboardPage() {
         </div>
 
         <div className="card stat-card animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <div className="stat-card-icon stat-card-icon-arcane">🤖</div>
+          <div className="stat-card-icon stat-card-icon-arcane">📚</div>
           <div className="stat-card-info">
-            <span className="stat-card-value">{stats.aiChats}</span>
-            <span className="stat-card-label">Consultas IA</span>
+            <span className="stat-card-value">{totalSrd.toLocaleString("pt-BR")}</span>
+            <span className="stat-card-label">Registros SRD</span>
           </div>
         </div>
       </div>
@@ -126,25 +132,29 @@ export default async function DashboardPage() {
 
         {/* Right Column */}
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-          {/* AI Quick Panel */}
-          <div className="card ia-panel">
+          {/* SRD Stats Mini */}
+          <div className="card">
             <div className="card-header">
-              <span className="card-title">🤖 Assistente IA</span>
-              <span className="badge badge-arcane">Gemini 2.5</span>
+              <span className="card-title">📚 Acervo SRD</span>
+              <Link href="/acervo" className="btn btn-ghost btn-sm">Ver tudo →</Link>
             </div>
-            <div className="ia-input-wrapper">
-              <textarea
-                className="ia-input"
-                placeholder="Pergunte sobre regras, gere um NPC, peça um recap..."
-                rows={3}
-              />
-            </div>
-            <div className="ia-edition-tags">
-              <span className="badge badge-35">3.5</span>
-              <span className="badge badge-5e">5e</span>
-              <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", display: "flex", alignItems: "center" }}>
-                Em breve
-              </span>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
+              <div className="srd-mini-stat">
+                <span className="srd-mini-value">{srdStats.spells}</span>
+                <span className="srd-mini-label">Magias</span>
+              </div>
+              <div className="srd-mini-stat">
+                <span className="srd-mini-value">{srdStats.monsters}</span>
+                <span className="srd-mini-label">Monstros</span>
+              </div>
+              <div className="srd-mini-stat">
+                <span className="srd-mini-value">{srdStats.feats}</span>
+                <span className="srd-mini-label">Talentos</span>
+              </div>
+              <div className="srd-mini-stat">
+                <span className="srd-mini-value">{srdStats.equipment + srdStats.magicItems}</span>
+                <span className="srd-mini-label">Itens</span>
+              </div>
             </div>
           </div>
 
@@ -168,20 +178,20 @@ export default async function DashboardPage() {
                   <div className="quick-note-time">Criar e editar personagens</div>
                 </div>
               </Link>
-              <div className="quick-note" style={{ opacity: 0.5 }}>
+              <Link href="/acervo" className="quick-note" style={{ textDecoration: "none" }}>
                 <span className="quick-note-icon">📚</span>
                 <div className="quick-note-content">
                   <div className="quick-note-text"><strong>Acervo de Regras</strong></div>
-                  <div className="quick-note-time">Em breve — Fase 3</div>
+                  <div className="quick-note-time">Magias, monstros, equipamentos e mais</div>
                 </div>
-              </div>
-              <div className="quick-note" style={{ opacity: 0.5 }}>
+              </Link>
+              <Link href="/assistente" className="quick-note" style={{ textDecoration: "none" }}>
                 <span className="quick-note-icon">🤖</span>
                 <div className="quick-note-content">
                   <div className="quick-note-text"><strong>Assistente IA</strong></div>
-                  <div className="quick-note-time">Em breve — Fase 4</div>
+                  <div className="quick-note-time">Chat de regras, gerar NPCs, recaps</div>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

@@ -305,3 +305,128 @@ model SrdMagicItem {
   requiresAttunement Boolean @default(false)
   source          String @default("SRD")
 }
+
+// ── Raças ──────────────────────────
+
+model SrdRace {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String?
+  edition         String  @default("5e")
+  speed           Int
+  abilityBonuses  String? // JSON: [{ name, bonus }]
+  alignment       String?
+  age             String?
+  size            String?
+  sizeDescription String?
+  languages       String? // JSON
+  traits          String? // JSON: [{ index, name }]
+  subraces        String? // JSON
+  proficiencies   String? // JSON
+  source          String  @default("SRD")
+}
+
+model SrdSubrace {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String?
+  edition         String  @default("5e")
+  raceIndex       String
+  description     String?
+  abilityBonuses  String? // JSON
+  traits          String? // JSON
+  proficiencies   String? // JSON
+  source          String  @default("SRD")
+}
+
+// ── Subclasses ─────────────────────
+
+model SrdSubclass {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String?
+  edition         String  @default("5e")
+  classIndex      String
+  description     String?
+  descriptionPtBr String?
+  features        String? // JSON
+  spells          String? // JSON
+  source          String  @default("SRD")
+}
+
+// ── Features de Classe ─────────────
+
+model SrdFeature {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String?
+  edition         String  @default("5e")
+  classIndex      String?
+  subclassIndex   String?
+  level           Int
+  description     String
+  descriptionPtBr String?
+  prerequisites   String? // JSON
+  source          String  @default("SRD")
+}
+
+// ── Condições ──────────────────────
+
+model SrdCondition {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String?
+  edition         String  @default("5e")
+  description     String
+  descriptionPtBr String?
+  source          String  @default("SRD")
+}
+
+// ── Skills ─────────────────────────
+
+model SrdSkill {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String?
+  edition         String  @default("5e")
+  abilityScore    String  // "DEX", "WIS", etc.
+  description     String
+  descriptionPtBr String?
+  source          String  @default("SRD")
+}
+
+// ── Traits (Raciais) ───────────────
+
+model SrdTrait {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String?
+  edition         String  @default("5e")
+  races           String? // JSON: [{ index, name }]
+  subraces        String? // JSON
+  description     String
+  descriptionPtBr String?
+  proficiencies   String? // JSON
+  source          String  @default("SRD")
+}
+
+// ── Idiomas ────────────────────────
+
+model SrdLanguage {
+  id              String  @id @default(cuid())
+  index           String  @unique
+  name            String
+  namePtBr        String?
+  edition         String  @default("5e")
+  type            String  // "Standard" or "Exotic"
+  typicalSpeakers String? // "Humans, Halflings, ..."
+  script          String? // "Common", "Elvish", etc.
+  source          String  @default("SRD")
+}

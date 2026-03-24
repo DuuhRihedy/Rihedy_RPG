@@ -269,11 +269,15 @@ code, pre {
 
 .card-interactive {
   cursor: pointer;
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast),
+              transform var(--transition-fast);
 }
 
 .card-interactive:hover {
   border-color: var(--dnd-gold);
   box-shadow: var(--shadow-glow-gold);
+  transform: translateY(-2px);
 }
 
 /* ── Button ───────────────────────────── */
@@ -345,6 +349,27 @@ code, pre {
   color: var(--text-primary);
 }
 
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border-color: var(--danger);
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+  border-color: #dc2626;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger-text {
+  color: var(--danger);
+}
+
+.btn-danger-text:hover:not(:disabled) {
+  background: var(--danger-subtle);
+  color: var(--danger);
+}
+
 .btn-sm {
   height: 28px;
   padding: var(--space-1) var(--space-3);
@@ -355,6 +380,29 @@ code, pre {
   height: 44px;
   padding: var(--space-3) var(--space-6);
   font-size: var(--text-base);
+}
+
+/* ── Delete Confirmation ─────────────── */
+.delete-confirm-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--danger-subtle);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: var(--radius-md);
+  animation: fadeIn 0.2s ease;
+}
+
+.delete-confirm-text {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.delete-confirm-actions {
+  display: flex;
+  gap: var(--space-2);
 }
 
 /* ── Input ────────────────────────────── */
@@ -380,6 +428,43 @@ code, pre {
   outline: none;
   border-color: var(--dnd-gold);
   box-shadow: 0 0 0 3px var(--dnd-gold-subtle);
+}
+
+.textarea {
+  height: auto;
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: var(--space-8);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.form-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--space-4) 0;
 }
 
 /* ── Stat Block (RPG) ─────────────────── */
@@ -449,8 +534,36 @@ code, pre {
   50% { box-shadow: 0 0 20px rgba(200, 168, 78, 0.4); }
 }
 
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes borderGlow {
+  0%, 100% { border-color: var(--border-subtle); }
+  50% { border-color: var(--dnd-gold); }
+}
+
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease forwards;
+}
+
+.animate-slide-in {
+  animation: slideInRight 0.3s ease forwards;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.25s ease forwards;
 }
 
 .skeleton {

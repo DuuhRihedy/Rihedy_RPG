@@ -9,36 +9,59 @@ export async function sendMessage(
   campaignId?: string,
   sessionId?: string,
 ) {
-  const response = await askAssistant({
-    message,
-    mode,
-    campaignId: campaignId || undefined,
-    sessionId: sessionId || undefined,
-  });
+  try {
+    const response = await askAssistant({
+      message,
+      mode,
+      campaignId: campaignId || undefined,
+      sessionId: sessionId || undefined,
+    });
 
-  return response;
+    return response;
+  } catch (err) {
+    console.error("[sendMessage] Erro:", err);
+    return {
+      text: `❌ Erro ao processar mensagem: ${err instanceof Error ? err.message : "Erro desconhecido"}`,
+      tokensUsed: 0,
+    };
+  }
 }
 
 export async function getCampaignsForSelector() {
-  return prisma.campaign.findMany({
-    select: { id: true, name: true, edition: true, status: true },
-    orderBy: { updatedAt: "desc" },
-  });
+  try {
+    return await prisma.campaign.findMany({
+      select: { id: true, name: true, edition: true, status: true },
+      orderBy: { updatedAt: "desc" },
+    });
+  } catch (err) {
+    console.error("[getCampaignsForSelector] Erro:", err);
+    return [];
+  }
 }
 
 export async function getSessionsForCampaign(campaignId: string) {
-  return prisma.session.findMany({
-    where: { campaignId },
-    select: { id: true, number: true, title: true },
-    orderBy: { number: "desc" },
-  });
+  try {
+    return await prisma.session.findMany({
+      where: { campaignId },
+      select: { id: true, number: true, title: true },
+      orderBy: { number: "desc" },
+    });
+  } catch (err) {
+    console.error("[getSessionsForCampaign] Erro:", err);
+    return [];
+  }
 }
 
 export async function getChatHistory(limit: number = 20) {
-  return prisma.chatHistory.findMany({
-    orderBy: { createdAt: "desc" },
-    take: limit,
-  });
+  try {
+    return await prisma.chatHistory.findMany({
+      orderBy: { createdAt: "desc" },
+      take: limit,
+    });
+  } catch (err) {
+    console.error("[getChatHistory] Erro:", err);
+    return [];
+  }
 }
 
 export async function saveNpcFromAi(
@@ -50,30 +73,40 @@ export async function saveNpcFromAi(
   type: string,
   campaignId?: string,
 ) {
-  const npc = await prisma.npc.create({
-    data: {
-      name,
-      race,
-      class: npcClass,
-      level,
-      alignment,
-      type,
-      status: "alive",
-    },
-  });
-
-  if (campaignId) {
-    await prisma.campaignNpc.create({
-      data: { campaignId, npcId: npc.id },
+  try {
+    const npc = await prisma.npc.create({
+      data: {
+        name,
+        race,
+        class: npcClass,
+        level,
+        alignment,
+        type,
+        status: "alive",
+      },
     });
-  }
 
-  return npc;
+    if (campaignId) {
+      await prisma.campaignNpc.create({
+        data: { campaignId, npcId: npc.id },
+      });
+    }
+
+    return npc;
+  } catch (err) {
+    console.error("[saveNpcFromAi] Erro:", err);
+    throw new Error(`Falha ao salvar NPC: ${err instanceof Error ? err.message : "Erro desconhecido"}`);
+  }
 }
 
 export async function saveRecapToSession(sessionId: string, recap: string) {
-  return prisma.session.update({
-    where: { id: sessionId },
-    data: { aiRecap: recap },
-  });
+  try {
+    return await prisma.session.update({
+      where: { id: sessionId },
+      data: { aiRecap: recap },
+    });
+  } catch (err) {
+    console.error("[saveRecapToSession] Erro:", err);
+    throw new Error(`Falha ao salvar recap: ${err instanceof Error ? err.message : "Erro desconhecido"}`);
+  }
 }

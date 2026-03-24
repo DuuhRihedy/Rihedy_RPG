@@ -121,3 +121,72 @@ export async function deleteNpc(id: string) {
   revalidatePath("/npcs");
   redirect("/npcs");
 }
+
+// ── Itens do NPC ───────────────────
+
+export async function addItemToNpc(formData: FormData) {
+  const npcId = formData.get("npcId") as string;
+  const name = formData.get("name") as string;
+  const type = formData.get("type") as string || "misc";
+  const description = formData.get("description") as string;
+  const value = formData.get("value") as string;
+  const weight = formData.get("weight") as string;
+  const magical = formData.get("magical") === "true";
+
+  if (!npcId || !name?.trim()) return;
+
+  await prisma.item.create({
+    data: {
+      npcId,
+      name: name.trim(),
+      type,
+      description: description?.trim() || null,
+      value: value?.trim() || null,
+      weight: weight ? parseFloat(weight) : null,
+      magical,
+    },
+  });
+
+  revalidatePath(`/npcs/${npcId}`);
+}
+
+export async function removeItemFromNpc(itemId: string, npcId: string) {
+  await prisma.item.delete({ where: { id: itemId } });
+  revalidatePath(`/npcs/${npcId}`);
+}
+
+// ── Relações entre NPCs ────────────
+
+export async function createRelation(formData: FormData) {
+  const originId = formData.get("originId") as string;
+  const targetId = formData.get("targetId") as string;
+  const type = formData.get("type") as string;
+  const description = formData.get("description") as string;
+
+  if (!originId || !targetId || !type?.trim()) return;
+
+  await prisma.relation.create({
+    data: {
+      originId,
+      targetId,
+      type: type.trim(),
+      description: description?.trim() || null,
+    },
+  });
+
+  revalidatePath(`/npcs/${originId}`);
+}
+
+export async function deleteRelation(id: string, npcId: string) {
+  await prisma.relation.delete({ where: { id } });
+  revalidatePath(`/npcs/${npcId}`);
+}
+
+export async function getAllNpcsForSelector(excludeId?: string) {
+  const where = excludeId ? { id: { not: excludeId } } : {};
+  return prisma.npc.findMany({
+    where,
+    select: { id: true, name: true, type: true },
+    orderBy: { name: "asc" },
+  });
+}

@@ -1,5 +1,5 @@
 import { searchSpells, getSpellFilters } from "@/lib/actions/srd";
-import { translateSchool, translateClassList, translateSpellLevel, schoolsMap, classesMap } from "@/lib/translations";
+import { translateSchool, translateClassList, translateSpellLevel, classesMap } from "@/lib/translations";
 import Link from "next/link";
 import "../acervo.css";
 
@@ -13,9 +13,10 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
   const level = params.level !== undefined ? parseInt(params.level) : undefined;
   const school = params.school || undefined;
   const className = params.class || undefined;
+  const edition = params.edition || undefined;
 
   const [spells, filters] = await Promise.all([
-    searchSpells(query, level, school, className),
+    searchSpells(query, level, school, className, edition),
     getSpellFilters(),
   ]);
 
@@ -36,9 +37,15 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
         <input
           name="q"
           className="input"
-          placeholder="Buscar magia..."
+          placeholder="Buscar magia (nome ou descrição)..."
           defaultValue={query}
         />
+        <select name="edition" className="input select" defaultValue={edition ?? ""}>
+          <option value="">Todas as edições</option>
+          {filters.editions.map((e) => (
+            <option key={e} value={e}>D&D {e}</option>
+          ))}
+        </select>
         <select name="level" className="input select" defaultValue={params.level ?? ""}>
           <option value="">Todos os níveis</option>
           {filters.levels.map((l) => (
@@ -79,6 +86,9 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
             spells.map((spell) => (
               <Link key={spell.id} href={`/acervo/spells/${spell.index}`} className="spell-row">
                 <span className="spell-name">
+                  <span className={`badge badge-sm ${spell.edition === "3.5" ? "badge-35" : "badge-5e"}`} style={{ marginRight: "var(--space-2)" }}>
+                    {spell.edition}
+                  </span>
                   {spell.namePtBr || spell.name}
                   {spell.namePtBr && (
                     <span style={{ color: "var(--text-muted)", fontSize: "var(--text-xs)", marginLeft: "var(--space-2)" }}>

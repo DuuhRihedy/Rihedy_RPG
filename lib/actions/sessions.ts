@@ -39,6 +39,30 @@ export async function createSession(formData: FormData) {
   revalidatePath(`/campanhas/${campaignId}`);
 }
 
+export async function updateSession(id: string, formData: FormData) {
+  const campaignId = formData.get("campaignId") as string;
+  const title = formData.get("title") as string;
+  const notes = formData.get("notes") as string;
+  const date = formData.get("date") as string;
+  const durationMin = formData.get("durationMin") as string;
+  const aiRecap = formData.get("aiRecap") as string;
+
+  const data: Record<string, unknown> = {};
+  if (title !== null) data.title = title?.trim() || null;
+  if (notes !== null) data.notes = notes?.trim() || null;
+  if (date) data.date = new Date(date);
+  if (durationMin) data.durationMin = parseInt(durationMin) || null;
+  if (aiRecap !== null) data.aiRecap = aiRecap?.trim() || null;
+
+  await prisma.session.update({ where: { id }, data });
+  revalidatePath(`/campanhas/${campaignId}`);
+}
+
+export async function deleteSession(id: string, campaignId: string) {
+  await prisma.session.delete({ where: { id } });
+  revalidatePath(`/campanhas/${campaignId}`);
+}
+
 export async function getDashboardStats() {
   const [campaigns, npcs, sessions, aiChats] = await Promise.all([
     prisma.campaign.count({ where: { status: "active" } }),
