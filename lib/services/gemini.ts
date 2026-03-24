@@ -4,7 +4,7 @@
 // ══════════════════════════════════════════
 
 const GEMINI_API_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
 export interface GeminiMessage {
   role: "user" | "model";
