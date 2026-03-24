@@ -25,6 +25,46 @@ export interface AssistantResponse {
 
 // ─── RAG: Busca Expandida no SRD ────────
 
+// Mapeamento de nomes de classes PT-BR → EN para busca
+const CLASS_NAME_MAP: Record<string, string> = {
+  "mago": "Wizard", "wizard": "Wizard",
+  "guerreiro": "Fighter", "fighter": "Fighter",
+  "ladino": "Rogue", "rogue": "Rogue",
+  "clérigo": "Cleric", "clerigo": "Cleric", "cleric": "Cleric",
+  "bardo": "Bard", "bard": "Bard",
+  "druida": "Druid", "druid": "Druid",
+  "paladino": "Paladin", "paladin": "Paladin",
+  "ranger": "Ranger", "patrulheiro": "Ranger",
+  "feiticeiro": "Sorcerer", "sorcerer": "Sorcerer",
+  "bruxo": "Warlock", "warlock": "Warlock",
+  "monge": "Monk", "monk": "Monk",
+  "bárbaro": "Barbarian", "barbaro": "Barbarian", "barbarian": "Barbarian",
+};
+
+// Detecta nível de magia na query (ex: "3° nível", "nível 3", "level 3")
+function detectSpellLevel(query: string): number | null {
+  const patterns = [
+    /(\d+)[°º]?\s*n[ií]vel/i,
+    /n[ií]vel\s*(\d+)/i,
+    /level\s*(\d+)/i,
+    /(\d+)(?:st|nd|rd|th)\s*level/i,
+  ];
+  for (const p of patterns) {
+    const match = query.match(p);
+    if (match) return parseInt(match[1], 10);
+  }
+  return null;
+}
+
+// Detecta nome de classe na query
+function detectClassName(query: string): string | null {
+  const lower = query.toLowerCase();
+  for (const [key, value] of Object.entries(CLASS_NAME_MAP)) {
+    if (lower.includes(key)) return value;
+  }
+  return null;
+}
+
 async function searchSrdContext(query: string): Promise<string> {
   try {
   const terms = query
@@ -37,55 +77,107 @@ async function searchSrdContext(query: string): Promise<string> {
   const chunks: string[] = [];
   const searchTerms = terms.slice(0, 4);
 
-  // Buscar magias
-  for (const term of searchTerms) {
+  // ── Detecção inteligente de consultas por classe + nível ──
+  const detectedLevel = detectSpellLevel(query);
+  const detectedClass = detectClassName(query);
+  const isSpellByClassQuery = detectedClass !== null &&
+    (query.toLowerCase().includes("magia") || query.toLowerCase().includes("spell") ||
+     query.toLowerCase().includes("preparar") || query.toLowerCase().includes("conjur") ||
+     detectedLevel !== null);
+
+  // Busca direcionada: magias por classe + nível
+  if (isSpellByClassQuery) {
     const spells = await prisma.srdSpell.findMany({
       where: {
-        OR: [
-          { name: { contains: term, mode: "insensitive" } },
-          { namePtBr: { contains: term, mode: "insensitive" } },
-          { school: { contains: term, mode: "insensitive" } },
-          { classes: { contains: term, mode: "insensitive" } },
-        ],
+        classes: { contains: detectedClass!, mode: "insensitive" },
+        ...(detectedLevel !== null ? { level: detectedLevel } : {}),
       },
-      take: 3,
+      orderBy: { name: "asc" },
+      take: 30,
     });
 
-    for (const s of spells) {
+    if (spells.length > 0) {
       chunks.push(
-        `[MAGIA] ${s.namePtBr || s.name} (${s.name}) [${s.edition}]` +
-          `\nNível: ${s.level} | Escola: ${s.school}` +
-          `\nTempo: ${s.castingTime} | Alcance: ${s.range} | Duração: ${s.duration}` +
-          `\nComponentes: ${s.components}${s.material ? ` (${s.material})` : ""}` +
-          `\nDescrição: ${(s.descriptionPtBr || s.description).substring(0, 500)}` +
-          (s.higherLevel ? `\nNíveis superiores: ${(s.higherLevelPtBr || s.higherLevel).substring(0, 200)}` : ""),
+        `[BUSCA DIRECIONADA] Magias de nível ${detectedLevel ?? "todos"} da classe ${detectedClass}: ${spells.length} encontradas\n` +
+        spells.map((s) =>
+          `• ${s.namePtBr || s.name} (${s.name}) [${s.edition}] — Escola: ${s.school} | Nível: ${s.level}`
+        ).join("\n"),
       );
+
+      // Adicionar detalhes das primeiras 5
+      for (const s of spells.slice(0, 5)) {
+        chunks.push(
+          `[MAGIA] ${s.namePtBr || s.name} (${s.name}) [${s.edition}]` +
+            `\nNível: ${s.level} | Escola: ${s.school}` +
+            `\nTempo: ${s.castingTime} | Alcance: ${s.range} | Duração: ${s.duration}` +
+            `\nComponentes: ${s.components}${s.material ? ` (${s.material})` : ""}` +
+            `\nDescrição: ${(s.descriptionPtBr || s.description).substring(0, 300)}` +
+            (s.higherLevel ? `\nNíveis superiores: ${(s.higherLevelPtBr || s.higherLevel).substring(0, 150)}` : ""),
+        );
+      }
     }
   }
 
-  // Buscar monstros
-  for (const term of searchTerms) {
-    const monsters = await prisma.srdMonster.findMany({
-      where: {
-        OR: [
-          { name: { contains: term, mode: "insensitive" } },
-          { namePtBr: { contains: term, mode: "insensitive" } },
-          { type: { contains: term, mode: "insensitive" } },
-        ],
-      },
-      take: 2,
-    });
+  // ── Busca genérica de magias (se não foi busca direcionada ou não achou nada) ──
+  if (!isSpellByClassQuery || chunks.length === 0) {
+    // Filtrar termos genéricos que poluem a busca
+    const stopWords = new Set(["quais", "como", "pode", "preparar", "funciona", "qual", "onde", "usar", "para", "nível", "nivel"]);
+    const spellTerms = searchTerms.filter((t) => !stopWords.has(t));
 
-    for (const m of monsters) {
-      chunks.push(
-        `[MONSTRO] ${m.namePtBr || m.name} (${m.name}) [${m.edition}]` +
-          `\nTamanho: ${m.size} | Tipo: ${m.type} | ND: ${m.challengeRating} (${m.xp} XP)` +
-          `\nCA: ${m.armorClass} | PV: ${m.hitPoints} (${m.hitDice})` +
-          `\nFOR ${m.str} DES ${m.dex} CON ${m.con} INT ${m.intl} SAB ${m.wis} CAR ${m.cha}` +
-          `\nVelocidade: ${m.speed}` +
-          (m.specialAbilities ? `\nHabilidades: ${(m.specialAbilitiesPtBr || m.specialAbilities).substring(0, 400)}` : "") +
-          (m.actions ? `\nAções: ${(m.actionsPtBr || m.actions).substring(0, 400)}` : ""),
-      );
+    for (const term of spellTerms) {
+      // Traduzir classe PT-BR → EN para busca no campo classes
+      const classEN = CLASS_NAME_MAP[term];
+      const spells = await prisma.srdSpell.findMany({
+        where: {
+          OR: [
+            { name: { contains: term, mode: "insensitive" as const } },
+            { namePtBr: { contains: term, mode: "insensitive" as const } },
+            { school: { contains: term, mode: "insensitive" as const } },
+            ...(classEN ? [{ classes: { contains: classEN, mode: "insensitive" as const } }] : []),
+            { classes: { contains: term, mode: "insensitive" as const } },
+          ],
+        },
+        take: 3,
+      });
+
+      for (const s of spells) {
+        chunks.push(
+          `[MAGIA] ${s.namePtBr || s.name} (${s.name}) [${s.edition}]` +
+            `\nNível: ${s.level} | Escola: ${s.school}` +
+            `\nTempo: ${s.castingTime} | Alcance: ${s.range} | Duração: ${s.duration}` +
+            `\nComponentes: ${s.components}${s.material ? ` (${s.material})` : ""}` +
+            `\nDescrição: ${(s.descriptionPtBr || s.description).substring(0, 500)}` +
+            (s.higherLevel ? `\nNíveis superiores: ${(s.higherLevelPtBr || s.higherLevel).substring(0, 200)}` : ""),
+        );
+      }
+    }
+  }
+
+  // ── Buscar monstros (pular se a query é claramente sobre classe/magias) ──
+  if (!isSpellByClassQuery) {
+    for (const term of searchTerms) {
+      const monsters = await prisma.srdMonster.findMany({
+        where: {
+          OR: [
+            { name: { contains: term, mode: "insensitive" } },
+            { namePtBr: { contains: term, mode: "insensitive" } },
+            { type: { contains: term, mode: "insensitive" } },
+          ],
+        },
+        take: 2,
+      });
+
+      for (const m of monsters) {
+        chunks.push(
+          `[MONSTRO] ${m.namePtBr || m.name} (${m.name}) [${m.edition}]` +
+            `\nTamanho: ${m.size} | Tipo: ${m.type} | ND: ${m.challengeRating} (${m.xp} XP)` +
+            `\nCA: ${m.armorClass} | PV: ${m.hitPoints} (${m.hitDice})` +
+            `\nFOR ${m.str} DES ${m.dex} CON ${m.con} INT ${m.intl} SAB ${m.wis} CAR ${m.cha}` +
+            `\nVelocidade: ${m.speed}` +
+            (m.specialAbilities ? `\nHabilidades: ${(m.specialAbilitiesPtBr || m.specialAbilities).substring(0, 400)}` : "") +
+            (m.actions ? `\nAções: ${(m.actionsPtBr || m.actions).substring(0, 400)}` : ""),
+        );
+      }
     }
   }
 
@@ -158,7 +250,8 @@ async function searchSrdContext(query: string): Promise<string> {
   }
 
   // Buscar classes
-  for (const term of searchTerms.slice(0, 2)) {
+  const classSearchTerms = searchTerms.map(t => CLASS_NAME_MAP[t] || t);
+  for (const term of [...new Set(classSearchTerms)].slice(0, 2)) {
     const classes = await prisma.srdClass.findMany({
       where: {
         OR: [
@@ -179,7 +272,7 @@ async function searchSrdContext(query: string): Promise<string> {
   }
 
   // Limitar contexto total para não exceder token limits
-  return chunks.slice(0, 12).join("\n\n---\n\n");
+  return chunks.slice(0, 15).join("\n\n---\n\n");
   } catch (err) {
     console.error("[searchSrdContext] Erro ao buscar SRD:", err);
     return "";
