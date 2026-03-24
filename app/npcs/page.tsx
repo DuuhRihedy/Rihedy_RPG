@@ -17,8 +17,8 @@ export default async function NpcsPage() {
     <div className="page-container">
       <div className="page-header">
         <div>
-          <h1>NPCs</h1>
-          <p>Personagens do seu mundo</p>
+          <h1>Banco de NPCs</h1>
+          <p>Personagens do seu mundo — importáveis para qualquer campanha</p>
         </div>
       </div>
 
@@ -97,9 +97,17 @@ export default async function NpcsPage() {
               className="card card-interactive npc-card"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
-              <div className={`npc-card-avatar npc-card-avatar-${npc.type === "enemy" ? "enemy" : npc.type === "ally" ? "ally" : "neutral"}`}>
-                {npc.type === "enemy" ? "💀" : npc.type === "ally" ? "🛡️" : "👤"}
-              </div>
+              {npc.imageUrl ? (
+                <img
+                  src={npc.imageUrl}
+                  alt={npc.name}
+                  className="npc-card-img"
+                />
+              ) : (
+                <div className={`npc-card-avatar npc-card-avatar-${npc.type === "enemy" ? "enemy" : npc.type === "ally" ? "ally" : "neutral"}`}>
+                  {npc.type === "enemy" ? "💀" : npc.type === "ally" ? "🛡️" : "👤"}
+                </div>
+              )}
               <div className="npc-card-info">
                 <div className="npc-card-name">{npc.name}</div>
                 <div className="npc-card-meta">

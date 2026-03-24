@@ -151,6 +151,22 @@ export default async function NpcDetailPage({ params }: { params: Params }) {
 
         {/* Right — Stats & Campaigns */}
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+          {/* NPC Image */}
+          {npc.imageUrl && (
+            <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+              <img
+                src={npc.imageUrl}
+                alt={npc.name}
+                style={{
+                  width: "100%",
+                  maxHeight: "300px",
+                  objectFit: "cover",
+                  display: "block",
+                }}
+              />
+            </div>
+          )}
+
           {/* Attributes */}
           {attrs && (
             <div className="card">

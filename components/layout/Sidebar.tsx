@@ -9,9 +9,13 @@ const NAV_ITEMS = [
     section: "Principal",
     items: [
       { href: "/", icon: "📊", label: "Dashboard" },
-      { href: "/campanhas", icon: "📜", label: "Campanhas" },
-      { href: "/npcs", icon: "👥", label: "NPCs" },
-      { href: "/sessoes", icon: "📖", label: "Sessões" },
+      { href: "/campanhas", icon: "⚔️", label: "Campanhas" },
+    ],
+  },
+  {
+    section: "Banco Global",
+    items: [
+      { href: "/npcs", icon: "👥", label: "Banco de NPCs" },
     ],
   },
   {
@@ -19,13 +23,6 @@ const NAV_ITEMS = [
     items: [
       { href: "/acervo", icon: "📚", label: "Acervo de Regras" },
       { href: "/assistente", icon: "🤖", label: "Assistente IA" },
-    ],
-  },
-  {
-    section: "Ferramentas",
-    items: [
-      { href: "/notas", icon: "📝", label: "Notas" },
-      { href: "/mapas", icon: "🗺️", label: "Mapas" },
     ],
   },
 ];

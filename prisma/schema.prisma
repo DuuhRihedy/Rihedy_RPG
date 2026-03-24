@@ -93,6 +93,7 @@ model Item {
   weight      Float?
   value       String?
   magical     Boolean @default(false)
+  imageUrl    String?
 
   npcId       String?
   npc         Npc?    @relation(fields: [npcId], references: [id], onDelete: SetNull)

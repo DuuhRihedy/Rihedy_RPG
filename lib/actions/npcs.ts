@@ -70,7 +70,7 @@ export async function createNpc(formData: FormData) {
 
 export async function updateNpc(id: string, formData: FormData) {
   const data: Record<string, unknown> = {};
-  const fields = ["name", "race", "class", "alignment", "description", "backstory", "gmNotes", "type", "status", "edition"];
+  const fields = ["name", "race", "class", "alignment", "description", "backstory", "gmNotes", "type", "status", "edition", "imageUrl"];
 
   for (const field of fields) {
     const value = formData.get(field);

@@ -1,6 +1,7 @@
 import { getNpc, updateNpc, addItemToNpc, removeItemFromNpc, createRelation, deleteRelation, getAllNpcsForSelector } from "@/lib/actions/npcs";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import NpcImageField from "@/components/NpcImageField";
 import "../../../campanhas/campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -156,6 +157,14 @@ export default async function EditNpcPage({ params }: { params: Params }) {
 
           {/* Right Column */}
           <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
+
+            {/* Imagem do NPC */}
+            <div className="card">
+              <div className="card-header">
+                <span className="card-title">🖼️ Imagem</span>
+              </div>
+              <NpcImageField currentImage={npc.imageUrl} npcName={npc.name} />
+            </div>
 
             {/* Atributos */}
             <div className="card">
