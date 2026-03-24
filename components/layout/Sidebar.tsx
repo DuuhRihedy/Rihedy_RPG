@@ -19,6 +19,14 @@ const NAV_ITEMS = [
     ],
   },
   {
+    section: "Ferramentas",
+    items: [
+      { href: "/ferramentas/dados", icon: "🎲", label: "Rolador de Dados" },
+      { href: "/ferramentas/gerador-npc", icon: "🧙", label: "Gerador de NPC" },
+      { href: "/ferramentas/encontros", icon: "⚔️", label: "Encontros & Loot" },
+    ],
+  },
+  {
     section: "Conhecimento",
     items: [
       { href: "/acervo", icon: "📚", label: "Acervo de Regras" },

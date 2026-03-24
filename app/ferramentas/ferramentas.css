@@ -1,0 +1,689 @@
+/* ═══════════════════════════════════════════
+   VTT Engine — Ferramentas Styles
+   ═══════════════════════════════════════════ */
+
+/* ── Layout ──────────────────────────── */
+.tools-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--space-6);
+}
+
+.tool-main {
+  min-width: 0;
+}
+
+.tool-sidebar {
+  min-width: 0;
+}
+
+@media (max-width: 1024px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.encounter-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+@media (max-width: 900px) {
+  .encounter-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Dice Roller ─────────────────────── */
+.dice-result-display {
+  background: var(--bg-deep);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  margin-bottom: var(--space-4);
+  transition: border-color 0.3s, transform 0.15s;
+}
+
+.dice-result-display:has(.dice-result-total:not(:empty)) {
+  border-color: var(--dnd-gold);
+}
+
+.dice-rolling {
+  animation: diceShake 0.3s ease;
+}
+
+@keyframes diceShake {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.05) rotate(-2deg); }
+  50% { transform: scale(0.95) rotate(2deg); }
+  75% { transform: scale(1.02) rotate(-1deg); }
+}
+
+.dice-result-total {
+  font-family: var(--font-mono);
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--dnd-gold);
+  line-height: 1;
+  text-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+}
+
+.dice-result-detail {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.dice-result-expr {
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.dice-result-rolls {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* Quick Buttons */
+.dice-quick-row {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.dice-btn {
+  flex: 1;
+  min-width: 60px;
+  padding: var(--space-3);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dice-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--dnd-gold);
+  color: var(--dnd-gold);
+  transform: translateY(-2px);
+}
+
+.dice-btn:active {
+  transform: translateY(0);
+}
+
+/* Custom Roll */
+.dice-custom-row {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-end;
+  margin-bottom: var(--space-3);
+}
+
+.dice-input {
+  flex: 2;
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+.dice-mod-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dice-mod-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.dice-mod-input {
+  width: 60px !important;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.dice-roll-btn {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--text-lg);
+  white-space: nowrap;
+}
+
+/* Stats Row */
+.dice-stats-row {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-deep);
+  border-radius: var(--radius-sm);
+}
+
+.dice-stats-row strong {
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+/* Presets */
+.dice-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--space-2);
+}
+
+.dice-preset-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-3);
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dice-preset-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--dnd-gold);
+  transform: translateY(-1px);
+}
+
+.dice-preset-icon {
+  font-size: 20px;
+}
+
+.dice-preset-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.dice-preset-expr {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Ability Scores */
+.ability-scores-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.ability-score-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--bg-deep);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.ability-score-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.ability-score-mod {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--dnd-gold);
+  margin-top: 2px;
+}
+
+.ability-score-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  margin-top: var(--space-1);
+}
+
+/* History */
+.dice-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.dice-history-item {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--bg-deep);
+  transition: background var(--transition-fast);
+}
+
+.dice-history-item:hover {
+  background: var(--bg-hover);
+}
+
+.dice-history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dice-history-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.dice-history-total {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-base);
+  color: var(--dnd-gold);
+}
+
+.dice-history-detail {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── NPC Generator ───────────────────── */
+.gen-controls {
+  margin-bottom: var(--space-4);
+}
+
+.gen-controls-row {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.gen-btn {
+  padding: var(--space-3) var(--space-5);
+  white-space: nowrap;
+}
+
+/* NPC Sheet */
+.npc-sheet {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+}
+
+.npc-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--space-5) var(--space-6);
+  background: linear-gradient(135deg, var(--bg-deep), var(--bg-surface));
+  border-bottom: 2px solid var(--dnd-gold);
+}
+
+.npc-sheet-name {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  margin: 0;
+  color: var(--dnd-gold);
+}
+
+.npc-sheet-info {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: var(--space-1) 0 0;
+}
+
+.npc-sheet-level {
+  background: var(--dnd-red);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* Vitals */
+.npc-sheet-vitals {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background: var(--bg-deep);
+  flex-wrap: wrap;
+}
+
+.vital-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  min-width: 60px;
+}
+
+.vital-hp { border-color: var(--danger); }
+.vital-ac { border-color: var(--info); }
+
+.vital-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.vital-hp .vital-value { color: var(--danger); }
+.vital-ac .vital-value { color: var(--info); }
+
+.vital-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* NPC Sections */
+.npc-sheet-section {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.npc-sheet-section-title {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--dnd-gold);
+  margin: 0 0 var(--space-3);
+  font-weight: 700;
+}
+
+.npc-sheet-abilities {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 600px) {
+  .npc-sheet-abilities,
+  .ability-scores-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Combat Grid */
+.npc-sheet-combat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.combat-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-2);
+  background: var(--bg-deep);
+  border-radius: var(--radius-sm);
+}
+
+.combat-stat-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.combat-stat-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Saves */
+.npc-sheet-saves {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.save-box {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--bg-deep);
+  border-radius: var(--radius-md);
+  flex: 1;
+  min-width: 140px;
+}
+
+.save-icon {
+  font-size: 18px;
+}
+
+.save-label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.save-total {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--dnd-gold);
+  margin-left: auto;
+}
+
+.save-breakdown {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* ── Encounter Generator ─────────────── */
+.difficulty-row {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.difficulty-btn {
+  flex: 1;
+  padding: var(--space-2) var(--space-2);
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.difficulty-btn:hover {
+  border-color: var(--diff-color);
+  color: var(--diff-color);
+}
+
+.difficulty-btn.active {
+  background: var(--bg-surface);
+  border-color: var(--diff-color);
+  color: var(--diff-color);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Encounter Result */
+.encounter-result {
+  animation: fadeIn 0.3s ease;
+}
+
+.encounter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-4);
+}
+
+.encounter-title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+.encounter-meta {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin: var(--space-1) 0 0;
+}
+
+.encounter-difficulty {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.encounter-creatures {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.creature-row {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--bg-deep);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+}
+
+.creature-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.creature-count {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--dnd-red);
+  width: 36px;
+  text-align: center;
+}
+
+.creature-name {
+  display: block;
+  color: var(--text-primary);
+}
+
+.creature-stats {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* Loot */
+.loot-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.loot-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--bg-deep);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  transition: border-color var(--transition-fast);
+}
+
+.loot-item:hover {
+  border-color: var(--dnd-gold);
+}
+
+.loot-icon {
+  font-size: 20px;
+  width: 28px;
+  text-align: center;
+}
+
+.loot-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.loot-info strong {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+
+.loot-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--dnd-gold);
+}
+
+.loot-type {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.loot-type-magic_item {
+  background: var(--dnd-gold-subtle);
+  color: var(--dnd-gold);
+}
+
+.loot-type-gem {
+  background: rgba(99, 179, 237, 0.1);
+  color: var(--info);
+}
+
+.loot-type-art {
+  background: rgba(159, 122, 234, 0.1);
+  color: #9f7aea;
+}
