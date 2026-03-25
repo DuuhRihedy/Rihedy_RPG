@@ -22,6 +22,7 @@ model Campaign {
   npcs        CampaignNpc[]
   notes       Note[]
   arcs        StoryArc[]
+  maps        Map[]
 }
 
 // ── Sessões ────────────────────────
@@ -167,6 +168,20 @@ model StoryArc {
 
   campaignId  String
   campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+// ── Mapas ─────────────────────────
+
+model Map {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   @default("other") // world, city, dungeon, village, other
+  description String?
+  imageUrl    String
+  createdAt   DateTime @default(now())
+
+  campaignId  String?
+  campaign    Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
 }
 
 // ── Histórico de Chat IA ───────────

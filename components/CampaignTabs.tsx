@@ -13,6 +13,9 @@ const TABS = [
   { id: "npcs", icon: "👥", label: "NPCs" },
   { id: "notes", icon: "📝", label: "Notas" },
   { id: "arcs", icon: "🧵", label: "Arcos" },
+  { id: "maps", icon: "🗺️", label: "Mapas" },
+  { id: "mesa", icon: "🎲", label: "Mesa" },
+  { id: "regras", icon: "📚", label: "Regras" },
 ];
 
 export default function CampaignTabs({ defaultTab = "overview", children }: CampaignTabsProps) {

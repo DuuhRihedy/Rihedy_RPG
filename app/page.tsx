@@ -1,200 +1,72 @@
 import { getDashboardStats } from "@/lib/actions/sessions";
-import { getSrdStats } from "@/lib/actions/srd";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
+import "./entrada.css";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-export default async function DashboardPage() {
-  const [stats, srdStats] = await Promise.all([
-    getDashboardStats(),
-    getSrdStats(),
-  ]);
+/** Itens do menu principal */
+const MENU_ITEMS = [
+  { href: "/campanhas", icon: "⚔️", label: "Campanhas", desc: "Gerenciar campanhas" },
+  { href: "/ferramentas/dados", icon: "🎲", label: "Mesa", desc: "Dados, encontros e ferramentas" },
+  { href: "/acervo", icon: "📚", label: "Grimório", desc: "Regras e acervo SRD" },
+  { href: "/npcs", icon: "👥", label: "Bestiário", desc: "Banco de NPCs" },
+  { href: "/ferramentas/mapas", icon: "🗺️", label: "Mapas", desc: "Geradores de mapas" },
+  { href: "/assistente", icon: "🤖", label: "Assistente", desc: "IA para mestres" },
+];
 
-  const totalSrd = srdStats.spells + srdStats.monsters + srdStats.classes + srdStats.feats + srdStats.equipment + srdStats.magicItems;
+export default async function EntradaPage() {
+  const stats = await getDashboardStats();
 
   return (
-    <div className="dashboard">
-      {/* Greeting */}
-      <div className="dashboard-greeting animate-fade-in">
-        <h1>
-          Bem-vindo, <span className="text-gold">Mestre</span>
-        </h1>
-        <p>Seu centro de comando para campanhas de RPG</p>
+    <div className="entrada">
+      {/* Título */}
+      <h1 className="entrada-titulo entrada-animate">HUB RPG</h1>
+      <p className="entrada-subtitulo entrada-animate">Centro de Comando do Mestre</p>
+
+      {/* Botão "Continuar" — campanha mais recente */}
+      {stats.recentCampaign ? (
+        <Link
+          href={`/campanhas/${stats.recentCampaign.id}`}
+          className="entrada-continuar entrada-animate"
+        >
+          <span className="entrada-continuar-icon">▶</span>
+          <span className="entrada-continuar-info">
+            <span className="entrada-continuar-label">Continuar</span>
+            <span className="entrada-continuar-nome">{stats.recentCampaign.name}</span>
+          </span>
+        </Link>
+      ) : (
+        <Link href="/campanhas" className="entrada-sem-campanha entrada-animate">
+          + Criar primeira campanha
+        </Link>
+      )}
+
+      {/* Grid 3x2 de menu */}
+      <div className="entrada-grid entrada-animate">
+        {MENU_ITEMS.map((item) => (
+          <Link key={item.href} href={item.href} className="entrada-btn">
+            <span className="entrada-btn-icon">{item.icon}</span>
+            <span className="entrada-btn-label">{item.label}</span>
+            <span className="entrada-btn-desc">{item.desc}</span>
+          </Link>
+        ))}
       </div>
 
-      {/* Stats Row */}
-      <div className="stats-row">
-        <div className="card stat-card animate-fade-in" style={{ animationDelay: "0.05s" }}>
-          <div className="stat-card-icon stat-card-icon-red">📜</div>
-          <div className="stat-card-info">
-            <span className="stat-card-value">{stats.campaigns}</span>
-            <span className="stat-card-label">Campanhas Ativas</span>
-          </div>
+      {/* Rodapé: stats + toggle de tema */}
+      <div className="entrada-footer entrada-animate">
+        <div className="entrada-stats">
+          <span>
+            <span className="entrada-stat-value">{stats.campaigns}</span>campanhas
+          </span>
+          <span>
+            <span className="entrada-stat-value">{stats.npcs}</span>NPCs
+          </span>
+          <span>
+            <span className="entrada-stat-value">{stats.sessions}</span>sessões
+          </span>
         </div>
-
-        <div className="card stat-card animate-fade-in" style={{ animationDelay: "0.1s" }}>
-          <div className="stat-card-icon stat-card-icon-gold">👥</div>
-          <div className="stat-card-info">
-            <span className="stat-card-value">{stats.npcs}</span>
-            <span className="stat-card-label">NPCs Criados</span>
-          </div>
-        </div>
-
-        <div className="card stat-card animate-fade-in" style={{ animationDelay: "0.15s" }}>
-          <div className="stat-card-icon stat-card-icon-success">📖</div>
-          <div className="stat-card-info">
-            <span className="stat-card-value">{stats.sessions}</span>
-            <span className="stat-card-label">Sessões Registradas</span>
-          </div>
-        </div>
-
-        <div className="card stat-card animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          <div className="stat-card-icon stat-card-icon-arcane">📚</div>
-          <div className="stat-card-info">
-            <span className="stat-card-value">{totalSrd.toLocaleString("pt-BR")}</span>
-            <span className="stat-card-label">Registros SRD</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Grid */}
-      <div className="dashboard-grid">
-        {/* Left Column */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-          {/* Active Campaign */}
-          {stats.recentCampaign ? (
-            <Link href={`/campanhas/${stats.recentCampaign.id}`} className="card campaign-active" style={{ textDecoration: "none" }}>
-              <div className="card-header">
-                <span className="card-title">⚔️ Campanha Ativa</span>
-                <span className={`badge ${stats.recentCampaign.edition === "3.5" ? "badge-35" : "badge-5e"}`}>
-                  D&D {stats.recentCampaign.edition}
-                </span>
-              </div>
-              <h3 style={{ fontSize: "var(--text-xl)", marginBottom: "var(--space-2)" }}>
-                {stats.recentCampaign.name}
-              </h3>
-              {stats.recentCampaign.description && (
-                <p style={{ marginBottom: "var(--space-2)", fontSize: "var(--text-sm)" }}>
-                  {stats.recentCampaign.description}
-                </p>
-              )}
-              <div className="campaign-meta">
-                <span className="campaign-meta-item">
-                  📖 {stats.recentCampaign._count.sessions} sessões
-                </span>
-                <span className="campaign-meta-item">
-                  👥 {stats.recentCampaign._count.npcs} NPCs
-                </span>
-                {stats.recentCampaign.sessions[0]?.date && (
-                  <span className="campaign-meta-item">
-                    📅 {new Date(stats.recentCampaign.sessions[0].date).toLocaleDateString("pt-BR")}
-                  </span>
-                )}
-              </div>
-            </Link>
-          ) : (
-            <div className="card" style={{ textAlign: "center", padding: "var(--space-10)" }}>
-              <p style={{ fontSize: "var(--text-lg)", color: "var(--text-muted)", marginBottom: "var(--space-4)" }}>
-                Nenhuma campanha ativa
-              </p>
-              <Link href="/campanhas" className="btn btn-primary">
-                Criar Primeira Campanha
-              </Link>
-            </div>
-          )}
-
-          {/* Recent Notes */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">📝 Últimas Notas</span>
-            </div>
-            {stats.recentNotes.length === 0 ? (
-              <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", textAlign: "center", padding: "var(--space-4) 0" }}>
-                Nenhuma nota ainda. Crie notas nas suas campanhas!
-              </p>
-            ) : (
-              <div className="quick-notes-list">
-                {stats.recentNotes.map((note) => (
-                  <div key={note.id} className="quick-note">
-                    <span className="quick-note-icon">📝</span>
-                    <div className="quick-note-content">
-                      <div className="quick-note-text"><strong>{note.title}</strong></div>
-                      <div className="quick-note-time">
-                        {note.campaign.name} · {new Date(note.createdAt).toLocaleDateString("pt-BR")}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right Column */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-6)" }}>
-          {/* SRD Stats Mini */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">📚 Acervo SRD</span>
-              <Link href="/acervo" className="btn btn-ghost btn-sm">Ver tudo →</Link>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
-              <div className="srd-mini-stat">
-                <span className="srd-mini-value">{srdStats.spells}</span>
-                <span className="srd-mini-label">Magias</span>
-              </div>
-              <div className="srd-mini-stat">
-                <span className="srd-mini-value">{srdStats.monsters}</span>
-                <span className="srd-mini-label">Monstros</span>
-              </div>
-              <div className="srd-mini-stat">
-                <span className="srd-mini-value">{srdStats.feats}</span>
-                <span className="srd-mini-label">Talentos</span>
-              </div>
-              <div className="srd-mini-stat">
-                <span className="srd-mini-value">{srdStats.equipment + srdStats.magicItems}</span>
-                <span className="srd-mini-label">Itens</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">⚡ Acesso Rápido</span>
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-              <Link href="/campanhas" className="quick-note" style={{ textDecoration: "none" }}>
-                <span className="quick-note-icon">📜</span>
-                <div className="quick-note-content">
-                  <div className="quick-note-text"><strong>Campanhas</strong></div>
-                  <div className="quick-note-time">Gerenciar aventuras</div>
-                </div>
-              </Link>
-              <Link href="/npcs" className="quick-note" style={{ textDecoration: "none" }}>
-                <span className="quick-note-icon">👥</span>
-                <div className="quick-note-content">
-                  <div className="quick-note-text"><strong>NPCs</strong></div>
-                  <div className="quick-note-time">Criar e editar personagens</div>
-                </div>
-              </Link>
-              <Link href="/acervo" className="quick-note" style={{ textDecoration: "none" }}>
-                <span className="quick-note-icon">📚</span>
-                <div className="quick-note-content">
-                  <div className="quick-note-text"><strong>Acervo de Regras</strong></div>
-                  <div className="quick-note-time">Magias, monstros, equipamentos e mais</div>
-                </div>
-              </Link>
-              <Link href="/assistente" className="quick-note" style={{ textDecoration: "none" }}>
-                <span className="quick-note-icon">🤖</span>
-                <div className="quick-note-content">
-                  <div className="quick-note-text"><strong>Assistente IA</strong></div>
-                  <div className="quick-note-time">Chat de regras, gerar NPCs, recaps</div>
-                </div>
-              </Link>
-            </div>
-          </div>
-        </div>
+        <ThemeToggle />
       </div>
     </div>
   );

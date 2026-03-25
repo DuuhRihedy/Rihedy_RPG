@@ -4,6 +4,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { ChatSidebar } from "@/components/layout/ChatSidebar";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 import "./layout.css";
 
@@ -30,6 +31,22 @@ export const metadata: Metadata = {
   title: "Hub RPG — Centro de Comando do Mestre",
   description:
     "Hub personalizado para gerenciamento de campanhas de RPG com inteligência artificial. D&D 3.5 e 5e.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Hub RPG",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+};
+
+export const viewport = {
+  themeColor: "#d4af37",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({
@@ -42,6 +59,14 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${cinzel.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        {/* Carrega o tema antes do render pra evitar flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("hub-rpg-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`,
+          }}
+        />
+      </head>
       <body>
         <div className="app-layout">
           <Sidebar />
@@ -54,6 +79,7 @@ export default function RootLayout({
           <ChatSidebar />
           <KeyboardShortcuts />
         </div>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

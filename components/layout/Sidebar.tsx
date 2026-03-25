@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -13,7 +13,7 @@ const NAV_ITEMS = [
   {
     section: "Principal",
     items: [
-      { href: "/", icon: "📊", label: "Dashboard" },
+      { href: "/", icon: "🏠", label: "Dashboard" },
     ],
   },
   {
@@ -26,26 +26,22 @@ const NAV_ITEMS = [
   {
     section: "Banco Global",
     items: [
-      { href: "/npcs", icon: "👥", label: "Banco de NPCs" },
+      { href: "/npcs", icon: "👥", label: "NPCs" },
     ],
   },
   {
     section: "Ferramentas",
     items: [
       { href: "/ferramentas/dados", icon: "🎲", label: "Rolador de Dados" },
-      { href: "/ferramentas/gerador-npc", icon: "🧙", label: "Gerador de NPC" },
       { href: "/ferramentas/encontros", icon: "⚔️", label: "Encontros & Loot" },
       { href: "/ferramentas/calculadoras", icon: "🧮", label: "Calculadoras" },
-      { href: "/ferramentas/homebrew", icon: "🛠️", label: "Homebrew" },
-      { href: "/ferramentas/personagem", icon: "🧙", label: "Criar Personagem" },
       { href: "/ferramentas/mapas", icon: "🗺️", label: "Geradores de Mapas" },
     ],
   },
   {
     section: "Conhecimento",
     items: [
-      { href: "/acervo", icon: "📚", label: "Acervo de Regras" },
-      { href: "/compendium", icon: "🔮", label: "Compêndio" },
+      { href: "/acervo", icon: "📚", label: "Regras SRD" },
       { href: "/assistente", icon: "🤖", label: "Assistente IA" },
     ],
   },
@@ -56,6 +52,7 @@ export function Sidebar() {
   const [activeEdition, setActiveEdition] = useState<"3.5" | "5e">("3.5");
   const [campaigns, setCampaigns] = useState<CampaignLink[]>([]);
   const [campaignsExpanded, setCampaignsExpanded] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/campaigns-sidebar")
@@ -64,8 +61,29 @@ export function Sidebar() {
       .catch(() => {});
   }, []);
 
+  // Fecha sidebar ao navegar no mobile
+  const closeMobile = useCallback(() => setMobileOpen(false), []);
+  useEffect(() => {
+    closeMobile();
+  }, [pathname, closeMobile]);
+
   return (
-    <aside className="sidebar">
+    <>
+      {/* Botão hamburger — só aparece no mobile */}
+      <button
+        className="mobile-menu-btn"
+        onClick={() => setMobileOpen(!mobileOpen)}
+        aria-label="Menu"
+      >
+        {mobileOpen ? "✕" : "☰"}
+      </button>
+
+      {/* Overlay escuro no mobile */}
+      {mobileOpen && (
+        <div className="mobile-overlay" onClick={closeMobile} />
+      )}
+
+    <aside className={`sidebar ${mobileOpen ? "open" : ""}`}>
       {/* Brand */}
       <div className="sidebar-brand">
         <div className="sidebar-brand-icon">⚔️</div>
@@ -151,5 +169,6 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   );
 }

@@ -5,6 +5,9 @@ import Link from "next/link";
 import { DeleteButton } from "@/components/ui/DeleteButton";
 import ImportNpcPanel from "@/components/ImportNpcPanel";
 import CampaignTabs from "@/components/CampaignTabs";
+import CampaignMaps from "@/components/CampaignMaps";
+import CampaignMesa from "@/components/CampaignMesa";
+import CampaignRegras from "@/components/CampaignRegras";
 import "../campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -388,6 +391,20 @@ export default async function CampaignDetailPage({ params }: { params: Params })
               <button type="submit" className="btn btn-primary btn-sm">+ Adicionar</button>
             </form>
           </div>
+        </div>
+        {/* TAB 5: Mapas */}
+        <div>
+          <CampaignMaps campaignId={campaign.id} />
+        </div>
+
+        {/* TAB 6: Mesa */}
+        <div>
+          <CampaignMesa />
+        </div>
+
+        {/* TAB 7: Regras */}
+        <div>
+          <CampaignRegras />
         </div>
       </CampaignTabs>
     </div>

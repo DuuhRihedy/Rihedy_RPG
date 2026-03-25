@@ -1,6 +1,6 @@
 /* ================================================
    HUB RPG — Design System
-   Tema: D&D / Wizards of the Coast (Underdark Mode)
+   Sistema de temas: Book (claro) e Underdark (escuro)
    ================================================ */
 
 /* ── Reset ────────────────────────────── */
@@ -12,35 +12,40 @@
   padding: 0;
 }
 
-/* ── Design Tokens ────────────────────── */
+/* ── Design Tokens — Tema Book (Claro, Padrão) ── */
 :root {
-  /* Background */
-  --bg-deep: #0a0a0f;
-  --bg-surface: #141420;
-  --bg-elevated: #1e1e2e;
-  --bg-hover: #2a2a3a;
-  --bg-active: #32324a;
+  /* Cores do tema — inspiradas no Player's Handbook D&D 3.5 */
+  --bg-deep: #ede0c8;
+  --bg-surface: #fdf1dc;
+  --bg-elevated: #fff8ee;
+  --bg-hover: #f0e0c0;
+  --bg-active: #e8d4a8;
 
-  /* Borders */
-  --border-subtle: #2e2e40;
-  --border-default: #3a3a50;
-  --border-strong: #4a4a60;
+  --border-subtle: #d4bc8e;
+  --border-default: #c4a060;
+  --border-strong: #a08040;
 
-  /* Text */
-  --text-primary: #e8e6e3;
-  --text-secondary: #a0a0b0;
-  --text-muted: #6a6a7a;
-  --text-inverse: #0a0a0f;
+  --text-primary: #231f20;
+  --text-secondary: #58180d;
+  --text-muted: #7a6840;
+  --text-inverse: #fdf1dc;
 
-  /* Brand — D&D */
-  --dnd-red: #cc0000;
-  --dnd-red-hover: #e63946;
-  --dnd-red-subtle: rgba(204, 0, 0, 0.15);
-  --dnd-gold: #c8a84e;
-  --dnd-gold-hover: #dfc06e;
-  --dnd-gold-subtle: rgba(200, 168, 78, 0.15);
+  --dnd-red: #58180d;
+  --dnd-red-hover: #7a2828;
+  --dnd-red-subtle: rgba(88, 24, 13, 0.12);
+  --dnd-gold: #b8860b;
+  --dnd-gold-hover: #d4a017;
+  --dnd-gold-subtle: rgba(184, 134, 11, 0.12);
 
-  /* Functional */
+  /* Sombras — tema claro */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.2);
+  --shadow-glow-gold: 0 0 16px rgba(184, 134, 11, 0.2);
+  --shadow-glow-red: 0 0 16px rgba(88, 24, 13, 0.2);
+
+  /* Cores funcionais (compartilhadas entre temas) */
   --success: #22c55e;
   --success-subtle: rgba(34, 197, 94, 0.15);
   --warning: #f59e0b;
@@ -51,14 +56,15 @@
   --info-subtle: rgba(59, 130, 246, 0.15);
   --arcane: #6366f1;
   --arcane-subtle: rgba(99, 102, 241, 0.15);
+  --shadow-glow-arcane: 0 0 16px rgba(99, 102, 241, 0.25);
 
-  /* Editions */
+  /* Edições */
   --edition-35: #8b0000;
   --edition-35-bg: rgba(139, 0, 0, 0.15);
   --edition-5e: #1a3a5c;
   --edition-5e-bg: rgba(26, 58, 92, 0.15);
 
-  /* Typography Scale (1.25 ratio) */
+  /* Escala tipográfica (proporção 1.25) */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -68,12 +74,12 @@
   --text-3xl: 2.441rem;
   --text-4xl: 3.052rem;
 
-  /* Font Families */
+  /* Famílias de fontes */
   --font-display: "Cinzel", "Palatino Linotype", "Book Antiqua", serif;
   --font-body: "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
 
-  /* Spacing (8-point grid) */
+  /* Espaçamento (grid de 8pt) */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -86,21 +92,12 @@
   --space-16: 64px;
   --space-20: 80px;
 
-  /* Radius */
+  /* Raios de borda */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
   --radius-full: 9999px;
-
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
-  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
-  --shadow-glow-gold: 0 0 16px rgba(200, 168, 78, 0.25);
-  --shadow-glow-red: 0 0 16px rgba(204, 0, 0, 0.25);
-  --shadow-glow-arcane: 0 0 16px rgba(99, 102, 241, 0.25);
 
   /* Layout */
   --sidebar-width: 260px;
@@ -108,16 +105,53 @@
   --header-height: 56px;
   --content-max-width: 1200px;
 
-  /* Transitions */
+  /* Transições */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
   --transition-slow: 400ms ease;
 }
 
+/* ── Design Tokens — Tema Underdark (Escuro) ──── */
+[data-theme="dark"] {
+  --bg-deep: #0a0a0f;
+  --bg-surface: #141420;
+  --bg-elevated: #1e1e2e;
+  --bg-hover: #2a2a3a;
+  --bg-active: #32324a;
+
+  --border-subtle: #2e2e40;
+  --border-default: #3a3a50;
+  --border-strong: #4a4a60;
+
+  --text-primary: #e8e6e3;
+  --text-secondary: #a0a0b0;
+  --text-muted: #6a6a7a;
+  --text-inverse: #0a0a0f;
+
+  --dnd-red: #cc0000;
+  --dnd-red-hover: #e63946;
+  --dnd-red-subtle: rgba(204, 0, 0, 0.15);
+  --dnd-gold: #c8a84e;
+  --dnd-gold-hover: #dfc06e;
+  --dnd-gold-subtle: rgba(200, 168, 78, 0.15);
+
+  /* Sombras — tema escuro (opacidade mais alta) */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.7);
+  --shadow-glow-gold: 0 0 16px rgba(200, 168, 78, 0.25);
+  --shadow-glow-red: 0 0 16px rgba(204, 0, 0, 0.25);
+}
+
 /* ── Base ─────────────────────────────── */
 html {
-  color-scheme: dark;
+  color-scheme: light;
   scroll-behavior: smooth;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 body {
@@ -131,7 +165,7 @@ body {
   overflow: hidden;
 }
 
-/* ── Typography ───────────────────────── */
+/* ── Tipografia ──────────────────────── */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   font-weight: 700;
@@ -186,19 +220,19 @@ code, pre {
   background: var(--border-strong);
 }
 
-/* ── Focus ────────────────────────────── */
+/* ── Foco ─────────────────────────────── */
 :focus-visible {
   outline: 2px solid var(--dnd-gold);
   outline-offset: 2px;
 }
 
-/* ── Selection ────────────────────────── */
+/* ── Seleção ──────────────────────────── */
 ::selection {
   background: var(--dnd-gold-subtle);
   color: var(--dnd-gold);
 }
 
-/* ── Utility Classes ──────────────────── */
+/* ── Classes Utilitárias ─────────────── */
 .text-gold { color: var(--dnd-gold); }
 .text-red { color: var(--dnd-red); }
 .text-muted { color: var(--text-muted); }
@@ -280,7 +314,22 @@ code, pre {
   transform: translateY(-2px);
 }
 
-/* ── Button ───────────────────────────── */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.card-title {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Botão ────────────────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -289,7 +338,7 @@ code, pre {
   padding: var(--space-2) var(--space-4);
   font-family: var(--font-body);
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
@@ -382,7 +431,7 @@ code, pre {
   font-size: var(--text-base);
 }
 
-/* ── Delete Confirmation ─────────────── */
+/* ── Confirmação de exclusão ──────────── */
 .delete-confirm-inline {
   display: flex;
   align-items: center;
@@ -418,6 +467,7 @@ code, pre {
   border-radius: var(--radius-md);
   transition: border-color var(--transition-fast),
               box-shadow var(--transition-fast);
+  outline: none;
 }
 
 .input::placeholder {
@@ -425,7 +475,6 @@ code, pre {
 }
 
 .input:focus {
-  outline: none;
   border-color: var(--dnd-gold);
   box-shadow: 0 0 0 3px var(--dnd-gold-subtle);
 }
@@ -447,6 +496,7 @@ code, pre {
   padding-right: var(--space-8);
 }
 
+/* ── Formulário ──────────────────────── */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -461,13 +511,29 @@ code, pre {
   letter-spacing: 0.05em;
 }
 
+/* ── Divisor ──────────────────────────── */
 .divider {
+  height: 1px;
+  background: var(--border-subtle);
   border: none;
-  border-top: 1px solid var(--border-subtle);
   margin: var(--space-4) 0;
 }
 
-/* ── Stat Block (RPG) ─────────────────── */
+.divider-ornate {
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--dnd-gold) 20%,
+    var(--dnd-gold) 80%,
+    transparent
+  );
+  border: none;
+  margin: var(--space-6) 0;
+  opacity: 0.4;
+}
+
+/* ── Bloco de Atributos (RPG) ────────── */
 .stat {
   display: flex;
   flex-direction: column;
@@ -496,29 +562,7 @@ code, pre {
   color: var(--dnd-gold);
 }
 
-/* ── Divider ──────────────────────────── */
-.divider {
-  height: 1px;
-  background: var(--border-subtle);
-  border: none;
-  margin: var(--space-4) 0;
-}
-
-.divider-ornate {
-  height: 2px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    var(--dnd-gold) 20%,
-    var(--dnd-gold) 80%,
-    transparent
-  );
-  border: none;
-  margin: var(--space-6) 0;
-  opacity: 0.4;
-}
-
-/* ── Animations ───────────────────────── */
+/* ── Animações ────────────────────────── */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -552,6 +596,11 @@ code, pre {
 @keyframes floatUp {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
 }
 
 .animate-fade-in {
@@ -701,11 +750,6 @@ code, pre {
 .mini-loading span:nth-child(1) { animation-delay: -0.32s; }
 .mini-loading span:nth-child(2) { animation-delay: -0.16s; }
 
-@keyframes bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
-}
-
 .mini-chat-input-area {
   display: flex;
   gap: var(--space-2);
@@ -748,7 +792,7 @@ code, pre {
 .mini-chat-send:hover:not(:disabled) { background: #818cf8; }
 .mini-chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* ── Image Upload ────────────────────── */
+/* ── Upload de Imagem ────────────────── */
 .image-upload {
   display: flex;
   flex-direction: column;
@@ -876,7 +920,7 @@ code, pre {
   color: var(--danger);
 }
 
-/* ── Import NPC Panel ────────────────── */
+/* ── Painel de Importação de NPC ─────── */
 .import-panel {
   padding: var(--space-4);
   margin-bottom: var(--space-4);
@@ -932,103 +976,7 @@ code, pre {
   flex-shrink: 0;
 }
 
-/* ── Global Utility Components ──────── */
-
-/* Buttons */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  font-size: var(--text-sm);
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition: all var(--transition-fast);
-  line-height: 1.4;
-}
-
-.btn-primary {
-  background: var(--dnd-red);
-  color: white;
-  border-color: var(--dnd-red);
-}
-
-.btn-primary:hover {
-  background: var(--dnd-red-hover);
-  border-color: var(--dnd-red-hover);
-  transform: translateY(-1px);
-}
-
-.btn-gold {
-  background: var(--dnd-gold);
-  color: var(--text-inverse);
-  border-color: var(--dnd-gold);
-}
-
-.btn-gold:hover {
-  background: var(--dnd-gold-hover);
-  transform: translateY(-1px);
-}
-
-.btn-ghost {
-  background: transparent;
-  color: var(--text-muted);
-  border-color: var(--border-subtle);
-}
-
-.btn-ghost:hover {
-  background: var(--bg-hover);
-  color: var(--text-primary);
-}
-
-.btn-sm {
-  font-size: var(--text-xs);
-  padding: var(--space-1) var(--space-3);
-}
-
-/* Inputs */
-.input {
-  padding: var(--space-2) var(--space-3);
-  background: var(--bg-deep);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  color: var(--text-primary);
-  font-size: var(--text-sm);
-  transition: border-color var(--transition-fast);
-  outline: none;
-}
-
-.input:focus {
-  border-color: var(--dnd-gold);
-}
-
-.select {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236a6a7a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: 30px;
-}
-
-/* Forms */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.form-label {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-}
-
-/* Page Layout */
+/* ── Layout de Página ────────────────── */
 .page-container {
   padding: var(--space-6);
   max-width: var(--content-max-width);
@@ -1051,45 +999,7 @@ code, pre {
   margin-top: var(--space-1);
 }
 
-/* Cards */
-.card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: var(--space-4) var(--space-5);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-3);
-}
-
-.card-title {
-  font-weight: 700;
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* Badges */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 2px 8px;
-  border-radius: var(--radius-full);
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.badge-gold {
-  background: var(--dnd-gold-subtle);
-  color: var(--dnd-gold);
-}
-
-/* Empty State */
+/* ── Estado Vazio ─────────────────────── */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -1118,10 +1028,3 @@ code, pre {
   font-size: var(--text-sm);
   max-width: 360px;
 }
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-

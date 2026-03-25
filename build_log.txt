@@ -1,0 +1,20 @@
+Ô¿» Failed to load next.config.ts, see more info here https://nextjs.org/docs/messages/next-config-error
+
+> Build error occurred
+Error: Cannot find module '@serwist/next'
+Require stack:
+- C:\Users\dev\Documents\VTT\next.config.compiled.js
+- C:\Users\dev\Documents\VTT\node_modules\next\dist\build\next-config-ts\transpile-config.js
+- C:\Users\dev\Documents\VTT\node_modules\next\dist\server\config.js
+- C:\Users\dev\Documents\VTT\node_modules\next\dist\cli\next-test.js
+- C:\Users\dev\Documents\VTT\node_modules\next\dist\bin\next
+    at ignore-listed frames {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    'C:\\Users\\dev\\Documents\\VTT\\next.config.compiled.js',
+    'C:\\Users\\dev\\Documents\\VTT\\node_modules\\next\\dist\\build\\next-config-ts\\transpile-config.js',
+    'C:\\Users\\dev\\Documents\\VTT\\node_modules\\next\\dist\\server\\config.js',
+    'C:\\Users\\dev\\Documents\\VTT\\node_modules\\next\\dist\\cli\\next-test.js',
+    'C:\\Users\\dev\\Documents\\VTT\\node_modules\\next\\dist\\bin\\next'
+  ]
+}
