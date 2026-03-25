@@ -23,6 +23,9 @@ model Campaign {
   notes       Note[]
   arcs        StoryArc[]
   maps        Map[]
+  documents   Document[]
+  links       Link[]
+  chapters    Chapter[]
 }
 
 // ── Sessões ────────────────────────
@@ -168,6 +171,53 @@ model StoryArc {
 
   campaignId  String
   campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+// ── Capítulos da História ─────────
+
+model Chapter {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   @default("")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+// ── Documentos ────────────────────
+
+model Document {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   @default("notas") // historia, ficha, aventura, notas, outro
+  content     String   // texto extraído
+  sourceFile  String?  // nome do arquivo original
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campaignId  String
+  campaign    Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+}
+
+// ── Vínculos entre entidades ──────
+
+model Link {
+  id        String   @id @default(cuid())
+  fromType  String   // npc, item, document, map, note
+  fromId    String
+  toType    String
+  toId      String
+  label     String?
+  createdAt DateTime @default(now())
+
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@index([fromType, fromId])
+  @@index([toType, toId])
 }
 
 // ── Mapas ─────────────────────────

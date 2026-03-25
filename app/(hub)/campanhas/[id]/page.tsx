@@ -1,5 +1,5 @@
 import { getCampaign, deleteCampaign, getAvailableNpcsForCampaign } from "@/lib/actions/campaigns";
-import { createSession, deleteSession } from "@/lib/actions/sessions";
+import { deleteSession } from "@/lib/actions/sessions";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { DeleteButton } from "@/components/ui/DeleteButton";
@@ -8,6 +8,9 @@ import CampaignTabs from "@/components/CampaignTabs";
 import CampaignMaps from "@/components/CampaignMaps";
 import CampaignMesa from "@/components/CampaignMesa";
 import CampaignRegras from "@/components/CampaignRegras";
+import CampaignDocuments from "@/components/CampaignDocuments";
+import CampaignSessions from "@/components/CampaignSessions";
+import CampaignStory from "@/components/CampaignStory";
 import "../campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -194,62 +197,14 @@ export default async function CampaignDetailPage({ params }: { params: Params })
           </div>
         </div>
 
-        {/* TAB 1: Sessões */}
+        {/* TAB 1: História */}
         <div>
-          <div className="card">
-            <div className="card-header">
-              <span className="card-title">📖 Sessões ({campaign.sessions.length})</span>
-            </div>
+          <CampaignStory campaignId={campaign.id} />
+        </div>
 
-            {/* New Session Form */}
-            <form action={createSession} style={{ marginBottom: "var(--space-4)" }}>
-              <input type="hidden" name="campaignId" value={campaign.id} />
-              <div className="form-row">
-                <input name="title" className="input" placeholder="Título da sessão..." />
-                <input name="date" type="date" className="input" style={{ maxWidth: "160px" }} />
-                <button type="submit" className="btn btn-primary btn-sm">+ Sessão</button>
-              </div>
-            </form>
-
-            {campaign.sessions.length === 0 ? (
-              <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", textAlign: "center", padding: "var(--space-8) 0" }}>
-                Nenhuma sessão registrada. Crie a primeira acima!
-              </p>
-            ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-2)" }}>
-                {campaign.sessions.map((session) => {
-                  const deleteSessionAction = async () => {
-                    "use server";
-                    await deleteSession(session.id, campaign.id);
-                  };
-                  return (
-                    <div key={session.id} className="session-item">
-                      <div className="session-number">#{session.number}</div>
-                      <div className="session-info">
-                        <div className="session-title">
-                          {session.title || `Sessão ${session.number}`}
-                        </div>
-                        <div className="session-meta">
-                          {session.date && new Date(session.date).toLocaleDateString("pt-BR")}
-                          {session.durationMin && ` · ${session.durationMin}min`}
-                        </div>
-                        {session.notes && (
-                          <p style={{ color: "var(--text-secondary)", fontSize: "var(--text-xs)", marginTop: "var(--space-2)", lineHeight: 1.5, margin: "var(--space-2) 0 0" }}>
-                            {session.notes.substring(0, 150)}
-                            {session.notes.length > 150 ? "..." : ""}
-                          </p>
-                        )}
-                      </div>
-                      <DeleteButton
-                        action={deleteSessionAction}
-                        entityName={session.title || `Sessão ${session.number}`}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+        {/* TAB 2: Sessões */}
+        <div>
+          <CampaignSessions campaignId={campaign.id} />
         </div>
 
         {/* TAB 2: NPCs */}
@@ -405,6 +360,11 @@ export default async function CampaignDetailPage({ params }: { params: Params })
         {/* TAB 7: Regras */}
         <div>
           <CampaignRegras />
+        </div>
+
+        {/* TAB 8: Documentos */}
+        <div>
+          <CampaignDocuments campaignId={campaign.id} />
         </div>
       </CampaignTabs>
     </div>

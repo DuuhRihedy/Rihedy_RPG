@@ -9,6 +9,7 @@ interface CampaignTabsProps {
 
 const TABS = [
   { id: "overview", icon: "📋", label: "Visão Geral" },
+  { id: "story", icon: "📜", label: "História" },
   { id: "sessions", icon: "📖", label: "Sessões" },
   { id: "npcs", icon: "👥", label: "NPCs" },
   { id: "notes", icon: "📝", label: "Notas" },
@@ -16,6 +17,7 @@ const TABS = [
   { id: "maps", icon: "🗺️", label: "Mapas" },
   { id: "mesa", icon: "🎲", label: "Mesa" },
   { id: "regras", icon: "📚", label: "Regras" },
+  { id: "docs", icon: "📄", label: "Documentos" },
 ];
 
 export default function CampaignTabs({ defaultTab = "overview", children }: CampaignTabsProps) {

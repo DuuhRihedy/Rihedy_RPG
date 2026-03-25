@@ -5,7 +5,7 @@ import { rollDice, diceStats } from "@/lib/engine/dice";
 import { generateEncounter } from "@/lib/engine/generators/encounter";
 import { generateLoot } from "@/lib/engine/generators/loot";
 import type { DiceResult, Encounter, EncounterDifficulty, LootTable } from "@/lib/engine/types";
-import "@/app/ferramentas/ferramentas.css";
+import "@/app/(hub)/ferramentas/ferramentas.css";
 
 // ── Tipos de ícone por tipo de loot ──
 const LOOT_ICONS: Record<string, string> = {

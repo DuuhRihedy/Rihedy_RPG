@@ -14,21 +14,21 @@
 
 /* ── Design Tokens — Tema Book (Claro, Padrão) ── */
 :root {
-  /* Cores do tema — inspiradas no Player's Handbook D&D 3.5 */
-  --bg-deep: #ede0c8;
-  --bg-surface: #fdf1dc;
-  --bg-elevated: #fff8ee;
-  --bg-hover: #f0e0c0;
-  --bg-active: #e8d4a8;
+  /* Cores do tema — fiéis ao Player's Handbook D&D 3.5 */
+  --bg-deep: #e8d8b8;
+  --bg-surface: #faf5ea;
+  --bg-elevated: #ffffff;
+  --bg-hover: #f0e4cc;
+  --bg-active: #e0d0b0;
 
-  --border-subtle: #d4bc8e;
-  --border-default: #c4a060;
-  --border-strong: #a08040;
+  --border-subtle: rgba(88, 24, 13, 0.1);
+  --border-default: rgba(88, 24, 13, 0.2);
+  --border-strong: rgba(88, 24, 13, 0.35);
 
-  --text-primary: #231f20;
-  --text-secondary: #58180d;
-  --text-muted: #7a6840;
-  --text-inverse: #fdf1dc;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a3520;
+  --text-muted: #8a7a68;
+  --text-inverse: #faf5ea;
 
   --dnd-red: #58180d;
   --dnd-red-hover: #7a2828;
@@ -1027,4 +1027,478 @@ code, pre {
 .empty-state p {
   font-size: var(--text-sm);
   max-width: 360px;
+}
+
+/* ══════════════════════════════════════════════════
+   TEMA LIVRO — Estilo Player's Handbook D&D 3.5
+   Aplica-se quando NÃO é dark (tema padrão)
+   ══════════════════════════════════════════════════ */
+
+/* ── Fundo limpo de página ───────────── */
+:root body {
+  background-color: var(--bg-deep);
+}
+
+[data-theme="dark"] body {
+  background-color: var(--bg-deep);
+}
+
+/* ── Sidebar estilo encadernação ────── */
+:root .sidebar {
+  background:
+    linear-gradient(180deg, #3c1a0a 0%, #2a1008 50%, #3c1a0a 100%);
+  border-right: 3px solid #5a2d0c;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.3);
+}
+
+:root .sidebar-brand {
+  border-bottom: 2px solid #5a2d0c;
+  background: linear-gradient(135deg, rgba(200, 168, 78, 0.1), transparent);
+}
+
+:root .sidebar-brand-name {
+  color: #c8a84e;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+:root .sidebar-brand-sub {
+  color: rgba(200, 168, 78, 0.5);
+}
+
+:root .sidebar-brand-icon {
+  background: linear-gradient(135deg, #8b0000, #5a0000);
+  box-shadow: 0 0 12px rgba(139, 0, 0, 0.4);
+}
+
+:root .sidebar-section-label {
+  color: rgba(200, 168, 78, 0.6);
+}
+
+:root .sidebar-link {
+  color: rgba(237, 224, 200, 0.7);
+  border-color: transparent;
+}
+
+:root .sidebar-link:hover {
+  background: rgba(200, 168, 78, 0.1);
+  color: #ede0c8;
+}
+
+:root .sidebar-link.active {
+  background: rgba(200, 168, 78, 0.15);
+  color: #c8a84e;
+  border-color: rgba(200, 168, 78, 0.3);
+}
+
+:root .sidebar-link-icon {
+  filter: brightness(1.2);
+}
+
+:root .sidebar-link-sub {
+  color: rgba(200, 168, 78, 0.4);
+}
+
+:root .sidebar-link-sub:hover {
+  color: #c8a84e;
+}
+
+:root .sidebar-link-sub.active {
+  background: rgba(200, 168, 78, 0.1);
+  color: #c8a84e;
+  border-color: rgba(200, 168, 78, 0.2);
+}
+
+:root .sidebar-footer {
+  border-top: 2px solid #5a2d0c;
+}
+
+:root .edition-toggle {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+:root .edition-toggle-btn {
+  color: rgba(200, 168, 78, 0.5);
+}
+
+:root .sidebar-campaigns {
+  border-left-color: #5a2d0c;
+}
+
+/* ── Header estilo barra do livro ──── */
+:root .header {
+  background:
+    linear-gradient(90deg, #58180d 0%, #7a2828 50%, #58180d 100%);
+  border-bottom: 3px solid #3c1a0a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+:root .header-breadcrumb {
+  color: rgba(237, 224, 200, 0.6);
+}
+
+:root .header-breadcrumb-current {
+  color: #ede0c8;
+}
+
+:root .header-search-input {
+  background: rgba(0, 0, 0, 0.2);
+  border-color: rgba(200, 168, 78, 0.2);
+  color: #ede0c8;
+}
+
+:root .header-search-input::placeholder {
+  color: rgba(237, 224, 200, 0.4);
+}
+
+:root .header-search-input:focus {
+  border-color: #c8a84e;
+  box-shadow: 0 0 0 3px rgba(200, 168, 78, 0.15);
+}
+
+:root .header-search-icon {
+  color: rgba(237, 224, 200, 0.4);
+}
+
+:root .header-search-kbd {
+  background: rgba(0, 0, 0, 0.3);
+  color: rgba(237, 224, 200, 0.5);
+  border-color: rgba(200, 168, 78, 0.2);
+}
+
+:root .header-ia-tokens {
+  background: rgba(0, 0, 0, 0.2);
+  color: rgba(237, 224, 200, 0.5);
+  border-color: rgba(200, 168, 78, 0.2);
+}
+
+:root .header-actions .btn-ghost {
+  color: rgba(237, 224, 200, 0.6);
+}
+
+:root .header-actions .btn-ghost:hover {
+  background: rgba(200, 168, 78, 0.15);
+  color: #c8a84e;
+}
+
+/* ── Cards estilo página do PHB ──────── */
+:root .card {
+  background: #faf5ea;
+  border: none;
+  border-top: 2px solid #58180d;
+  border-bottom: 1px solid rgba(88, 24, 13, 0.15);
+  border-radius: 0;
+  box-shadow: none;
+  padding: var(--space-5) var(--space-4);
+}
+
+:root .card:hover {
+  border-color: #58180d;
+}
+
+:root .card-interactive {
+  border: 1px solid rgba(88, 24, 13, 0.1);
+  border-top: 2px solid #58180d;
+}
+
+:root .card-interactive:hover {
+  border-color: #58180d;
+  box-shadow: 0 2px 8px rgba(88, 24, 13, 0.1);
+  transform: translateY(-1px);
+}
+
+:root .card-header {
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid #58180d;
+  margin-bottom: var(--space-3);
+}
+
+:root .card-title {
+  color: #58180d;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  letter-spacing: 0.03em;
+}
+
+/* ── Headers em vermelho PHB ────────── */
+:root h1, :root h2, :root h3 {
+  color: #58180d;
+}
+
+:root h4, :root h5 {
+  color: #58180d;
+}
+
+:root .page-header h1 {
+  color: #58180d;
+  border-bottom: 2px solid #58180d;
+  padding-bottom: var(--space-2);
+}
+
+/* ── Divisores ornamentais ───────────── */
+:root .divider-ornate {
+  height: 2px;
+  background: #58180d;
+  opacity: 0.7;
+}
+
+:root hr, :root .divider {
+  border: none;
+  height: 1px;
+  background: rgba(88, 24, 13, 0.2);
+}
+
+/* ── Inputs estilo limpo ─────────────── */
+:root .input {
+  background: #fff9f0;
+  border: 1px solid rgba(88, 24, 13, 0.2);
+  border-radius: var(--radius-sm);
+}
+
+:root .input:focus {
+  border-color: #58180d;
+  box-shadow: 0 0 0 2px rgba(88, 24, 13, 0.08);
+}
+
+:root .select {
+  background-color: #fff9f0;
+}
+
+/* ── Botões estilo livro ─────────────── */
+:root .btn-primary {
+  background: linear-gradient(180deg, #7a2828 0%, #58180d 100%);
+  border-color: #3c1a0a;
+  color: #ede0c8;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+:root .btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #8b3030 0%, #6a2010 100%);
+  box-shadow: 0 2px 8px rgba(88, 24, 13, 0.3);
+}
+
+:root .btn-gold {
+  background: linear-gradient(180deg, #d4a017 0%, #b8860b 100%);
+  border-color: #8b6508;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+:root .btn-ghost {
+  color: #58180d;
+  border-color: rgba(88, 24, 13, 0.2);
+}
+
+:root .btn-ghost:hover:not(:disabled) {
+  background: rgba(88, 24, 13, 0.06);
+  color: #3c1a0a;
+}
+
+/* ── Tabs estilo abas do livro ───────── */
+:root .hub-tab {
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  color: var(--text-muted);
+}
+
+:root .hub-tab:hover {
+  color: #58180d;
+}
+
+:root .hub-tab.active {
+  border-bottom-color: #58180d;
+  color: #58180d;
+  background: transparent;
+  font-weight: 700;
+}
+
+:root .hub-tabs {
+  border-bottom: 1px solid rgba(88, 24, 13, 0.15);
+}
+
+/* ── Badges no tema livro ────────────── */
+:root .badge {
+  border-radius: 2px;
+}
+
+:root .badge-35 {
+  background: rgba(139, 0, 0, 0.08);
+  color: #8b0000;
+  border: 1px solid rgba(139, 0, 0, 0.2);
+}
+
+:root .badge-5e {
+  background: rgba(26, 58, 92, 0.08);
+  color: #1a3a5c;
+  border: 1px solid rgba(26, 58, 92, 0.2);
+}
+
+/* ── Scrollbar do tema livro ─────────── */
+:root ::-webkit-scrollbar-thumb {
+  background: #c4a060;
+}
+
+:root ::-webkit-scrollbar-thumb:hover {
+  background: #a08040;
+}
+
+/* ── Reverter sidebar/header no dark ─── */
+[data-theme="dark"] .sidebar {
+  background: var(--bg-surface);
+  border-right: 1px solid var(--border-subtle);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .sidebar-brand {
+  border-bottom: 1px solid var(--border-subtle);
+  background: transparent;
+}
+
+[data-theme="dark"] .sidebar-brand-name {
+  color: var(--text-primary);
+  text-shadow: none;
+}
+
+[data-theme="dark"] .sidebar-brand-sub {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .sidebar-brand-icon {
+  background: linear-gradient(135deg, var(--dnd-red), #8b0000);
+  box-shadow: var(--shadow-glow-red);
+}
+
+[data-theme="dark"] .sidebar-section-label {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .sidebar-link {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .sidebar-link:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .sidebar-link.active {
+  background: var(--dnd-red-subtle);
+  color: var(--dnd-red-hover);
+  border-color: rgba(204, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .sidebar-footer {
+  border-top: 1px solid var(--border-subtle);
+}
+
+[data-theme="dark"] .edition-toggle {
+  background: var(--bg-deep);
+}
+
+[data-theme="dark"] .edition-toggle-btn {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .sidebar-campaigns {
+  border-left-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .header {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .header-breadcrumb {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .header-breadcrumb-current {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .header-search-input {
+  background: var(--bg-deep);
+  border-color: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .header-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .header-search-icon {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .header-search-kbd {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .header-ia-tokens {
+  background: var(--arcane-subtle);
+  color: var(--text-muted);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="dark"] .card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-top: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: none;
+}
+
+[data-theme="dark"] .card-header {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+[data-theme="dark"] .card-title {
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3 {
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .input {
+  background: var(--bg-surface);
+  border-color: var(--border-subtle);
+}
+
+[data-theme="dark"] .input:focus {
+  border-color: var(--dnd-gold);
+  box-shadow: 0 0 0 3px var(--dnd-gold-subtle);
+}
+
+[data-theme="dark"] .btn-primary {
+  background: var(--dnd-red);
+  border-color: var(--dnd-red);
+  text-shadow: none;
+}
+
+[data-theme="dark"] .btn-primary:hover:not(:disabled) {
+  background: var(--dnd-red-hover);
+  box-shadow: var(--shadow-glow-red);
+}
+
+[data-theme="dark"] .btn-ghost {
+  color: var(--text-secondary);
+  border-color: transparent;
+}
+
+[data-theme="dark"] .btn-ghost:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
 }

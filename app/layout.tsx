@@ -1,9 +1,5 @@
 import type { Metadata } from "next";
 import { Cinzel, Inter, JetBrains_Mono } from "next/font/google";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { Header } from "@/components/layout/Header";
-import { ChatSidebar } from "@/components/layout/ChatSidebar";
-import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 import "./layout.css";
@@ -58,9 +54,9 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       className={`${cinzel.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
     >
       <head>
-        {/* Carrega o tema antes do render pra evitar flash */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("hub-rpg-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`,
@@ -68,17 +64,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <div className="app-layout">
-          <Sidebar />
-          <div className="app-main">
-            <Header />
-            <main className="app-content">
-              {children}
-            </main>
-          </div>
-          <ChatSidebar />
-          <KeyboardShortcuts />
-        </div>
+        {children}
         <ServiceWorkerRegister />
       </body>
     </html>

@@ -586,9 +586,11 @@
 
 .hub-hero {
   position: relative;
-  border-radius: var(--radius-lg);
+  border-radius: 0;
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: none;
+  border-top: 3px solid var(--dnd-red);
+  border-bottom: 1px solid var(--border-subtle);
   overflow: hidden;
   margin-bottom: var(--space-6);
   animation: fadeIn 0.4s ease;
@@ -615,8 +617,7 @@
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(var(--bg-deep-rgb, 14, 14, 22), 0.6) 40%,
-    rgba(var(--bg-deep-rgb, 14, 14, 22), 0.95) 100%
+    var(--bg-surface) 100%
   );
 }
 
@@ -638,10 +639,7 @@
   font-size: var(--text-3xl);
   font-family: var(--font-display);
   margin-bottom: var(--space-2);
-  background: linear-gradient(135deg, var(--text-primary), var(--dnd-gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--dnd-red);
 }
 
 .hub-hero-desc {
@@ -659,8 +657,8 @@
   display: flex;
   gap: var(--space-6);
   padding: var(--space-4) var(--space-6);
-  border-top: 1px solid var(--border-subtle);
-  background: rgba(var(--bg-deep-rgb, 14, 14, 22), 0.4);
+  border-top: 2px solid var(--dnd-red);
+  background: var(--bg-surface);
 }
 
 .hub-stat {
@@ -673,12 +671,12 @@
   font-family: var(--font-mono);
   font-size: var(--text-xl);
   font-weight: 700;
-  color: var(--dnd-gold);
+  color: var(--dnd-red);
 }
 
 .hub-stat-label {
   font-size: var(--text-sm);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-weight: 500;
