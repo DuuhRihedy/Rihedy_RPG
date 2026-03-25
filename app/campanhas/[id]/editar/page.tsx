@@ -1,6 +1,7 @@
 import { getCampaign, updateCampaign, linkNpcToCampaign, unlinkNpcFromCampaign, getAvailableNpcsForCampaign, createNote, deleteNote, createArc, updateArcStatus, deleteArc } from "@/lib/actions/campaigns";
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
+import CampaignImageField from "@/components/CampaignImageField";
 import "../../campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -109,7 +110,10 @@ export default async function EditCampaignPage({ params }: { params: Params }) {
                 </select>
               </div>
             </div>
-            <button type="submit" className="btn btn-primary" style={{ alignSelf: "flex-start" }}>
+            <div style={{ marginTop: "var(--space-4)" }}>
+              <CampaignImageField currentImage={campaign.imageUrl} campaignName={campaign.name} />
+            </div>
+            <button type="submit" className="btn btn-primary" style={{ alignSelf: "flex-start", marginTop: "var(--space-4)" }}>
               💾 Salvar Alterações
             </button>
           </div>

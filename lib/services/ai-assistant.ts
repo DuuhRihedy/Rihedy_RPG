@@ -7,7 +7,7 @@ import { callGemini, type GeminiMessage } from "./gemini";
 
 // ─── Tipos ──────────────────────────────
 
-export type AssistantMode = "chat" | "npc" | "recap";
+export type AssistantMode = "chat" | "npc" | "recap" | "adventure";
 
 export interface AssistantRequest {
   message: string;
@@ -435,6 +435,47 @@ FORMATO:
 - [escolhas significativas]
 ### Ganchos para próxima sessão
 - [fios soltos, ameaças pendentes]`,
+
+  adventure: `Você é um gerador de aventuras e side-quests para D&D.
+
+PRIORIDADE: D&D 3.5 é o sistema principal. Use monstros, encontros e regras do 3.5 por padrão.
+
+REGRAS:
+- SEMPRE responda em PT-BR
+- Se houver campanha ativa, contextualize a aventura nela (use NPCs, arcos, locais existentes)
+- Inclua encontros com CR/ND balanceado para o grupo
+- Seja criativo mas mantenha a consistência com o mundo da campanha
+- Use terminologia oficial brasileira
+
+FORMATO OBRIGATÓRIO:
+## ⚔️ [Nome da Aventura]
+### 📋 Sinopse
+[1-2 parágrafos com o conceito]
+
+### 🎯 Ganho de Aventura (como apresentar aos jogadores)
+[como os PJs entram na aventura]
+
+### 📍 Atos
+#### Ato 1 — [Título]
+[descrição do primeiro ato, locais, NPCs]
+#### Ato 2 — [Título]
+[descrição]
+#### Ato 3 — [Título / Clímax]
+[descrição do confronto final]
+
+### ⚔️ Encontros
+| # | Encontro | Monstros | CR/ND |
+|---|----------|----------|-------|
+| 1 | [Local]  | [Monstros] | [CR] |
+
+### 👥 NPCs Importantes
+- **[Nome]:** [raça, classe, papel na aventura]
+
+### 💰 Recompensas
+- [tesouros, itens mágicos, aliados]
+
+### 🧵 Ganchos Futuros
+- [conexões com a campanha maior]`,
 };
 
 // ─── Função Principal ───────────────────
@@ -453,7 +494,7 @@ export async function askAssistant(req: AssistantRequest): Promise<AssistantResp
   }
 
   // RAG: buscar no SRD (para chat e npc)
-  if (req.mode === "chat" || req.mode === "npc") {
+  if (req.mode === "chat" || req.mode === "npc" || req.mode === "adventure") {
     const srdCtx = await searchSrdContext(req.message);
     if (srdCtx) {
       systemPrompt += `\n\n--- DADOS DO SRD (use para responder) ---\n${srdCtx}`;

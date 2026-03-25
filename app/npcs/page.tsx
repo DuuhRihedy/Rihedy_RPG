@@ -1,13 +1,13 @@
 import { getNpcs, createNpc } from "@/lib/actions/npcs";
-import Link from "next/link";
+import NpcListFilter from "@/components/NpcListFilter";
 import "../campanhas/campanhas.css";
 
 export const dynamic = 'force-dynamic';
 
 const ALIGNMENTS = [
-  "Lawful Good", "Neutral Good", "Chaotic Good",
-  "Lawful Neutral", "True Neutral", "Chaotic Neutral",
-  "Lawful Evil", "Neutral Evil", "Chaotic Evil",
+  "Leal e Bom", "Neutro e Bom", "Caótico e Bom",
+  "Leal e Neutro", "Neutro", "Caótico e Neutro",
+  "Leal e Mau", "Neutro e Mau", "Caótico e Mau",
 ];
 
 export default async function NpcsPage() {
@@ -68,12 +68,12 @@ export default async function NpcsPage() {
                   name={attr}
                   type="number"
                   className="input"
-                  defaultValue={attr === "hp" ? 10 : attr === "ac" ? 10 : 10}
+                  defaultValue={10}
                   min="1"
                   style={{ textAlign: "center", maxWidth: "70px" }}
                 />
                 <span style={{ fontSize: "10px", fontWeight: 700, textTransform: "uppercase", color: "var(--text-muted)", letterSpacing: "0.1em" }}>
-                  {attr === "intl" ? "INT" : attr.toUpperCase()}
+                  {attr.toUpperCase()}
                 </span>
               </div>
             ))}
@@ -81,7 +81,7 @@ export default async function NpcsPage() {
         </div>
       </form>
 
-      {/* NPCs List */}
+      {/* NPCs List with Filters */}
       {npcs.length === 0 ? (
         <div className="empty-state">
           <span className="empty-state-icon">👥</span>
@@ -89,41 +89,7 @@ export default async function NpcsPage() {
           <p>Crie seu primeiro personagem usando o formulário acima</p>
         </div>
       ) : (
-        <div className="npc-grid">
-          {npcs.map((npc, i) => (
-            <Link
-              key={npc.id}
-              href={`/npcs/${npc.id}`}
-              className="card card-interactive npc-card"
-              style={{ animationDelay: `${i * 0.05}s` }}
-            >
-              {npc.imageUrl ? (
-                <img
-                  src={npc.imageUrl}
-                  alt={npc.name}
-                  className="npc-card-img"
-                />
-              ) : (
-                <div className={`npc-card-avatar npc-card-avatar-${npc.type === "enemy" ? "enemy" : npc.type === "ally" ? "ally" : "neutral"}`}>
-                  {npc.type === "enemy" ? "💀" : npc.type === "ally" ? "🛡️" : "👤"}
-                </div>
-              )}
-              <div className="npc-card-info">
-                <div className="npc-card-name">{npc.name}</div>
-                <div className="npc-card-meta">
-                  {[npc.race, npc.class, npc.level ? `Nv ${npc.level}` : null].filter(Boolean).join(" · ") || "Sem detalhes"}
-                </div>
-                <div className="npc-card-tags">
-                  <span className={`badge ${npc.edition === "3.5" ? "badge-35" : "badge-5e"}`}>
-                    {npc.edition}
-                  </span>
-                  {npc.status === "dead" && <span className="badge" style={{ background: "var(--danger-subtle)", color: "var(--danger)" }}>Morto</span>}
-                  {npc.alignment && <span style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)" }}>{npc.alignment}</span>}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <NpcListFilter npcs={npcs} />
       )}
     </div>
   );

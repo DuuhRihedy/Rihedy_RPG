@@ -1,8 +1,8 @@
 # GEMINI.md — Memória do Projeto Hub RPG
 
-> **Última atualização:** 2026-03-23 (formulários editáveis + SRD 5e completo + VTT architecture)
+> **Última atualização:** 2026-03-25 (Hub campanha reestruturado + Imagens + Clone NPC + VTT Engine completo)
 > **Objetivo:** Preservar todo o contexto do projeto entre conversas
-> **Status:** Fases 1-4 concluídas + Melhorias em andamento + Arquitetura VTT definida
+> **Status:** Fases 1-4 concluídas + VTT Engine (Fases 1-4) + Hub reestruturado
 
 ---
 
@@ -78,14 +78,22 @@ VTT/
 │       ├── classes/               ← Listagem + detalhe de classes
 │       └── feats/                 ← Listagem de talentos (3.5+5e)
 │
-├── components/                    ← FRONTEND — Componentes React
 │   └── layout/                    ← Sidebar, Header, ChatSidebar (mini-chat)
+│
+├── components/                    ← FRONTEND — Componentes React
+│   ├── layout/                    ← Sidebar, Header, ChatSidebar
+│   ├── CampaignTabs.tsx           ← Abas do hub da campanha (client)
+│   ├── CampaignImageField.tsx     ← Upload de capa da campanha
+│   ├── ImageUpload.tsx            ← Componente genérico de upload (Vercel Blob)
+│   ├── NpcImageField.tsx          ← Upload de imagem do NPC
+│   ├── ItemImageField.tsx         ← Upload de imagem de item
+│   └── ImportNpcPanel.tsx         ← Painel de vincular/importar NPCs
 │
 ├── lib/                           ← BACKEND — Lógica servidor
 │   ├── db.ts                      ← Prisma Client (conexão)
 │   ├── translations.ts            ← Dicionários PT-BR (escolas, tipos, tamanhos, etc.)
 │   ├── actions/                   ← Server Actions por domínio
-│   │   ├── campaigns.ts           ← CRUD campanhas + vincular NPCs + notas + arcos
+│   │   ├── campaigns.ts           ← CRUD campanhas + vincular NPCs + notas + arcos + clone NPC
 │   │   ├── npcs.ts                ← CRUD NPCs + itens + relações
 │   │   ├── sessions.ts            ← CRUD sessões + update + dashboard stats
 │   │   ├── srd.ts                 ← Busca acervo SRD (busca bilíngue EN+PT-BR)
@@ -229,6 +237,9 @@ VTT/
 | 2026-03-23 | SRD 5e completo | 8 novas tabelas: raças (9), sub-raças (4), subclasses (12), features (407), condições (15), skills (18), traits (38), idiomas (16). Total ~3550 registros |
 | 2026-03-23 | Importação 3.5 completa | Equipamentos (233), itens mágicos (635), classes (33), condições (38), raças (7). Total 3.5: 2715 registros. Total geral: ~4500 |
 | 2026-03-23 | Arquitetura VTT | Documento docs/arquitetura-vtt-engine.md: rules engine, character system, generators, importer. 6 fases planejadas |
+| 2026-03-24 | VTT Engine Fases 1-4 | lib/engine/ completo: types, compendium, rules-engine, dice, combat, conditions, character, generators (NPC, encounter, loot), validators, importer. 18 funções. Páginas /ferramentas/* (dados, gerador-npc, encontros) |
+| 2026-03-24 | Melhorias Hub | RAG priorizar D&D 3.5, ImportNpcPanel com busca, upload de imagens (Vercel Blob), API /api/upload |
+| 2026-03-25 | Hub Campanha reestruturado | Campanha virou hub central com hero header + abas (Visão Geral, Sessões, NPCs, Notas, Arcos). Sidebar com campanhas ativas como sub-links. Upload de capa da campanha. Clone NPC entre campanhas. Imagens nos cards de listagem. |
 
 ---
 

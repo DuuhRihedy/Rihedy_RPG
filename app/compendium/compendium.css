@@ -1,0 +1,290 @@
+/* ── Compendium Search ────────────── */
+
+.compendium-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.compendium-search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.compendium-search-input-wrap {
+  position: relative;
+}
+
+.compendium-search-icon {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.compendium-search-input {
+  padding-left: var(--space-10) !important;
+  width: 100%;
+  font-size: var(--text-base) !important;
+  height: 48px;
+}
+
+.compendium-clear {
+  position: absolute;
+  right: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Category Chips */
+.compendium-categories {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.compendium-cat-chip {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.compendium-cat-chip:hover {
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.compendium-cat-chip.active {
+  background: var(--bg-elevated);
+}
+
+.compendium-cat-count {
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+  opacity: 0.6;
+}
+
+.compendium-edition-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.compendium-result-count {
+  margin-left: auto;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* Layout */
+.compendium-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: var(--space-4);
+  min-height: 500px;
+}
+
+@media (max-width: 1024px) {
+  .compendium-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Results */
+.compendium-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.compendium-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.compendium-empty-icon {
+  font-size: 48px;
+  margin-bottom: var(--space-4);
+  opacity: 0.5;
+}
+
+.compendium-empty h3 {
+  font-size: var(--text-xl);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+/* Result Card */
+.compendium-result-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: all var(--transition-fast);
+  animation: fadeIn 0.15s ease backwards;
+}
+
+.compendium-result-card:hover {
+  border-color: var(--border-default);
+  background: var(--bg-hover);
+}
+
+.compendium-result-card.selected {
+  border-color: var(--dnd-gold);
+  box-shadow: 0 0 0 1px var(--dnd-gold-subtle);
+}
+
+.compendium-result-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+}
+
+.compendium-result-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.compendium-result-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.compendium-result-en {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.compendium-result-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: 2px;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* Detail Panel */
+.compendium-detail {
+  position: sticky;
+  top: var(--space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  max-height: 70vh;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease;
+}
+
+.compendium-detail-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.compendium-detail-title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.compendium-detail-en {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 2px 0 0;
+}
+
+.compendium-detail-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 18px;
+  padding: var(--space-1);
+  flex-shrink: 0;
+}
+
+.compendium-detail-close:hover {
+  color: var(--text-primary);
+}
+
+.compendium-detail-badges {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.compendium-detail-data {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.compendium-detail-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.compendium-detail-field.full {
+  grid-column: 1 / -1;
+}
+
+.compendium-detail-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.compendium-detail-value {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  white-space: pre-line;
+}

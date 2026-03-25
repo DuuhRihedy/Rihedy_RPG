@@ -1,0 +1,290 @@
+/* ── Character Wizard ─────────────── */
+
+.wizard-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Progress */
+.wizard-progress {
+  display: flex;
+  gap: var(--space-1);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+}
+
+.wizard-step-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-muted);
+}
+
+.wizard-step-btn:hover {
+  background: var(--bg-hover);
+}
+
+.wizard-step-btn.active {
+  background: var(--dnd-gold-subtle);
+  color: var(--dnd-gold);
+}
+
+.wizard-step-btn.done {
+  color: var(--success);
+}
+
+.wizard-step-icon {
+  font-size: 20px;
+}
+
+.wizard-step-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Content */
+.wizard-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  animation: fadeIn 0.2s ease;
+}
+
+.wizard-panel h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-5);
+}
+
+/* Options Grid */
+.wizard-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--space-3);
+}
+
+.wizard-option-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-deep);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.wizard-option-card:hover {
+  border-color: var(--border-default);
+  background: var(--bg-hover);
+}
+
+.wizard-option-card.selected {
+  border-color: var(--dnd-gold);
+  background: var(--dnd-gold-subtle);
+}
+
+.wizard-option-name {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.wizard-option-meta {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.wizard-option-bonuses {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.wizard-bonus {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.wizard-bonus.positive {
+  background: var(--success-subtle);
+  color: var(--success);
+}
+
+.wizard-bonus.negative {
+  background: var(--danger-subtle);
+  color: var(--danger);
+}
+
+.wizard-option-traits {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.wizard-option-traits li::before {
+  content: "• ";
+  color: var(--dnd-gold);
+}
+
+.wizard-option-stats {
+  display: flex;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.wizard-option-saves {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* Abilities */
+.wizard-ability-methods {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.wizard-abilities-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 768px) {
+  .wizard-abilities-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.wizard-ability-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.wizard-ability-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.wizard-ability-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wizard-ability-value {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 32px;
+}
+
+.wizard-ability-racial {
+  font-size: var(--text-xs);
+  color: var(--dnd-gold);
+  font-weight: 600;
+}
+
+.wizard-ability-final {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 900;
+  color: var(--text-primary);
+}
+
+.wizard-ability-mod {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  color: var(--dnd-gold);
+}
+
+/* Details */
+.wizard-details-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .wizard-details-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Review */
+.wizard-review-header {
+  margin-bottom: var(--space-4);
+}
+
+.wizard-review-header h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  background: linear-gradient(135deg, var(--dnd-gold), var(--dnd-gold-dim));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.wizard-review-header p {
+  color: var(--text-muted);
+}
+
+.wizard-review-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.wizard-saved {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  background: var(--success-subtle);
+  border: 1px solid var(--success);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-weight: 600;
+  color: var(--success);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Navigation */
+.wizard-nav {
+  display: flex;
+  gap: var(--space-3);
+}

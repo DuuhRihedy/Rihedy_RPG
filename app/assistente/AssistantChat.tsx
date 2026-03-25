@@ -5,6 +5,7 @@ import {
   sendMessage,
   getCampaignsForSelector,
   getSessionsForCampaign,
+  getChatHistory,
 } from "@/lib/actions/assistant";
 import type { AssistantMode } from "@/lib/services/ai-assistant";
 
@@ -13,6 +14,7 @@ interface ChatMessage {
   content: string;
   mode?: AssistantMode;
   tokens?: number;
+  fromHistory?: boolean;
 }
 
 interface Campaign {
@@ -47,6 +49,12 @@ const MODE_CONFIG = {
     placeholder: "Cole suas notas brutas da sessão...",
     color: "var(--warning)",
   },
+  adventure: {
+    emoji: "🗺️",
+    label: "Gerar Aventura",
+    placeholder: "Descreva a aventura/side-quest (tema, nível, ambiente)...",
+    color: "var(--dnd-gold)",
+  },
 };
 
 export default function AssistantChat() {
@@ -58,6 +66,7 @@ export default function AssistantChat() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [selectedCampaign, setSelectedCampaign] = useState("");
   const [selectedSession, setSelectedSession] = useState("");
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -75,6 +84,24 @@ export default function AssistantChat() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  async function loadHistory() {
+    const history = await getChatHistory(20);
+    if (history.length > 0) {
+      const historyMessages: ChatMessage[] = [];
+      for (const entry of history.reverse()) {
+        historyMessages.push({ role: "user", content: entry.question, fromHistory: true });
+        historyMessages.push({ role: "assistant", content: entry.answer, fromHistory: true, tokens: entry.tokensUsed || undefined });
+      }
+      setMessages(historyMessages);
+      setHistoryLoaded(true);
+    }
+  }
+
+  function handleNewConversation() {
+    setMessages([]);
+    setHistoryLoaded(false);
+  }
 
   async function handleSend() {
     if (!input.trim() || loading) return;
@@ -178,6 +205,19 @@ export default function AssistantChat() {
             </select>
           )}
         </div>
+
+        <div className="assistant-actions">
+          {messages.length > 0 && (
+            <button className="btn btn-ghost btn-sm" onClick={handleNewConversation}>
+              🔄 Nova Conversa
+            </button>
+          )}
+          {!historyLoaded && messages.length === 0 && (
+            <button className="btn btn-ghost btn-sm" onClick={loadHistory}>
+              📂 Carregar Histórico
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Messages */}
@@ -229,6 +269,7 @@ export default function AssistantChat() {
           <div
             key={i}
             className={`assistant-msg ${msg.role === "user" ? "msg-user" : "msg-assistant"}`}
+            style={msg.fromHistory ? { opacity: 0.6 } : undefined}
           >
             <div className="msg-avatar">
               {msg.role === "user"

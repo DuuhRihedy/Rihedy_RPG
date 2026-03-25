@@ -46,6 +46,7 @@ export async function updateCampaign(id: string, formData: FormData) {
   const description = formData.get("description") as string;
   const edition = formData.get("edition") as string;
   const status = formData.get("status") as string;
+  const imageUrl = formData.get("imageUrl") as string;
 
   await prisma.campaign.update({
     where: { id },
@@ -54,6 +55,7 @@ export async function updateCampaign(id: string, formData: FormData) {
       ...(description !== null && { description: description?.trim() || null }),
       ...(edition && { edition }),
       ...(status && { status }),
+      ...(imageUrl !== null && { imageUrl: imageUrl?.trim() || null }),
     },
   });
 
@@ -155,4 +157,78 @@ export async function updateArcStatus(id: string, status: string, campaignId: st
 export async function deleteArc(id: string, campaignId: string) {
   await prisma.storyArc.delete({ where: { id } });
   revalidatePath(`/campanhas/${campaignId}`);
+}
+
+// ── Clonar NPC para Campanha ───────
+
+export async function cloneNpcToCampaign(npcId: string, campaignId: string) {
+  const source = await prisma.npc.findUnique({
+    where: { id: npcId },
+    include: { attributes: true, items: true },
+  });
+
+  if (!source) return;
+
+  const clone = await prisma.npc.create({
+    data: {
+      name: `${source.name} (Cópia)`,
+      race: source.race,
+      class: source.class,
+      level: source.level,
+      alignment: source.alignment,
+      description: source.description,
+      backstory: source.backstory,
+      gmNotes: source.gmNotes,
+      imageUrl: source.imageUrl,
+      status: source.status,
+      type: source.type,
+      edition: source.edition,
+      ...(source.attributes && {
+        attributes: {
+          create: {
+            str: source.attributes.str,
+            dex: source.attributes.dex,
+            con: source.attributes.con,
+            intl: source.attributes.intl,
+            wis: source.attributes.wis,
+            cha: source.attributes.cha,
+            hp: source.attributes.hp,
+            ac: source.attributes.ac,
+          },
+        },
+      }),
+      campaigns: {
+        create: { campaignId },
+      },
+    },
+  });
+
+  if (source.items.length > 0) {
+    await prisma.item.createMany({
+      data: source.items.map((item) => ({
+        npcId: clone.id,
+        name: item.name,
+        type: item.type,
+        description: item.description,
+        weight: item.weight,
+        value: item.value,
+        magical: item.magical,
+        imageUrl: item.imageUrl,
+      })),
+    });
+  }
+
+  revalidatePath(`/campanhas/${campaignId}`);
+  revalidatePath("/npcs");
+}
+
+// ── Campanhas ativas (para sidebar) ─
+
+export async function getActiveCampaigns() {
+  return prisma.campaign.findMany({
+    where: { status: "active" },
+    select: { id: true, name: true },
+    orderBy: { updatedAt: "desc" },
+    take: 5,
+  });
 }

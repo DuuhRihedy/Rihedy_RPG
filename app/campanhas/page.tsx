@@ -57,6 +57,11 @@ export default async function CampanhasPage() {
               href={`/campanhas/${campaign.id}`}
               className="card card-interactive campaign-card"
             >
+              {campaign.imageUrl && (
+                <div className="campaign-card-cover-wrap">
+                  <img src={campaign.imageUrl} alt="" className="campaign-card-cover" />
+                </div>
+              )}
               <div className="campaign-card-top">
                 <span className={`badge ${campaign.edition === "3.5" ? "badge-35" : "badge-5e"}`}>
                   D&D {campaign.edition}

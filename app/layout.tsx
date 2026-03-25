@@ -3,6 +3,7 @@ import { Cinzel, Inter, JetBrains_Mono } from "next/font/google";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { ChatSidebar } from "@/components/layout/ChatSidebar";
+import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import "./globals.css";
 import "./layout.css";
 
@@ -51,6 +52,7 @@ export default function RootLayout({
             </main>
           </div>
           <ChatSidebar />
+          <KeyboardShortcuts />
         </div>
       </body>
     </html>
