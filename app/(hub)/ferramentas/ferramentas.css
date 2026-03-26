@@ -1142,13 +1142,71 @@
 }
 
 @media (max-width: 768px) {
+  .dice-result-total {
+    font-size: 48px;
+  }
+
+  .dice-result-display {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .dice-custom-row {
+    flex-wrap: wrap;
+  }
+
+  .dice-mod-input {
+    width: 50px !important;
+  }
+
+  .dice-stats-row {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .dice-history-top {
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .npc-sheet-header {
+    flex-direction: column;
+    padding: var(--space-4);
+    gap: var(--space-2);
+  }
+
+  .npc-sheet-section {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .npc-sheet-combat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .npc-sheet-vitals {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .save-box {
+    min-width: 100px;
+  }
+
+  .encounter-header {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .creature-row {
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
   .map-tabs {
     flex-direction: column;
   }
 
   .map-iframe-container {
     height: 60vh;
-    min-height: 400px;
+    min-height: 300px;
   }
 
   .map-info-bar {
@@ -1166,5 +1224,13 @@
 
   .map-gallery-filters {
     flex-wrap: wrap;
+  }
+
+  .gen-controls-row {
+    gap: var(--space-2);
+  }
+
+  .dice-preset-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   }
 }

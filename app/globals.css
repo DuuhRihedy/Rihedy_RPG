@@ -105,6 +105,9 @@
   --header-height: 56px;
   --content-max-width: 1200px;
 
+  /* Gradiente de fundo */
+  --bg-gradient: linear-gradient(145deg, #e8d8b8 0%, #f0e8d4 40%, #ffffff 100%);
+
   /* Transições */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
@@ -135,6 +138,9 @@
   --dnd-gold-hover: #dfc06e;
   --dnd-gold-subtle: rgba(200, 168, 78, 0.15);
 
+  /* Gradiente de fundo */
+  --bg-gradient: linear-gradient(145deg, #0a0a0f 0%, #0d0d1a 40%, #000000 100%);
+
   /* Sombras — tema escuro (opacidade mais alta) */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -159,10 +165,50 @@ body {
   font-size: var(--text-base);
   line-height: 1.6;
   color: var(--text-primary);
-  background-color: var(--bg-deep);
+  background: var(--bg-gradient);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
+}
+
+/* ── Grids Responsivos ────────────────── */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+}
+
+.grid-docs {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (max-width: 768px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-2 {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Tipografia ──────────────────────── */
@@ -1178,6 +1224,24 @@ code, pre {
 :root .header-actions .btn-ghost:hover {
   background: rgba(200, 168, 78, 0.15);
   color: #c8a84e;
+}
+
+/* ── Toggle de tema ─────────────────── */
+.theme-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+  padding: 6px 16px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  letter-spacing: 0.05em;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--dnd-gold);
+  border-color: var(--dnd-gold-subtle);
 }
 
 /* ── Cards estilo página do PHB ──────── */

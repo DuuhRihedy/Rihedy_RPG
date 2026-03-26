@@ -40,16 +40,23 @@ export default function CampaignStory({ campaignId }: { campaignId: string }) {
       if (res.ok) {
         const data = await res.json();
         setChapters(data);
-        if (!activeId && data.length > 0) {
-          setActiveId(data[0].id);
-          setEditingContent(data[0].content);
-          setEditingTitle(data[0].title);
-        }
+        return data;
       }
     } catch {}
-  }, [campaignId, activeId]);
+    return [];
+  }, [campaignId]);
 
-  useEffect(() => { loadChapters(); }, [loadChapters]);
+  // Carrega capítulos apenas uma vez na montagem
+  useEffect(() => {
+    loadChapters().then((data: Chapter[]) => {
+      if (data.length > 0) {
+        setActiveId(data[0].id);
+        setEditingContent(data[0].content);
+        setEditingTitle(data[0].title);
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [campaignId]);
 
   const activeChapter = chapters.find((c) => c.id === activeId);
 
@@ -67,17 +74,22 @@ export default function CampaignStory({ campaignId }: { campaignId: string }) {
   async function saveChapter(id: string, content: string, title: string) {
     setSaving(true);
     try {
-      await fetch(`/api/chapters/${id}`, {
+      const res = await fetch(`/api/chapters/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content, title }),
       });
-      setLastSaved(new Date().toLocaleTimeString("pt-BR"));
-      // Atualizar local
-      setChapters((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, content, title } : c))
-      );
-    } catch {}
+      if (res.ok) {
+        setLastSaved(new Date().toLocaleTimeString("pt-BR"));
+        setChapters((prev) =>
+          prev.map((c) => (c.id === id ? { ...c, content, title } : c))
+        );
+      } else {
+        console.error("[saveChapter] Erro:", res.status, await res.text());
+      }
+    } catch (err) {
+      console.error("[saveChapter] Erro:", err);
+    }
     setSaving(false);
   }
 
@@ -152,14 +164,11 @@ export default function CampaignStory({ campaignId }: { campaignId: string }) {
         encounters: `Sugira 3-5 encontros temáticos para este capítulo de aventura D&D 3.5. Para cada encontro: nome, monstros específicos (com CR e quantidade), ambiente/terreno, tática dos monstros, e tesouro possível. Baseie nos locais e tom da história. Responda em português (PT-BR).\n\nCapítulo: ${editingTitle}\n\n${editingContent || "(sem conteúdo ainda)"}`,
       };
 
-      const res = await fetch("/api/documents/ai", {
+      const res = await fetch("/api/chapters/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          action: "expand-story",
-          campaignId,
-          documentId: null,
-          customContent: prompts[action] || prompts.expand,
+          prompt: prompts[action] || prompts.expand,
         }),
       });
 
@@ -191,14 +200,10 @@ export default function CampaignStory({ campaignId }: { campaignId: string }) {
   const wordCount = editingContent.split(/\s+/).filter(Boolean).length;
 
   return (
-    <div style={{ display: "flex", gap: "var(--space-4)", minHeight: "500px" }}>
+    <div className="story-layout">
 
       {/* Sidebar de capítulos */}
-      <div style={{
-        width: "220px", flexShrink: 0, display: "flex", flexDirection: "column",
-        gap: "var(--space-2)", borderRight: "1px solid var(--border-subtle)",
-        paddingRight: "var(--space-4)",
-      }}>
+      <div className="story-sidebar">
         <div style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--dnd-red)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "var(--space-1)" }}>
           📜 Capítulos
         </div>
@@ -272,7 +277,7 @@ export default function CampaignStory({ campaignId }: { campaignId: string }) {
       </div>
 
       {/* Editor principal */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <div className="story-editor">
         {activeId ? (
           <>
             {/* Header do editor */}
@@ -385,13 +390,9 @@ export default function CampaignStory({ campaignId }: { campaignId: string }) {
             )}
           </>
         ) : (
-          <div style={{
-            flex: 1, display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            color: "var(--text-muted)", gap: "var(--space-3)",
-          }}>
+          <div className="story-empty">
             <span style={{ fontSize: "48px" }}>📜</span>
-            <p style={{ fontSize: "var(--text-sm)", textAlign: "center", maxWidth: "400px", lineHeight: 1.6 }}>
+            <p>
               Aqui você escreve a história da sua campanha — o enredo, a ambientação, os segredos.
               Organize em capítulos e use a IA para expandir, gerar ganchos narrativos, NPCs e encontros temáticos.
             </p>

@@ -288,3 +288,42 @@
   display: flex;
   gap: var(--space-3);
 }
+
+@media (max-width: 768px) {
+  .wizard-progress {
+    flex-wrap: wrap;
+  }
+
+  .wizard-step-btn {
+    min-width: 0;
+    padding: var(--space-2);
+  }
+
+  .wizard-step-label {
+    display: none;
+  }
+
+  .wizard-panel {
+    padding: var(--space-4);
+  }
+
+  .wizard-panel h2 {
+    font-size: var(--text-xl);
+  }
+
+  .wizard-options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wizard-review-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wizard-ability-methods {
+    flex-wrap: wrap;
+  }
+
+  .wizard-nav {
+    flex-wrap: wrap;
+  }
+}

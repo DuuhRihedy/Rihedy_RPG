@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 const MENU_ITEMS = [
   { href: "/campanhas", icon: "⚔️", label: "Campanhas", desc: "Suas aventuras" },
   { href: "/ferramentas/dados", icon: "🎲", label: "Mesa", desc: "Dados e encontros" },
-  { href: "/acervo", icon: "📜", label: "Grimório", desc: "Regras SRD" },
+  { href: "/acervo", icon: "📜", label: "Grimório", desc: "Acervo D&D" },
   { href: "/npcs", icon: "💀", label: "Bestiário", desc: "NPCs e criaturas" },
   { href: "/ferramentas/mapas", icon: "🗺️", label: "Mapas", desc: "Gerar mapas" },
   { href: "/assistente", icon: "🔮", label: "Oráculo", desc: "Assistente IA" },

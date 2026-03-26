@@ -15,6 +15,7 @@ interface ChatMessage {
   mode?: AssistantMode;
   tokens?: number;
   fromHistory?: boolean;
+  fileName?: string;
 }
 
 interface Campaign {
@@ -57,6 +58,8 @@ const MODE_CONFIG = {
   },
 };
 
+const ACCEPTED_TYPES = ".txt,.md,.pdf,.doc,.docx,.xls,.xlsx,.csv";
+
 export default function AssistantChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -67,7 +70,10 @@ export default function AssistantChat() {
   const [selectedCampaign, setSelectedCampaign] = useState("");
   const [selectedSession, setSelectedSession] = useState("");
   const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [attachedFile, setAttachedFile] = useState<{ name: string; text: string } | null>(null);
+  const [extracting, setExtracting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     getCampaignsForSelector().then(setCampaigns);
@@ -101,14 +107,56 @@ export default function AssistantChat() {
   function handleNewConversation() {
     setMessages([]);
     setHistoryLoaded(false);
+    setAttachedFile(null);
+  }
+
+  async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setExtracting(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/extract-text", { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Erro ao extrair texto");
+        return;
+      }
+
+      setAttachedFile({ name: data.fileName, text: data.text });
+
+      if (!input.trim()) {
+        setInput(`Analise o documento "${data.fileName}" e me diga o que ele contém:`);
+      }
+    } catch {
+      alert("Erro ao processar arquivo");
+    } finally {
+      setExtracting(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   }
 
   async function handleSend() {
-    if (!input.trim() || loading) return;
+    if ((!input.trim() && !attachedFile) || loading) return;
 
-    const userMsg = input.trim();
+    let userMsg = input.trim();
+    let displayMsg = userMsg;
+    const fileName = attachedFile?.name;
+
+    // Se tem arquivo anexado, inclui o conteúdo na mensagem para a IA
+    if (attachedFile) {
+      const docPrefix = `[Documento anexado: "${attachedFile.name}" — ${attachedFile.text.length} caracteres]\n\n`;
+      userMsg = docPrefix + attachedFile.text + "\n\n---\n\n" + (userMsg || "Analise este documento.");
+      displayMsg = displayMsg || "Analise este documento.";
+    }
+
     setInput("");
-    setMessages((prev) => [...prev, { role: "user", content: userMsg, mode }]);
+    setAttachedFile(null);
+    setMessages((prev) => [...prev, { role: "user", content: displayMsg, mode, fileName }]);
     setLoading(true);
 
     try {
@@ -254,12 +302,9 @@ export default function AssistantChat() {
               </button>
               <button
                 className="assistant-tip"
-                onClick={() => {
-                  setMode("chat");
-                  setInput("Quais magias de 3° nível o Mago pode preparar?");
-                }}
+                onClick={() => fileInputRef.current?.click()}
               >
-                📖 &quot;Magias de 3° nível do Mago&quot;
+                📎 Anexar documento (.txt, .pdf, .docx, .xlsx)
               </button>
             </div>
           </div>
@@ -279,6 +324,9 @@ export default function AssistantChat() {
                   : "🤖"}
             </div>
             <div className="msg-content">
+              {msg.fileName && (
+                <span className="msg-file-badge">📎 {msg.fileName}</span>
+              )}
               {msg.role === "assistant" ? (
                 <div
                   className="msg-text markdown"
@@ -312,12 +360,35 @@ export default function AssistantChat() {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Arquivo anexado */}
+      {attachedFile && (
+        <div className="assistant-attached">
+          <span>📎 {attachedFile.name} ({attachedFile.text.length.toLocaleString()} chars)</span>
+          <button onClick={() => setAttachedFile(null)} className="assistant-attached-remove">✕</button>
+        </div>
+      )}
+
       {/* Input */}
       <div className="assistant-input-area">
         <div
           className="assistant-input-indicator"
           style={{ background: config.color }}
         />
+        <input
+          type="file"
+          ref={fileInputRef}
+          accept={ACCEPTED_TYPES}
+          onChange={handleFileSelect}
+          style={{ display: "none" }}
+        />
+        <button
+          className="assistant-attach-btn"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={loading || extracting}
+          title="Anexar documento (.txt, .pdf, .docx, .xlsx)"
+        >
+          {extracting ? "⏳" : "📎"}
+        </button>
         <textarea
           className="assistant-input"
           value={input}
@@ -330,7 +401,7 @@ export default function AssistantChat() {
         <button
           className="btn btn-primary assistant-send"
           onClick={handleSend}
-          disabled={loading || !input.trim()}
+          disabled={loading || (!input.trim() && !attachedFile)}
         >
           {loading ? "⏳" : "➤"}
         </button>

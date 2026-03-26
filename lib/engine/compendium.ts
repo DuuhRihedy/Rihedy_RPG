@@ -36,7 +36,7 @@ export async function searchCompendium(params: CompendiumSearchParams): Promise<
             ...(params.level !== undefined && { level: params.level }),
           },
           take: limit,
-          orderBy: [{ edition: "asc" }, { level: "asc" }, { name: "asc" }],
+          orderBy: [{ name: "asc" }, { edition: "asc" }, { level: "asc" }],
         });
 
         for (const s of spells) {
@@ -59,7 +59,7 @@ export async function searchCompendium(params: CompendiumSearchParams): Promise<
             ...(params.edition && { edition: params.edition }),
           },
           take: limit,
-          orderBy: [{ edition: "asc" }, { name: "asc" }],
+          orderBy: [{ name: "asc" }, { edition: "asc" }],
         });
 
         for (const m of monsters) {
@@ -82,7 +82,7 @@ export async function searchCompendium(params: CompendiumSearchParams): Promise<
             ...(params.edition && { edition: params.edition }),
           },
           take: limit,
-          orderBy: [{ edition: "asc" }, { name: "asc" }],
+          orderBy: [{ name: "asc" }, { edition: "asc" }],
         });
 
         for (const c of classes) {
@@ -105,7 +105,7 @@ export async function searchCompendium(params: CompendiumSearchParams): Promise<
             ...(params.edition && { edition: params.edition }),
           },
           take: limit,
-          orderBy: [{ edition: "asc" }, { name: "asc" }],
+          orderBy: [{ name: "asc" }, { edition: "asc" }],
         });
 
         for (const f of feats) {

@@ -407,7 +407,7 @@ export default function CampaignDocuments({ campaignId }: { campaignId: string }
       )}
 
       {/* Layout de duas colunas: lista + visualizador */}
-      <div style={{ display: "grid", gridTemplateColumns: selectedDoc ? "1fr 2fr" : "1fr", gap: "var(--space-4)" }}>
+      <div className="grid-docs" style={{ gridTemplateColumns: selectedDoc ? "1fr 2fr" : "1fr" }}>
         {/* Lista de documentos */}
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
           {documents.length === 0 ? (

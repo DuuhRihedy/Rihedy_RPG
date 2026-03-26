@@ -1,4 +1,31 @@
+"use client";
+
+import { useEffect, useState, useCallback } from "react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { getTodayRequestCount } from "@/lib/actions/assistant";
+
 export function Header() {
+  const [requestCount, setRequestCount] = useState<number | null>(null);
+
+  const refresh = useCallback(() => {
+    getTodayRequestCount().then(setRequestCount);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+
+    // Atualiza a cada 30 segundos
+    const interval = setInterval(refresh, 30_000);
+
+    // Atualiza quando a aba ganha foco
+    window.addEventListener("focus", refresh);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("focus", refresh);
+    };
+  }, [refresh]);
+
   return (
     <header className="header">
       {/* Breadcrumb */}
@@ -25,8 +52,9 @@ export function Header() {
       <div className="header-actions">
         <div className="header-ia-tokens">
           <span className="header-ia-tokens-dot" />
-          <span>IA: 247/250</span>
+          <span>IA: {requestCount !== null ? requestCount : "…"}/250</span>
         </div>
+        <ThemeToggle />
         <button className="btn btn-ghost btn-sm">⚙️</button>
       </div>
     </header>

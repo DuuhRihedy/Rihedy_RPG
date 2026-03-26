@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useEdition } from "@/lib/EditionContext";
 
 interface CompendiumResult {
   id: string;
@@ -23,13 +24,18 @@ const CATEGORY_CONFIG: Record<string, { icon: string; label: string; color: stri
 };
 
 export default function CompendiumSearch() {
+  const { edition: globalEdition } = useEdition();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("all");
-  const [edition, setEdition] = useState("all");
+  const [edition, setEdition] = useState(globalEdition as string);
   const [results, setResults] = useState<CompendiumResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<CompendiumResult | null>(null);
   const [stats, setStats] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    setEdition(globalEdition);
+  }, [globalEdition]);
 
   useEffect(() => {
     fetch("/api/compendium/stats")

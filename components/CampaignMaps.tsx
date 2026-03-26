@@ -91,7 +91,7 @@ export default function CampaignMaps({ campaignId }: { campaignId: string }) {
       {/* Formulário inline */}
       {showForm && (
         <form onSubmit={handleSave} style={{ padding: "var(--space-4)", borderBottom: "1px solid var(--border-subtle)", display: "flex", flexDirection: "column", gap: "var(--space-3)" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 150px", gap: "var(--space-3)" }}>
+          <div className="grid-2">
             <div className="form-group">
               <label className="form-label">Nome *</label>
               <input

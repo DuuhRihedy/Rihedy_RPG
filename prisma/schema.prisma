@@ -245,6 +245,17 @@ model ChatHistory {
   createdAt   DateTime @default(now())
 }
 
+// ── Uso da API de IA ────────────────
+
+model ApiUsage {
+  id          String   @id @default(cuid())
+  source      String   // "chat", "chapters", "documents", etc
+  tokensUsed  Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+}
+
 // ══════════════════════════════════════
 // ── ACERVO SRD ───────────────────────
 // ══════════════════════════════════════
@@ -319,6 +330,7 @@ model SrdClass {
   id            String @id @default(cuid())
   index         String @unique
   name          String
+  namePtBr      String? // nome traduzido PT-BR
   edition       String @default("5e")
   hitDie        Int
   proficiencies String? // JSON

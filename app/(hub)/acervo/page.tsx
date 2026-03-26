@@ -25,7 +25,7 @@ export default async function AcervoPage() {
           📚 <span className="text-gold">Acervo de Regras</span>
         </h1>
         <p>
-          {totalItems.toLocaleString()} registros do SRD · D&D 5e
+          {totalItems.toLocaleString()} registros · Acervo D&D
         </p>
       </div>
 
@@ -49,7 +49,7 @@ export default async function AcervoPage() {
       {totalItems === 0 && (
         <div className="card" style={{ textAlign: "center", padding: "var(--space-10)" }}>
           <p style={{ fontSize: "var(--text-lg)", marginBottom: "var(--space-4)" }}>
-            Acervo vazio — execute a importação SRD
+            Acervo vazio — execute a importação do banco de dados
           </p>
           <code style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)" }}>
             npx tsx prisma/import-srd.ts

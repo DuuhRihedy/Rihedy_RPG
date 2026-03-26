@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
+import { useEdition } from "@/lib/EditionContext";
 
 // ── Categorias disponíveis ──
 const CATEGORIES = [
@@ -45,9 +46,14 @@ interface SearchResult {
 }
 
 export default function CampaignRegras() {
+  const { edition: globalEdition } = useEdition();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
-  const [edition, setEdition] = useState("");
+  const [edition, setEdition] = useState(globalEdition as string);
+
+  useEffect(() => {
+    setEdition(globalEdition);
+  }, [globalEdition]);
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
@@ -284,7 +290,7 @@ export default function CampaignRegras() {
       {/* Estado inicial */}
       {!searched && !loading && (
         <div style={{ textAlign: "center", padding: "var(--space-6)", color: "var(--text-muted)", fontSize: "var(--text-sm)" }}>
-          📚 Pesquise no compêndio SRD para consultar regras, magias, monstros e mais.
+          📚 Pesquise no Acervo D&D para consultar regras, magias, monstros e mais.
         </div>
       )}
     </div>

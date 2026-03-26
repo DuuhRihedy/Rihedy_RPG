@@ -3,6 +3,8 @@
 // Modelo: gemini-2.5-flash (Free Tier)
 // ══════════════════════════════════════════
 
+import { prisma } from "@/lib/db";
+
 const GEMINI_API_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
@@ -20,6 +22,7 @@ export async function callGemini(
   systemPrompt: string,
   history: GeminiMessage[],
   userMessage: string,
+  source: string = "chat",
 ): Promise<GeminiResponse> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) {
@@ -69,6 +72,15 @@ export async function callGemini(
   const tokensUsed =
     (data.usageMetadata?.promptTokenCount || 0) +
     (data.usageMetadata?.candidatesTokenCount || 0);
+
+  // Registrar uso da API
+  try {
+    await prisma.apiUsage.create({
+      data: { source, tokensUsed },
+    });
+  } catch (err) {
+    console.error("[ApiUsage] Erro ao registrar:", err);
+  }
 
   return { text, tokensUsed };
 }

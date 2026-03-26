@@ -30,7 +30,7 @@ export async function searchSpells(query?: string, level?: number, school?: stri
 
   return prisma.srdSpell.findMany({
     where,
-    orderBy: [{ level: "asc" }, { name: "asc" }],
+    orderBy: [{ name: "asc" }, { level: "asc" }],
     take: 100,
   });
 }
@@ -83,7 +83,7 @@ export async function searchMonsters(query?: string, type?: string, crMin?: numb
 
   return prisma.srdMonster.findMany({
     where,
-    orderBy: [{ challengeRating: "asc" }, { name: "asc" }],
+    orderBy: [{ name: "asc" }, { challengeRating: "asc" }],
     take: 100,
     select: {
       id: true,
@@ -155,7 +155,7 @@ export async function searchEquipment(query?: string, category?: string, edition
 
   return prisma.srdEquipment.findMany({
     where,
-    orderBy: [{ category: "asc" }, { name: "asc" }],
+    orderBy: [{ name: "asc" }, { category: "asc" }],
     take: 100,
   });
 }
@@ -200,7 +200,7 @@ export async function searchMagicItems(query?: string, rarity?: string, category
 
   return prisma.srdMagicItem.findMany({
     where,
-    orderBy: [{ rarity: "asc" }, { name: "asc" }],
+    orderBy: [{ name: "asc" }, { rarity: "asc" }],
     take: 100,
   });
 }

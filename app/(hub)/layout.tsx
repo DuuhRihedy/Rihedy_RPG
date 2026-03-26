@@ -2,6 +2,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Header } from "@/components/layout/Header";
 import { ChatSidebar } from "@/components/layout/ChatSidebar";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import { EditionProvider } from "@/lib/EditionContext";
 
 export default function HubLayout({
   children,
@@ -9,16 +10,18 @@ export default function HubLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="app-layout">
-      <Sidebar />
-      <div className="app-main">
-        <Header />
-        <main className="app-content">
-          {children}
-        </main>
+    <EditionProvider>
+      <div className="app-layout">
+        <Sidebar />
+        <div className="app-main">
+          <Header />
+          <main className="app-content">
+            {children}
+          </main>
+        </div>
+        <ChatSidebar />
+        <KeyboardShortcuts />
       </div>
-      <ChatSidebar />
-      <KeyboardShortcuts />
-    </div>
+    </EditionProvider>
   );
 }

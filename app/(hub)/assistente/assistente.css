@@ -359,6 +359,106 @@
   border-radius: var(--radius);
 }
 
+/* ─── Botão de anexar arquivo ──────────── */
+
+.assistant-attach-btn {
+  min-width: 42px;
+  height: 42px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.assistant-attach-btn:hover:not(:disabled) {
+  border-color: var(--dnd-gold);
+  color: var(--dnd-gold);
+}
+
+.assistant-attach-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ─── Barra de arquivo anexado ────────── */
+
+.assistant-attached {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  background: var(--dnd-gold-subtle);
+  border-top: 1px solid var(--dnd-gold);
+  font-size: var(--text-xs);
+  color: var(--dnd-gold);
+  font-weight: 600;
+}
+
+.assistant-attached-remove {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+}
+
+.assistant-attached-remove:hover {
+  color: var(--danger);
+}
+
+/* ─── Badge de arquivo na mensagem ────── */
+
+.msg-file-badge {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--dnd-gold);
+  background: var(--dnd-gold-subtle);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-1);
+}
+
 .assistant-send:disabled {
   opacity: 0.4;
+}
+
+@media (max-width: 768px) {
+  .assistant-msg {
+    max-width: 95%;
+  }
+
+  .assistant-modes {
+    flex-wrap: wrap;
+  }
+
+  .assistant-selectors {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .assistant-selectors .select {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .assistant-welcome {
+    padding: var(--space-4);
+  }
+
+  .assistant-welcome-icon {
+    font-size: 48px;
+  }
+
+  .assistant-welcome h2 {
+    font-size: var(--text-xl);
+  }
 }

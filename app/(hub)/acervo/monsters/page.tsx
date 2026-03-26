@@ -1,6 +1,7 @@
 import { searchMonsters, getMonsterFilters } from "@/lib/actions/srd";
 import { translateSize, translateCreatureType, translateAlignment, creatureTypesMap } from "@/lib/translations";
 import Link from "next/link";
+import AcervoEditionSync from "@/components/AcervoEditionSync";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -22,6 +23,7 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
 
   return (
     <div className="page-container">
+      <AcervoEditionSync />
       <div className="page-header">
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "var(--space-3)", marginBottom: "var(--space-2)" }}>

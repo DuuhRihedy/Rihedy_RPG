@@ -286,7 +286,7 @@ export async function POST(request: NextRequest) {
     const systemPrompt = buildSystemPrompt(action, document.content, campaignContext);
     const userMessage = `Analise o documento "${document.name}" e execute a ação solicitada.`;
 
-    const response = await callGemini(systemPrompt, [], userMessage);
+    const response = await callGemini(systemPrompt, [], userMessage, "documents");
 
     // Para ações que criam entidades, processa o resultado
     if (action === "extract-npcs") {

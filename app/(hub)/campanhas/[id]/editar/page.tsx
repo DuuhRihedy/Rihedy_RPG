@@ -93,7 +93,7 @@ export default async function EditCampaignPage({ params }: { params: Params }) {
               <label className="form-label">Descrição</label>
               <textarea name="description" className="input textarea" rows={4} defaultValue={campaign.description || ""} placeholder="Descreva sua campanha..." />
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
+            <div className="grid-2">
               <div className="form-group">
                 <label className="form-label">Edição</label>
                 <select name="edition" className="input select" defaultValue={campaign.edition}>

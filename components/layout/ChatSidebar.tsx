@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { sendMessage } from "@/lib/actions/assistant";
 
 interface MiniMsg {
@@ -9,6 +10,7 @@ interface MiniMsg {
 }
 
 export function ChatSidebar() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<MiniMsg[]>([]);
   const [input, setInput] = useState("");
@@ -18,6 +20,9 @@ export function ChatSidebar() {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Esconde na página do Assistente IA (já tem chat completo)
+  if (pathname === "/assistente") return null;
 
   async function handleSend() {
     if (!input.trim() || loading) return;
@@ -71,8 +76,7 @@ export function ChatSidebar() {
             )}
             {messages.map((msg, i) => (
               <div key={i} className={`mini-msg mini-${msg.role}`}>
-                {msg.content.substring(0, 500)}
-                {msg.content.length > 500 && "..."}
+                {msg.content}
               </div>
             ))}
             {loading && (

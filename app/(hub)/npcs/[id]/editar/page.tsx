@@ -74,7 +74,7 @@ export default async function EditNpcPage({ params }: { params: Params }) {
                   <label className="form-label">Nome *</label>
                   <input name="name" className="input" defaultValue={npc.name} required />
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
+                <div className="grid-2">
                   <div className="form-group">
                     <label className="form-label">Raça</label>
                     <input name="race" className="input" defaultValue={npc.race || ""} placeholder="Ex: Humano, Elfo..." />
@@ -84,7 +84,7 @@ export default async function EditNpcPage({ params }: { params: Params }) {
                     <input name="class" className="input" defaultValue={npc.class || ""} placeholder="Ex: Guerreiro, Mago..." />
                   </div>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-3)" }}>
+                <div className="grid-3">
                   <div className="form-group">
                     <label className="form-label">Nível</label>
                     <input name="level" type="number" className="input" defaultValue={npc.level || ""} min="1" max="30" />
@@ -113,7 +113,7 @@ export default async function EditNpcPage({ params }: { params: Params }) {
                     </select>
                   </div>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)" }}>
+                <div className="grid-2">
                   <div className="form-group">
                     <label className="form-label">Edição</label>
                     <select name="edition" className="input select" defaultValue={npc.edition}>
@@ -171,7 +171,7 @@ export default async function EditNpcPage({ params }: { params: Params }) {
               <div className="card-header">
                 <span className="card-title">⚔️ Atributos</span>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "var(--space-3)", marginBottom: "var(--space-4)" }}>
+              <div className="grid-2" style={{ marginBottom: "var(--space-4)" }}>
                 <div className="form-group">
                   <label className="form-label" style={{ color: "var(--danger)" }}>❤️ HP</label>
                   <input name="hp" type="number" className="input" defaultValue={attrs?.hp || 10} min="1" />
@@ -181,7 +181,7 @@ export default async function EditNpcPage({ params }: { params: Params }) {
                   <input name="ac" type="number" className="input" defaultValue={attrs?.ac || 10} min="0" />
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-3)" }}>
+              <div className="grid-3">
                 {([
                   { name: "str", label: "FOR" },
                   { name: "dex", label: "DES" },

@@ -1,6 +1,7 @@
 import { searchMagicItems, getMagicItemFilters } from "@/lib/actions/srd";
 import { translateRarity, translateCategory } from "@/lib/translations";
 import Link from "next/link";
+import AcervoEditionSync from "@/components/AcervoEditionSync";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -27,6 +28,7 @@ export default async function MagicItemsPage({
 
   return (
     <div className="page-container">
+      <AcervoEditionSync />
       <div className="page-header">
         <div>
           <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>

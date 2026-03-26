@@ -71,7 +71,7 @@ export default async function MonsterDetailPage({ params }: { params: Params }) 
         <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
           {/* Basic Stats */}
           <div className="card">
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "var(--space-3)", marginBottom: "var(--space-4)" }}>
+            <div className="grid-3" style={{ marginBottom: "var(--space-4)" }}>
               <div className="attr-box" style={{ borderColor: "var(--info)", background: "var(--info-subtle)" }}>
                 <span className="attr-value" style={{ color: "var(--info)", fontSize: "var(--text-2xl)" }}>{mon.armorClass}</span>
                 <span className="attr-label">CA</span>

@@ -61,7 +61,7 @@ export default async function NpcsPage() {
           <p style={{ fontSize: "var(--text-xs)", color: "var(--text-muted)", marginBottom: "var(--space-2)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700 }}>
             Atributos
           </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "var(--space-2)" }}>
+          <div className="grid-4" style={{ gap: "var(--space-2)" }}>
             {["str", "dex", "con", "int", "wis", "cha", "hp", "ac"].map((attr) => (
               <div key={attr} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
                 <input

@@ -99,6 +99,20 @@ export async function saveNpcFromAi(
   }
 }
 
+export async function getTodayRequestCount() {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const count = await prisma.apiUsage.count({
+      where: { createdAt: { gte: today } },
+    });
+    return count;
+  } catch (err) {
+    console.error("[getTodayRequestCount] Erro:", err);
+    return 0;
+  }
+}
+
 export async function saveRecapToSession(sessionId: string, recap: string) {
   try {
     return await prisma.session.update({

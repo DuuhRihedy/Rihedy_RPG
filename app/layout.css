@@ -662,6 +662,15 @@
     display: none;
   }
 
+  .header-breadcrumb {
+    display: none;
+  }
+
+  .header-actions {
+    flex: 1;
+    justify-content: flex-end;
+  }
+
   .dashboard-greeting h1 {
     font-size: var(--text-2xl);
   }

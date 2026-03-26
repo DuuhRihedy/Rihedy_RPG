@@ -1,5 +1,6 @@
 import { searchFeats, getFeatFilters } from "@/lib/actions/srd";
 import Link from "next/link";
+import AcervoEditionSync from "@/components/AcervoEditionSync";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -34,6 +35,7 @@ export default async function FeatsPage({
 
   return (
     <div className="page-container">
+      <AcervoEditionSync />
       <div className="page-header">
         <div>
           <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>

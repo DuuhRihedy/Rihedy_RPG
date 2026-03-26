@@ -1,6 +1,7 @@
 import { searchEquipment, getEquipmentFilters } from "@/lib/actions/srd";
 import { translateCategory } from "@/lib/translations";
 import Link from "next/link";
+import AcervoEditionSync from "@/components/AcervoEditionSync";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -18,6 +19,7 @@ export default async function EquipmentPage({
 
   return (
     <div className="page-container">
+      <AcervoEditionSync />
       <div className="page-header">
         <div>
           <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>

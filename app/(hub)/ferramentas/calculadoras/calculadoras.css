@@ -177,3 +177,26 @@
 .calc-table tr:hover td {
   background: var(--bg-hover);
 }
+
+@media (max-width: 768px) {
+  .calc-panel {
+    padding: var(--space-4);
+  }
+
+  .calc-field {
+    min-width: 80px;
+  }
+
+  .calc-results {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .calc-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .calc-creature-row {
+    flex-wrap: wrap;
+  }
+}

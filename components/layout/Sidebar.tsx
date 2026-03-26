@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEdition } from "@/lib/EditionContext";
 
 interface CampaignLink {
   id: string;
@@ -41,7 +42,7 @@ const NAV_ITEMS = [
   {
     section: "Conhecimento",
     items: [
-      { href: "/acervo", icon: "📚", label: "Regras SRD" },
+      { href: "/acervo", icon: "📚", label: "Acervo D&D" },
       { href: "/assistente", icon: "🤖", label: "Assistente IA" },
     ],
   },
@@ -49,7 +50,7 @@ const NAV_ITEMS = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const [activeEdition, setActiveEdition] = useState<"3.5" | "5e">("3.5");
+  const { edition: activeEdition, setEdition: setActiveEdition } = useEdition();
   const [campaigns, setCampaigns] = useState<CampaignLink[]>([]);
   const [campaignsExpanded, setCampaignsExpanded] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
