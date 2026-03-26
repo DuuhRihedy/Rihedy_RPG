@@ -56,3 +56,6 @@ next-env.d.ts
 .agent/
 
 .vercel
+
+# Claude Code config
+.claude/

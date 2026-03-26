@@ -1,6 +1,7 @@
 // ══════════════════════════════════════════════════════
-// Hub RPG — Tradução SRD COMPLETA v2 (sem API, hardcoded)
+// Hub RPG — Tradução SRD COMPLETA v3 (sem API, hardcoded)
 // Aplica TODAS as traduções PT-BR em TODOS os modelos
+// Inclui: namePtBr + descriptionPtBr (blocos menores)
 // Corrige bug de match do sufixo -35
 // Inclui dicionários 3.5 massivos + padrões de nome
 // ══════════════════════════════════════════════════════
@@ -29,6 +30,12 @@ import { featNames35 } from "./srd-pt-br/feat-names-35";
 // Tradução por padrão (monstros e itens mágicos)
 import { translateMonsterName } from "./srd-pt-br/monster-names-35";
 import { translateMagicItemName } from "./srd-pt-br/magic-item-names-35";
+
+// Dicionários de DESCRIÇÕES (blocos menores → hardcoded)
+import { conditionDescriptions } from "./srd-pt-br/description-conditions";
+import { skillDescriptions } from "./srd-pt-br/description-skills";
+import { traitDescriptions } from "./srd-pt-br/description-traits";
+import { subclassDescriptions } from "./srd-pt-br/description-subclasses";
 
 const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
@@ -195,14 +202,71 @@ async function main() {
   // ── Features (match por nome) ──
   addResult(await translateFeatures());
 
+  // ══════════════════════════════════════════════════════
+  // FASE 2: Descrições (descriptionPtBr) — Blocos menores
+  // ══════════════════════════════════════════════════════
+  console.log(`\n── Fase 2: Descrições (descriptionPtBr) ──────────`);
+  let descTranslated = 0;
+
+  // ── Condições ──
+  const conditions = await prisma.srdCondition.findMany({ select: { index: true } });
+  for (const c of conditions) {
+    const desc = conditionDescriptions[c.index];
+    if (desc) {
+      await prisma.srdCondition.update({ where: { index: c.index }, data: { descriptionPtBr: desc } });
+      descTranslated++;
+    }
+  }
+  console.log(`⚡ Condições: ${descTranslated}/${conditions.length} descrições traduzidas`);
+
+  // ── Skills ──
+  let skillCount = 0;
+  const skills = await prisma.srdSkill.findMany({ select: { index: true } });
+  for (const s of skills) {
+    const desc = skillDescriptions[s.index];
+    if (desc) {
+      await prisma.srdSkill.update({ where: { index: s.index }, data: { descriptionPtBr: desc } });
+      skillCount++;
+    }
+  }
+  console.log(`🎲 Skills: ${skillCount}/${skills.length} descrições traduzidas`);
+  descTranslated += skillCount;
+
+  // ── Traits ──
+  let traitCount = 0;
+  const traits = await prisma.srdTrait.findMany({ select: { index: true } });
+  for (const t of traits) {
+    const desc = traitDescriptions[t.index];
+    if (desc) {
+      await prisma.srdTrait.update({ where: { index: t.index }, data: { descriptionPtBr: desc } });
+      traitCount++;
+    }
+  }
+  console.log(`🧬 Traits: ${traitCount}/${traits.length} descrições traduzidas`);
+  descTranslated += traitCount;
+
+  // ── Subclasses ──
+  let subclassCount = 0;
+  const subclasses = await prisma.srdSubclass.findMany({ select: { index: true } });
+  for (const sc of subclasses) {
+    const desc = subclassDescriptions[sc.index];
+    if (desc) {
+      await prisma.srdSubclass.update({ where: { index: sc.index }, data: { descriptionPtBr: desc } });
+      subclassCount++;
+    }
+  }
+  console.log(`🏹 Subclasses: ${subclassCount}/${subclasses.length} descrições traduzidas`);
+  descTranslated += subclassCount;
+
   // ── Resumo ──
   const elapsed = ((Date.now() - start) / 1000).toFixed(1);
   const total = totalTranslated + totalSkipped;
   const pct = Math.round((totalTranslated / total) * 100);
   console.log(`\n═════════════════════════════════════════════════════`);
   console.log(`🏁 Tradução completa em ${elapsed}s`);
-  console.log(`📊 ${totalTranslated}/${total} traduzidos (${pct}%)`);
-  console.log(`❓ ${totalSkipped} sem tradução disponível`);
+  console.log(`📊 Nomes: ${totalTranslated}/${total} traduzidos (${pct}%)`);
+  console.log(`📝 Descrições: ${descTranslated} traduzidas (blocos menores)`);
+  console.log(`❓ ${totalSkipped} nomes sem tradução disponível`);
 }
 
 main()
