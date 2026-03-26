@@ -1,0 +1,190 @@
+/* ── Configurações ────────────────── */
+
+.config-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 800px;
+}
+
+/* Providers */
+.config-providers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.config-provider-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  background: var(--bg-deep);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.config-provider-card strong {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+
+.config-provider-card span {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.config-provider-card:hover {
+  border-color: var(--border-default);
+  background: var(--bg-hover);
+}
+
+.config-provider-card.active {
+  border-color: var(--dnd-gold);
+  background: var(--dnd-gold-subtle);
+}
+
+.config-provider-card.active strong {
+  color: var(--dnd-gold);
+}
+
+/* Fields */
+.config-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.config-key-badge {
+  margin-left: var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--success);
+  background: var(--success-subtle);
+  padding: 1px 8px;
+  border-radius: var(--radius-sm);
+}
+
+.config-hint {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Slider */
+.config-slider {
+  width: 100%;
+  accent-color: var(--dnd-gold);
+}
+
+.config-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* Toggle */
+.config-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.config-toggle input {
+  accent-color: var(--dnd-gold);
+  width: 18px;
+  height: 18px;
+}
+
+/* Test */
+.config-test-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.config-test-result {
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.config-test-result.success {
+  color: var(--success);
+}
+
+.config-test-result.error {
+  color: var(--danger);
+}
+
+/* Stats */
+.config-stats {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.config-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.config-stat-value {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.config-stat-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.config-stat-tokens {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--dnd-gold);
+}
+
+/* Save */
+.config-save-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.config-saved {
+  font-size: var(--text-sm);
+  color: var(--success);
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .config-providers {
+    grid-template-columns: 1fr;
+  }
+
+  .config-stats {
+    gap: var(--space-4);
+  }
+
+  .config-test-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

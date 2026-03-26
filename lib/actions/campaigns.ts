@@ -3,9 +3,12 @@
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getVisibilityFilter, getCurrentUserId } from "@/lib/visibility";
 
 export async function getCampaigns() {
+  const filter = await getVisibilityFilter();
   return prisma.campaign.findMany({
+    where: filter,
     orderBy: { updatedAt: "desc" },
     include: {
       _count: { select: { sessions: true, npcs: true, notes: true } },
@@ -27,14 +30,21 @@ export async function getCampaign(id: string) {
 }
 
 export async function createCampaign(formData: FormData) {
+
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const edition = formData.get("edition") as string || "3.5";
 
   if (!name?.trim()) return;
 
+  const userId = await getCurrentUserId();
   const campaign = await prisma.campaign.create({
-    data: { name: name.trim(), description: description?.trim() || null, edition },
+    data: {
+      name: name.trim(),
+      description: description?.trim() || null,
+      edition,
+      createdById: userId,
+    },
   });
 
   revalidatePath("/campanhas");
@@ -42,6 +52,7 @@ export async function createCampaign(formData: FormData) {
 }
 
 export async function updateCampaign(id: string, formData: FormData) {
+
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
   const edition = formData.get("edition") as string;
@@ -64,6 +75,7 @@ export async function updateCampaign(id: string, formData: FormData) {
 }
 
 export async function deleteCampaign(id: string) {
+
   await prisma.campaign.delete({ where: { id } });
   revalidatePath("/campanhas");
   redirect("/campanhas");
@@ -225,8 +237,9 @@ export async function cloneNpcToCampaign(npcId: string, campaignId: string) {
 // ── Campanhas ativas (para sidebar) ─
 
 export async function getActiveCampaigns() {
+  const filter = await getVisibilityFilter();
   return prisma.campaign.findMany({
-    where: { status: "active" },
+    where: { status: "active", ...filter },
     select: { id: true, name: true },
     orderBy: { updatedAt: "desc" },
     take: 5,

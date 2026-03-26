@@ -3,9 +3,12 @@
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getVisibilityFilter, getCurrentUserId } from "@/lib/visibility";
 
 export async function getNpcs() {
+  const filter = await getVisibilityFilter();
   return prisma.npc.findMany({
+    where: filter,
     orderBy: { updatedAt: "desc" },
     include: {
       attributes: true,
@@ -28,6 +31,7 @@ export async function getNpc(id: string) {
 }
 
 export async function createNpc(formData: FormData) {
+
   const name = formData.get("name") as string;
   const race = formData.get("race") as string;
   const npcClass = formData.get("class") as string;
@@ -39,6 +43,7 @@ export async function createNpc(formData: FormData) {
 
   if (!name?.trim()) return;
 
+  const userId = await getCurrentUserId();
   const npc = await prisma.npc.create({
     data: {
       name: name.trim(),
@@ -49,6 +54,7 @@ export async function createNpc(formData: FormData) {
       description: description?.trim() || null,
       type,
       edition,
+      createdById: userId,
       attributes: {
         create: {
           str: parseInt(formData.get("str") as string) || 10,
@@ -69,6 +75,7 @@ export async function createNpc(formData: FormData) {
 }
 
 export async function updateNpc(id: string, formData: FormData) {
+
   const data: Record<string, unknown> = {};
   const fields = ["name", "race", "class", "alignment", "description", "backstory", "gmNotes", "type", "status", "edition", "imageUrl"];
 
@@ -117,6 +124,7 @@ export async function updateNpc(id: string, formData: FormData) {
 }
 
 export async function deleteNpc(id: string) {
+
   await prisma.npc.delete({ where: { id } });
   revalidatePath("/npcs");
   redirect("/npcs");

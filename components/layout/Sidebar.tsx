@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEdition } from "@/lib/EditionContext";
+import { useAuth } from "@/lib/AuthContext";
+import { logout } from "@/lib/actions/auth";
 
 interface CampaignLink {
   id: string;
@@ -46,11 +48,19 @@ const NAV_ITEMS = [
       { href: "/assistente", icon: "🤖", label: "Assistente IA" },
     ],
   },
+  {
+    section: "Sistema",
+    items: [
+      { href: "/configuracoes", icon: "⚙️", label: "Configurações" },
+    ],
+  },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const { edition: activeEdition, setEdition: setActiveEdition } = useEdition();
+  const { name: userName, role: userRole } = useAuth();
+  const isAdmin = userRole === "admin";
   const [campaigns, setCampaigns] = useState<CampaignLink[]>([]);
   const [campaignsExpanded, setCampaignsExpanded] = useState(true);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -152,8 +162,12 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* Footer — Edition Toggle */}
+      {/* Footer */}
       <div className="sidebar-footer">
+        <div className="sidebar-user">
+          <span className="sidebar-user-name">{userName}</span>
+          <span className="sidebar-user-role">{isAdmin ? "Mestre" : "Jogador"}</span>
+        </div>
         <div className="edition-toggle">
           <button
             className={`edition-toggle-btn ${activeEdition === "3.5" ? "active-35" : ""}`}
@@ -168,6 +182,11 @@ export function Sidebar() {
             D&D 5e
           </button>
         </div>
+        <form action={logout}>
+          <button type="submit" className="sidebar-logout-btn">
+            Sair
+          </button>
+        </form>
       </div>
     </aside>
     </>

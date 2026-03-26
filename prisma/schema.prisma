@@ -6,6 +6,21 @@ datasource db {
   provider = "postgresql"
 }
 
+// ── Usuários ──────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("user") // "admin" | "user"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  campaigns Campaign[]
+  npcs      Npc[]
+}
+
 // ── Campanhas ──────────────────────
 
 model Campaign {
@@ -15,6 +30,8 @@ model Campaign {
   edition     String   @default("3.5")
   status      String   @default("active")
   imageUrl    String?
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -62,6 +79,8 @@ model Npc {
   status      String   @default("alive")
   type        String   @default("neutral")
   edition     String   @default("3.5")
+  createdById String?
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -250,10 +269,25 @@ model ChatHistory {
 model ApiUsage {
   id          String   @id @default(cuid())
   source      String   // "chat", "chapters", "documents", etc
+  provider    String   @default("gemini")
+  model       String?
   tokensUsed  Int      @default(0)
   createdAt   DateTime @default(now())
 
   @@index([createdAt])
+}
+
+// ── Configuração do Provider de IA ──
+
+model AiProviderConfig {
+  id          String   @id @default("singleton")
+  provider    String   @default("gemini")   // "gemini" | "groq" | "openrouter"
+  apiKey      String?
+  model       String?
+  fallback    Boolean  @default(true)
+  temperature Float    @default(0.7)
+  maxTokens   Int      @default(4096)
+  updatedAt   DateTime @updatedAt
 }
 
 // ══════════════════════════════════════
