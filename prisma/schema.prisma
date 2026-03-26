@@ -282,12 +282,28 @@ model ApiUsage {
 model AiProviderConfig {
   id          String   @id @default("singleton")
   provider    String   @default("gemini")   // "gemini" | "groq" | "openrouter"
-  apiKey      String?
+  apiKey      String?                        // key única (legado, opcional)
   model       String?
   fallback    Boolean  @default(true)
   temperature Float    @default(0.7)
   maxTokens   Int      @default(4096)
   updatedAt   DateTime @updatedAt
+}
+
+// ── Pool de API Keys (rotação) ──────
+
+model AiApiKey {
+  id          String    @id @default(cuid())
+  provider    String    // "gemini" | "groq" | "openrouter"
+  label       String    // nome para identificar ("Gemini Key 1", "Projeto RPG", etc)
+  apiKey      String
+  active      Boolean   @default(true)
+  blockedUntil DateTime? // quando atingiu rate limit, desbloqueia automaticamente
+  usageToday  Int       @default(0)
+  lastUsedAt  DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([provider, active])
 }
 
 // ══════════════════════════════════════

@@ -122,6 +122,86 @@ export async function testAiProvider(
   }
 }
 
+// ── Pool de API Keys ─────────────────
+
+export async function getApiKeys(provider?: string) {
+  try {
+    const keys = await prisma.aiApiKey.findMany({
+      where: provider ? { provider } : undefined,
+      orderBy: { createdAt: "asc" },
+      select: {
+        id: true,
+        provider: true,
+        label: true,
+        active: true,
+        blockedUntil: true,
+        usageToday: true,
+        lastUsedAt: true,
+      },
+    });
+    return keys;
+  } catch (err) {
+    console.error("[getApiKeys] Erro:", err);
+    return [];
+  }
+}
+
+export async function addApiKey(data: {
+  provider: string;
+  label: string;
+  apiKey: string;
+}) {
+  try {
+    await prisma.aiApiKey.create({
+      data: {
+        provider: data.provider,
+        label: data.label.trim(),
+        apiKey: data.apiKey.trim(),
+      },
+    });
+    return { ok: true };
+  } catch (err) {
+    console.error("[addApiKey] Erro:", err);
+    return { ok: false, error: "Erro ao adicionar key" };
+  }
+}
+
+export async function removeApiKey(id: string) {
+  try {
+    await prisma.aiApiKey.delete({ where: { id } });
+    return { ok: true };
+  } catch (err) {
+    console.error("[removeApiKey] Erro:", err);
+    return { ok: false, error: "Erro ao remover key" };
+  }
+}
+
+export async function toggleApiKey(id: string, active: boolean) {
+  try {
+    await prisma.aiApiKey.update({
+      where: { id },
+      data: { active },
+    });
+    return { ok: true };
+  } catch (err) {
+    console.error("[toggleApiKey] Erro:", err);
+    return { ok: false };
+  }
+}
+
+export async function unblockApiKey(id: string) {
+  try {
+    await prisma.aiApiKey.update({
+      where: { id },
+      data: { blockedUntil: null, usageToday: 0 },
+    });
+    return { ok: true };
+  } catch (err) {
+    console.error("[unblockApiKey] Erro:", err);
+    return { ok: false };
+  }
+}
+
 export async function getAiUsageStats() {
   try {
     const today = new Date();

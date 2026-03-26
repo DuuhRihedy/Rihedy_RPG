@@ -159,6 +159,75 @@
   color: var(--dnd-gold);
 }
 
+/* Key count badge */
+.config-key-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--success);
+  background: var(--success-subtle);
+  padding: 1px 8px;
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-1);
+  align-self: flex-start;
+}
+
+/* Keys list */
+.config-keys-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.config-key-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.config-key-row.disabled {
+  opacity: 0.5;
+}
+
+.config-key-row.blocked {
+  border-color: var(--warning);
+  background: var(--warning-subtle);
+}
+
+.config-key-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.config-key-info strong {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+
+.config-key-usage {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.config-key-actions {
+  display: flex;
+  gap: var(--space-1);
+}
+
+/* Add key form */
+.config-add-key {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
 /* Save */
 .config-save-row {
   display: flex;
@@ -186,5 +255,19 @@
   .config-test-row {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .config-add-key {
+    flex-direction: column;
+  }
+
+  .config-key-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .config-key-actions {
+    align-self: flex-end;
   }
 }
