@@ -2,6 +2,7 @@ import { getNpc, updateNpc, addItemToNpc, removeItemFromNpc, createRelation, del
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import NpcImageField from "@/components/NpcImageField";
+import RichTextField from "@/components/RichTextField";
 import "../../../campanhas/campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -143,14 +144,20 @@ export default async function EditNpcPage({ params }: { params: Params }) {
                   <label className="form-label">Descrição (aparência, personalidade)</label>
                   <textarea name="description" className="input textarea" rows={4} defaultValue={npc.description || ""} placeholder="Descreva a aparência, traços de personalidade..." />
                 </div>
-                <div className="form-group">
-                  <label className="form-label">📜 História / Backstory</label>
-                  <textarea name="backstory" className="input textarea" rows={6} defaultValue={npc.backstory || ""} placeholder="Conte a história deste NPC... De onde veio? O que o motiva?" />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">🔒 Notas do Mestre (GM Only)</label>
-                  <textarea name="gmNotes" className="input textarea" rows={4} defaultValue={npc.gmNotes || ""} placeholder="Segredos, planos ocultos, informações que os jogadores não sabem..." />
-                </div>
+                <RichTextField
+                  name="backstory"
+                  label="📜 História / Backstory"
+                  initialContent={npc.backstory}
+                  placeholder="Conte a história deste NPC... Digite '/' para comandos..."
+                  minHeight="250px"
+                />
+                <RichTextField
+                  name="gmNotes"
+                  label="🔒 Notas do Mestre (GM Only)"
+                  initialContent={npc.gmNotes}
+                  placeholder="Segredos, planos ocultos... Digite '/' para comandos..."
+                  minHeight="180px"
+                />
               </div>
             </div>
           </div>

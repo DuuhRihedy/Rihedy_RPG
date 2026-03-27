@@ -1,0 +1,847 @@
+/* ============================================
+   Blocksmith Editor — Underdark Theme
+   Adapted for Hub RPG VTT
+   ============================================ */
+
+/* --- Editor Wrapper --- */
+.blocksmith-wrapper {
+  position: relative;
+  width: 100%;
+  font-family: var(--font-body);
+}
+
+/* --- Main Editor Content --- */
+.blocksmith-editor {
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  line-height: 1.75;
+  outline: none;
+  min-height: 200px;
+  padding: 1rem 0;
+  caret-color: var(--dnd-gold);
+}
+
+.blocksmith-editor > *:first-child {
+  margin-top: 0;
+}
+
+/* Placeholder */
+.blocksmith-editor p.is-editor-empty:first-child::before {
+  color: var(--text-muted);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.blocksmith-editor .is-empty::before {
+  color: var(--text-muted);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* --- Typography --- */
+.blocksmith-editor h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 2rem 0 0.75rem;
+  letter-spacing: -0.025em;
+  color: var(--dnd-gold);
+}
+
+.blocksmith-editor h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 1.75rem 0 0.5rem;
+  letter-spacing: -0.02em;
+  color: var(--dnd-gold-light);
+}
+
+.blocksmith-editor h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 1.5rem 0 0.5rem;
+  color: var(--text-primary);
+}
+
+.blocksmith-editor p {
+  margin: 0.5rem 0;
+}
+
+.blocksmith-editor strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.blocksmith-editor em {
+  font-style: italic;
+}
+
+.blocksmith-editor s {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* --- Inline Code --- */
+.blocksmith-editor code {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--dnd-gold);
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+}
+
+/* --- Code Block --- */
+.blocksmith-code-block {
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin: 1rem 0;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+.blocksmith-code-block code {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  font-size: inherit;
+  padding: 0;
+}
+
+/* --- Blockquote --- */
+.blocksmith-editor blockquote {
+  border-left: 3px solid var(--dnd-gold);
+  margin: 1rem 0;
+  padding: 0.5rem 0 0.5rem 1.25rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.blocksmith-editor blockquote p {
+  margin: 0.25rem 0;
+}
+
+/* --- Lists --- */
+.blocksmith-editor ul,
+.blocksmith-editor ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.blocksmith-editor li {
+  margin: 0.25rem 0;
+}
+
+.blocksmith-editor li p {
+  margin: 0;
+}
+
+.blocksmith-editor ul > li {
+  list-style-type: disc;
+}
+
+.blocksmith-editor ul > li > ul > li {
+  list-style-type: circle;
+}
+
+.blocksmith-editor ol > li {
+  list-style-type: decimal;
+}
+
+/* --- Task List --- */
+.blocksmith-task-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.blocksmith-task-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.blocksmith-task-list li > label {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+
+.blocksmith-task-list li > label > input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.blocksmith-task-list li > label > input[type="checkbox"]:checked {
+  background: var(--dnd-gold);
+  border-color: var(--dnd-gold);
+}
+
+.blocksmith-task-list li > label > input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #000;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.blocksmith-task-list li[data-checked="true"] > div > p {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+/* --- Horizontal Rule --- */
+.blocksmith-editor hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 1.5rem 0;
+}
+
+/* --- Image --- */
+.blocksmith-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: 1rem 0;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.blocksmith-image:hover {
+  opacity: 0.9;
+}
+
+.blocksmith-image.ProseMirror-selectednode {
+  outline: 2px solid var(--dnd-gold);
+  outline-offset: 2px;
+}
+
+/* --- Link --- */
+.blocksmith-link {
+  color: var(--dnd-gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.blocksmith-link:hover {
+  color: var(--dnd-gold-hover);
+}
+
+/* ============================================
+   Toolbar (Bubble Menu)
+   ============================================ */
+.blocksmith-bubble-menu {
+  z-index: 50;
+}
+
+.blocksmith-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.blocksmith-toolbar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.blocksmith-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.blocksmith-toolbar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.blocksmith-toolbar-btn.is-active {
+  background: var(--dnd-gold-subtle);
+  color: var(--dnd-gold);
+}
+
+.blocksmith-toolbar-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.blocksmith-toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-subtle);
+  margin: 0 4px;
+}
+
+/* Link Input */
+.blocksmith-link-input {
+  display: flex;
+  gap: 4px;
+  padding: 4px 0 0;
+}
+
+.blocksmith-link-input input {
+  flex: 1;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  padding: 4px 8px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.blocksmith-link-input input:focus {
+  border-color: var(--dnd-gold);
+}
+
+.blocksmith-link-input button {
+  background: var(--dnd-gold);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #000;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  transition: background var(--transition-fast);
+}
+
+.blocksmith-link-input button:hover {
+  background: var(--dnd-gold-hover);
+}
+
+/* ============================================
+   Slash Menu
+   ============================================ */
+.blocksmith-slash-menu {
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  max-height: 320px;
+  width: 280px;
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  animation: bs-slash-in 120ms ease-out;
+}
+
+@keyframes bs-slash-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.blocksmith-slash-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition-fast);
+}
+
+.blocksmith-slash-menu-item:hover,
+.blocksmith-slash-menu-item.is-selected {
+  background: var(--bg-hover);
+}
+
+.blocksmith-slash-menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.blocksmith-slash-menu-item.is-selected .blocksmith-slash-menu-icon,
+.blocksmith-slash-menu-item:hover .blocksmith-slash-menu-icon {
+  color: var(--dnd-gold);
+  border-color: var(--dnd-gold);
+}
+
+.blocksmith-slash-menu-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.blocksmith-slash-menu-title {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.blocksmith-slash-menu-desc {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+/* Scrollbar */
+.blocksmith-slash-menu::-webkit-scrollbar { width: 4px; }
+.blocksmith-slash-menu::-webkit-scrollbar-track { background: transparent; }
+.blocksmith-slash-menu::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 2px; }
+
+/* Selection */
+.blocksmith-editor ::selection {
+  background: rgba(200, 168, 78, 0.25);
+}
+
+/* Dropcursor */
+.ProseMirror-dropcursor {
+  color: var(--dnd-gold) !important;
+}
+
+.ProseMirror-gapcursor::after {
+  border-top-color: var(--dnd-gold) !important;
+}
+
+/* ============================================
+   Color Picker
+   ============================================ */
+.blocksmith-color-indicator {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.blocksmith-color-picker {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  padding: 4px 0 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.blocksmith-color-swatch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.blocksmith-color-swatch:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.blocksmith-color-swatch.is-active {
+  background: var(--dnd-gold-subtle);
+  color: var(--dnd-gold);
+}
+
+.blocksmith-color-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.blocksmith-color-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   MenuBar (Fixed Top Toolbar)
+   ============================================ */
+.blocksmith-menubar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.blocksmith-menubar-inner {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.blocksmith-menubar-group {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.blocksmith-menubar-sep {
+  width: 1px;
+  height: 22px;
+  background: var(--border-subtle);
+  margin: 0 5px;
+  flex-shrink: 0;
+}
+
+.blocksmith-menubar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.blocksmith-menubar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.blocksmith-menubar-btn.is-active {
+  background: var(--dnd-gold-subtle);
+  color: var(--dnd-gold);
+}
+
+.blocksmith-menubar-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.blocksmith-menubar-btn:disabled:hover {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.blocksmith-menubar-color-bar {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.blocksmith-menubar-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  min-width: 180px;
+  animation: bs-slash-in 120ms ease-out;
+}
+
+.blocksmith-menubar-dropdown-title {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+
+.blocksmith-menubar-color-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 3px;
+}
+
+.blocksmith-menubar-color-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.blocksmith-menubar-color-cell:hover {
+  border-color: var(--text-muted);
+  transform: scale(1.15);
+}
+
+.blocksmith-menubar-color-cell.is-active {
+  border-color: var(--dnd-gold);
+  box-shadow: 0 0 0 1px var(--dnd-gold);
+}
+
+.blocksmith-menubar-color-cell .blocksmith-color-dot {
+  width: 16px;
+  height: 16px;
+}
+
+.blocksmith-menubar-link-row {
+  display: flex;
+  gap: 4px;
+}
+
+.blocksmith-menubar-link-row input {
+  flex: 1;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  padding: 5px 8px;
+  outline: none;
+  min-width: 180px;
+  transition: border-color var(--transition-fast);
+}
+
+.blocksmith-menubar-link-row input:focus {
+  border-color: var(--dnd-gold);
+}
+
+.blocksmith-menubar-link-row button {
+  background: var(--dnd-gold);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #000;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  transition: background var(--transition-fast);
+}
+
+.blocksmith-menubar-link-row button:hover {
+  background: var(--dnd-gold-hover);
+}
+
+/* ============================================
+   Image Upload Modal (VTT integration)
+   ============================================ */
+.bs-image-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.15s ease;
+}
+
+.bs-image-modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  width: 90%;
+  max-width: 440px;
+  overflow: hidden;
+}
+
+.bs-image-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.bs-image-modal-header h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  color: var(--dnd-gold);
+}
+
+.bs-image-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+}
+
+.bs-image-modal-close:hover {
+  color: var(--text-primary);
+}
+
+.bs-image-modal-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.bs-image-modal-tab {
+  flex: 1;
+  padding: var(--space-3);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-bottom: 2px solid transparent;
+}
+
+.bs-image-modal-tab.active {
+  color: var(--dnd-gold);
+  border-bottom-color: var(--dnd-gold);
+}
+
+.bs-image-modal-body {
+  padding: var(--space-5);
+}
+
+.bs-image-dropzone {
+  border: 2px dashed var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.bs-image-dropzone:hover,
+.bs-image-dropzone.dragover {
+  border-color: var(--dnd-gold);
+  background: var(--dnd-gold-subtle);
+  color: var(--dnd-gold);
+}
+
+.bs-image-dropzone-icon {
+  font-size: 32px;
+  margin-bottom: var(--space-2);
+}
+
+.bs-image-url-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.bs-image-url-form input {
+  height: 40px;
+  padding: 0 var(--space-3);
+  background: var(--bg-deep);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.bs-image-url-form input:focus {
+  border-color: var(--dnd-gold);
+}
+
+.bs-image-uploading {
+  text-align: center;
+  padding: var(--space-6);
+  color: var(--dnd-gold);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 768px) {
+  .blocksmith-menubar-sep {
+    display: none;
+  }
+
+  .blocksmith-menubar-inner {
+    gap: 1px;
+  }
+
+  .blocksmith-menubar-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .blocksmith-slash-menu {
+    width: 240px;
+    max-height: 260px;
+  }
+}

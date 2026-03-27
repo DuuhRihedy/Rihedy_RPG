@@ -458,7 +458,7 @@
 /* ── NPC Grid ─────────────────────── */
 .npc-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--space-4);
 }
 
@@ -546,6 +546,12 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--space-3);
+}
+
+@media (max-width: 480px) {
+  .attributes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .attr-box {
@@ -646,7 +652,7 @@
   font-size: var(--text-base);
   color: var(--text-secondary);
   margin: 0;
-  max-width: 600px;
+  max-width: 100%;
   line-height: 1.6;
 }
 
@@ -938,8 +944,16 @@
 
   .hub-stats-bar {
     flex-wrap: wrap;
-    gap: var(--space-4);
+    gap: var(--space-3);
     padding: var(--space-3) var(--space-4);
+  }
+
+  .hub-stat-value {
+    font-size: var(--text-lg);
+  }
+
+  .hub-stat-label {
+    font-size: var(--text-xs);
   }
 
   .hub-tabs {

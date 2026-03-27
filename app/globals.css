@@ -209,6 +209,10 @@ body {
   .grid-2 {
     grid-template-columns: 1fr;
   }
+
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Tipografia ──────────────────────── */
@@ -1033,6 +1037,7 @@ code, pre {
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--space-6);
+  gap: var(--space-3);
 }
 
 .page-header h1 {
@@ -1043,6 +1048,61 @@ code, pre {
   font-size: var(--text-sm);
   color: var(--text-muted);
   margin-top: var(--space-1);
+}
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: var(--space-3);
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header h1 {
+    font-size: var(--text-xl);
+  }
+
+  h1 { font-size: var(--text-2xl); }
+  h2 { font-size: var(--text-xl); }
+  h3 { font-size: var(--text-lg); }
+  h4 { font-size: var(--text-base); }
+
+  .import-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .import-item-info {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding: var(--space-2);
+  }
+
+  .page-header h1 {
+    font-size: var(--text-lg);
+  }
+
+  .mini-chat-panel {
+    width: calc(100vw - 24px);
+    right: 12px;
+    bottom: 72px;
+    height: 400px;
+  }
+
+  .mini-chat-toggle {
+    width: 44px;
+    height: 44px;
+    bottom: 16px;
+    right: 16px;
+    font-size: 20px;
+  }
 }
 
 /* ── Estado Vazio ─────────────────────── */

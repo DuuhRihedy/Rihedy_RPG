@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════
-// Hub RPG — Script ONE-TIME de tradução via Gemini
+// Hub RPG — Script ONE-TIME de tradução via IA (multi-key)
 // Traduz descriptionPtBr de TODOS os modelos restantes
-// Usa Gemini Flash 2.5 Free em batch (15 registros/req)
+// Usa pool de keys do banco: Gemini (4 keys) + Groq fallback
 // Salva direto no banco Neon PostgreSQL → resultado fixo
 // ══════════════════════════════════════════════════════
 
@@ -12,13 +12,90 @@ import { PrismaNeon } from "@prisma/adapter-neon";
 const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
-const API_KEY = process.env.GEMINI_API_KEY!;
-const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
-
 const BATCH_SIZE = 10;       // registros por request
-const DELAY_MS = 15000;      // 15s entre requests (conservador p/ Gemini Free)
-const MAX_REQUESTS = 240;    // reserva 10 do limite diário de 250
-const MAX_RETRIES = 3;       // retries por batch com backoff
+const DELAY_MS = 6000;       // 6s entre requests (mais rápido c/ rotação de keys)
+const MAX_REQUESTS = 900;    // 4 keys × 250 RPD = 1000, reserva 100
+const MAX_RETRIES = 4;       // retries por batch com backoff
+
+// Providers permitidos na rotação (ordem de prioridade)
+const ALLOWED_PROVIDERS = ["gemini", "groq"] as const;
+
+// URLs base por provider
+const API_URLS: Record<string, (key: string, model: string) => string> = {
+  gemini: (key, model) =>
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`,
+  groq: (key, _model) =>
+    `https://api.groq.com/openai/v1/chat/completions`,
+};
+
+const DEFAULT_MODELS: Record<string, string> = {
+  gemini: "gemini-2.5-flash",
+  groq: "llama-3.3-70b-versatile",
+};
+
+// ── Key Pool Manager (standalone, não depende do manager.ts) ──
+
+interface PoolKey {
+  id: string;
+  provider: string;
+  label: string;
+  apiKey: string;
+}
+
+let blockedKeys = new Set<string>(); // IDs bloqueados temporariamente nesta sessão
+
+async function getNextKey(): Promise<PoolKey | null> {
+  const now = new Date();
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  // Resetar uso de ontem
+  await prisma.aiApiKey.updateMany({
+    where: { lastUsedAt: { lt: todayStart }, usageToday: { gt: 0 } },
+    data: { usageToday: 0 },
+  });
+
+  // Desbloquear keys expiradas
+  await prisma.aiApiKey.updateMany({
+    where: { blockedUntil: { lte: now } },
+    data: { blockedUntil: null },
+  });
+
+  // Buscar por cada provider na ordem de prioridade
+  for (const provider of ALLOWED_PROVIDERS) {
+    const key = await prisma.aiApiKey.findFirst({
+      where: {
+        provider,
+        active: true,
+        id: { notIn: [...blockedKeys] },
+        OR: [{ blockedUntil: null }, { blockedUntil: { lte: now } }],
+      },
+      orderBy: { usageToday: "asc" },
+      select: { id: true, provider: true, label: true, apiKey: true },
+    });
+
+    if (key) {
+      // Incrementar uso
+      await prisma.aiApiKey.update({
+        where: { id: key.id },
+        data: { usageToday: { increment: 1 }, lastUsedAt: now },
+      });
+      return key;
+    }
+  }
+
+  return null;
+}
+
+async function blockKey(keyId: string, label: string) {
+  blockedKeys.add(keyId);
+  const blockUntil = new Date(Date.now() + 60 * 60 * 1000); // 1h
+  await prisma.aiApiKey.updateMany({
+    where: { id: keyId },
+    data: { blockedUntil: blockUntil },
+  });
+  console.log(`    🔒 Key "${label}" bloqueada por 1h (rate limit)`);
+}
 
 // ── Glossário D&D 3.5/5e PT-BR ─────────────────────
 const GLOSSARY = `
@@ -128,8 +205,11 @@ interface TranslateResult {
   [index: string]: string;
 }
 
-// ── Chamada API Gemini ─────────────────────────────
-async function callGeminiTranslate(items: TranslateItem[]): Promise<TranslateResult> {
+// ── Chamada API com rotação de keys ─────────────────
+async function callTranslateAPI(
+  items: TranslateItem[],
+  poolKey: PoolKey,
+): Promise<TranslateResult> {
   const itemsText = items.map((item, i) => {
     return `[${i + 1}] index: "${item.index}"
 nome EN: "${item.name}"
@@ -148,37 +228,65 @@ Retorne APENAS um JSON válido no formato:
 
 ${itemsText}`;
 
-  const body = {
-    contents: [
-      { role: "user", parts: [{ text: userPrompt }] },
-    ],
-    systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-    generationConfig: {
-      temperature: 0.3,
-      topP: 0.8,
-      responseMimeType: "application/json",
-    },
-  };
+  const model = DEFAULT_MODELS[poolKey.provider];
+  let res: Response;
 
-  const res = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  if (poolKey.provider === "groq") {
+    // Groq usa formato OpenAI
+    const url = API_URLS.groq(poolKey.apiKey, model);
+    res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${poolKey.apiKey}`,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userPrompt },
+        ],
+        temperature: 0.3,
+        response_format: { type: "json_object" },
+      }),
+    });
+  } else {
+    // Gemini
+    const url = API_URLS.gemini(poolKey.apiKey, model);
+    res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: userPrompt }] }],
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        generationConfig: {
+          temperature: 0.3,
+          topP: 0.8,
+          responseMimeType: "application/json",
+        },
+      }),
+    });
+  }
 
   if (!res.ok) {
     const errText = await res.text();
-    throw new Error(`Gemini API ${res.status}: ${errText.substring(0, 500)}`);
+    throw new Error(`${poolKey.provider} API ${res.status}: ${errText.substring(0, 500)}`);
   }
 
   const data = await res.json() as any;
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error("Resposta vazia do Gemini");
+
+  // Extrair texto da resposta (formato Gemini vs OpenAI)
+  let text: string;
+  if (poolKey.provider === "groq") {
+    text = data.choices?.[0]?.message?.content;
+  } else {
+    text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  }
+  if (!text) throw new Error(`Resposta vazia do ${poolKey.provider}`);
 
   try {
     return JSON.parse(text) as TranslateResult;
   } catch {
-    // Tenta extrair JSON de dentro de markdown code block
     const match = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?```/);
     if (match) return JSON.parse(match[1]) as TranslateResult;
     throw new Error(`JSON inválido: ${text.substring(0, 200)}`);
@@ -280,14 +388,16 @@ function buildModels(): ModelConfig[] {
 
 // ── Main ───────────────────────────────────────────
 async function main() {
-  console.log("🌐 Hub RPG — Tradução de Descrições via Gemini");
+  console.log("🌐 Hub RPG — Tradução de Descrições (multi-key rotation)");
   console.log("══════════════════════════════════════════════════════");
-  console.log(`Batch size: ${BATCH_SIZE} | Delay: ${DELAY_MS}ms | Max requests: ${MAX_REQUESTS}\n`);
+  console.log(`Batch: ${BATCH_SIZE} | Delay: ${DELAY_MS}ms | Max req: ${MAX_REQUESTS}`);
+  console.log(`Providers: ${ALLOWED_PROVIDERS.join(" → ")} (OpenRouter excluído)\n`);
 
   const models = buildModels();
   let totalRequests = 0;
   let totalTranslated = 0;
   let totalErrors = 0;
+  const keyUsage: Record<string, number> = {};
   const start = Date.now();
 
   for (const model of models) {
@@ -299,10 +409,9 @@ async function main() {
 
     console.log(`\n${model.emoji} ${model.name}: ${missing.length} descrições faltando`);
 
-    // Processar em batches
     for (let i = 0; i < missing.length; i += BATCH_SIZE) {
       if (totalRequests >= MAX_REQUESTS) {
-        console.log(`\n⚠️ Limite de ${MAX_REQUESTS} requests atingido! Pare e continue amanhã.`);
+        console.log(`\n⚠️ Limite de ${MAX_REQUESTS} requests atingido!`);
         console.log(`   Restam: ${missing.length - i} de ${model.name}`);
         break;
       }
@@ -311,12 +420,25 @@ async function main() {
       const batchNum = Math.floor(i / BATCH_SIZE) + 1;
       const totalBatches = Math.ceil(missing.length / BATCH_SIZE);
 
-      process.stdout.write(`  [${batchNum}/${totalBatches}] Traduzindo ${batch.length} registros... `);
-
       let success = false;
       for (let retry = 0; retry < MAX_RETRIES; retry++) {
+        // Pegar próxima key disponível
+        const poolKey = await getNextKey();
+        if (!poolKey) {
+          console.log(`\n🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.`);
+          console.log(`   Tente novamente mais tarde (keys desbloqueiam em 1h).`);
+          // Aguardar 5min e tentar de novo
+          console.log(`   ⏳ Aguardando 5 min...`);
+          await sleep(5 * 60 * 1000);
+          blockedKeys.clear();
+          continue;
+        }
+
+        const keyTag = `${poolKey.provider}/${poolKey.label}`;
+        process.stdout.write(`  [${batchNum}/${totalBatches}] ${batch.length} reg via ${keyTag}... `);
+
         try {
-          const result = await callGeminiTranslate(batch);
+          const result = await callTranslateAPI(batch, poolKey);
           let batchTranslated = 0;
 
           for (const item of batch) {
@@ -329,26 +451,28 @@ async function main() {
 
           totalTranslated += batchTranslated;
           totalRequests++;
-          console.log(`✅ ${batchTranslated}/${batch.length} salvos (req ${totalRequests}/${MAX_REQUESTS})`);
+          keyUsage[keyTag] = (keyUsage[keyTag] || 0) + 1;
+          console.log(`✅ ${batchTranslated}/${batch.length} (req ${totalRequests}/${MAX_REQUESTS})`);
           success = true;
           break;
 
         } catch (error: any) {
-          if (error.message?.includes("429")) {
-            const waitTime = 30_000 * Math.pow(2, retry); // 30s, 60s, 120s
-            console.log(`⏳ Rate limit (tentativa ${retry + 1}/${MAX_RETRIES}). Esperando ${waitTime / 1000}s...`);
-            await sleep(waitTime);
+          const msg = error.message || "";
+          if (msg.includes("429") || msg.includes("rate") || msg.includes("quota") || msg.includes("RESOURCE_EXHAUSTED")) {
+            await blockKey(poolKey.id, poolKey.label);
+            console.log(`    ↻ Tentando próxima key (retry ${retry + 1}/${MAX_RETRIES})...`);
+            // Não esperar entre retries com keys diferentes
           } else {
             totalErrors++;
             totalRequests++;
-            console.log(`❌ Erro: ${error.message?.substring(0, 100)}`);
+            console.log(`❌ Erro: ${msg.substring(0, 120)}`);
             break;
           }
         }
       }
       if (!success) totalErrors++;
 
-      // Respeitar rate limit
+      // Delay entre batches
       if (i + BATCH_SIZE < missing.length) {
         await sleep(DELAY_MS);
       }
@@ -359,12 +483,17 @@ async function main() {
 
   // ── Resumo ──
   const elapsed = ((Date.now() - start) / 1000).toFixed(0);
+  const elapsedMin = (parseFloat(elapsed) / 60).toFixed(1);
   console.log(`\n══════════════════════════════════════════════════════`);
-  console.log(`🏁 Tradução concluída em ${elapsed}s`);
+  console.log(`🏁 Tradução concluída em ${elapsedMin} min (${elapsed}s)`);
   console.log(`📊 ${totalTranslated} descrições traduzidas`);
   console.log(`📡 ${totalRequests} requests usados (de ${MAX_REQUESTS} max)`);
   console.log(`❌ ${totalErrors} erros`);
-  console.log(`💰 Custo: $0 (Gemini Free)`);
+  console.log(`🔑 Uso por key:`);
+  for (const [key, count] of Object.entries(keyUsage).sort((a, b) => b[1] - a[1])) {
+    console.log(`   ${key}: ${count} requests`);
+  }
+  console.log(`💰 Custo: $0`);
 }
 
 main()

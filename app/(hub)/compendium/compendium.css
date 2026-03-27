@@ -288,3 +288,39 @@
   line-height: 1.5;
   white-space: pre-line;
 }
+
+@media (max-width: 768px) {
+  .compendium-search-bar {
+    padding: var(--space-3);
+  }
+
+  .compendium-categories {
+    gap: var(--space-1);
+  }
+
+  .compendium-cat-chip {
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+  }
+
+  .compendium-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .compendium-detail {
+    position: static;
+    max-height: none;
+  }
+
+  .compendium-results {
+    max-height: 50vh;
+  }
+
+  .compendium-edition-row {
+    flex-wrap: wrap;
+  }
+
+  .compendium-detail-data {
+    grid-template-columns: 1fr;
+  }
+}

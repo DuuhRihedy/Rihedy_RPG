@@ -689,15 +689,36 @@
   }
 
   .header {
+    padding: 0 var(--space-3);
     padding-left: var(--space-12);
+    gap: var(--space-2);
+  }
+
+  .header-ia-tokens {
+    display: none;
   }
 
   .app-content {
-    padding: var(--space-4);
+    padding: var(--space-3);
   }
 
   .stats-row {
     grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .stat-card {
+    gap: var(--space-3);
+  }
+
+  .stat-card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .stat-card-value {
+    font-size: var(--text-xl);
   }
 
   .header-search {
@@ -713,8 +734,16 @@
     justify-content: flex-end;
   }
 
+  .dashboard-greeting {
+    margin-bottom: var(--space-4);
+  }
+
   .dashboard-greeting h1 {
-    font-size: var(--text-2xl);
+    font-size: var(--text-xl);
+  }
+
+  .dashboard-greeting p {
+    font-size: var(--text-sm);
   }
 
   .delete-confirm-inline {
@@ -760,6 +789,50 @@
     right: 12px;
     bottom: 76px;
   }
+
+  /* IA Panel */
+  .ia-input {
+    min-height: 60px;
+    font-size: var(--text-sm);
+  }
+
+  /* Dashboard coluna única */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  /* Create form inline */
+  .create-form {
+    padding: var(--space-3);
+  }
+
+  .create-form-title {
+    font-size: var(--text-base);
+  }
+
+  /* Session items */
+  .session-item {
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  .session-number {
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-xs);
+  }
+
+  /* Form row stack */
+  .form-row {
+    flex-direction: column;
+  }
+
+  /* Shortcuts modal */
+  .shortcuts-modal {
+    padding: var(--space-4);
+    width: 95%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -773,6 +846,27 @@
 
   .campaign-detail-header {
     flex-direction: column;
+  }
+
+  .dashboard-greeting h1 {
+    font-size: var(--text-lg);
+  }
+
+  .app-content {
+    padding: var(--space-2);
+  }
+
+  .header {
+    padding-left: 52px;
+    height: 48px;
+  }
+
+  .card {
+    padding: var(--space-3);
+  }
+
+  .stat-card-value {
+    font-size: var(--text-lg);
   }
 }
 

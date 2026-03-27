@@ -1,8 +1,8 @@
 # GEMINI.md — Memória do Projeto Hub RPG
 
-> **Última atualização:** 2026-03-25 (Hub campanha reestruturado + Imagens + Clone NPC + VTT Engine completo)
+> **Última atualização:** 2026-03-27 (Blocksmith Editor integrado + Responsividade mobile + Traduções SRD)
 > **Objetivo:** Preservar todo o contexto do projeto entre conversas
-> **Status:** Fases 1-4 concluídas + VTT Engine (Fases 1-4) + Hub reestruturado
+> **Status:** Fases 1-4 concluídas + VTT Engine (Fases 1-4) + Hub reestruturado + Editor Rich-Text
 
 ---
 
@@ -82,6 +82,16 @@ VTT/
 │
 ├── components/                    ← FRONTEND — Componentes React
 │   ├── layout/                    ← Sidebar, Header, ChatSidebar
+│   ├── editor/                    ← Blocksmith Rich-Text Editor (Tiptap)
+│   │   ├── BlockEditor.tsx         ← Componente principal (toolbar + slash menu + upload imagem)
+│   │   ├── MenuBar.tsx             ← Barra fixa superior (estilo Word/Notion)
+│   │   ├── Toolbar.tsx             ← Toolbar bubble (formatação rápida)
+│   │   ├── SlashMenu.tsx           ← Menu '/' (inserir blocos)
+│   │   ├── editor.css              ← Estilos tema Underdark
+│   │   ├── index.ts                ← Barrel exports
+│   │   ├── hooks/useBlockEditor.ts ← Hook utilitário
+│   │   └── extensions/slash-command.ts ← Extensão ProseMirror
+│   ├── RichTextField.tsx          ← Wrapper para form + hidden input
 │   ├── CampaignTabs.tsx           ← Abas do hub da campanha (client)
 │   ├── CampaignImageField.tsx     ← Upload de capa da campanha
 │   ├── ImageUpload.tsx            ← Componente genérico de upload (Vercel Blob)
@@ -240,6 +250,8 @@ VTT/
 | 2026-03-24 | VTT Engine Fases 1-4 | lib/engine/ completo: types, compendium, rules-engine, dice, combat, conditions, character, generators (NPC, encounter, loot), validators, importer. 18 funções. Páginas /ferramentas/* (dados, gerador-npc, encontros) |
 | 2026-03-24 | Melhorias Hub | RAG priorizar D&D 3.5, ImportNpcPanel com busca, upload de imagens (Vercel Blob), API /api/upload |
 | 2026-03-25 | Hub Campanha reestruturado | Campanha virou hub central com hero header + abas (Visão Geral, Sessões, NPCs, Notas, Arcos). Sidebar com campanhas ativas como sub-links. Upload de capa da campanha. Clone NPC entre campanhas. Imagens nos cards de listagem. |
+| 2026-03-27 | Responsividade mobile | Auditoria completa de 12 arquivos CSS, breakpoints 768px/480px, mobile-first em todos os layouts |
+| 2026-03-27 | Blocksmith Editor integrado | Tiptap rich-text editor copiado de My_Projects/blocksmith para components/editor/. Tema Underdark, upload imagem Vercel Blob, slash menu PT-BR. Integrado em: descrição campanha, backstory NPC, notas GM, história (capítulos), notas de sessão |
 
 ---
 

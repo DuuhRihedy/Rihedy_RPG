@@ -2,6 +2,7 @@ import { getCampaign, updateCampaign, linkNpcToCampaign, unlinkNpcFromCampaign, 
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import CampaignImageField from "@/components/CampaignImageField";
+import RichTextField from "@/components/RichTextField";
 import "../../campanhas.css";
 
 export const dynamic = 'force-dynamic';
@@ -89,10 +90,13 @@ export default async function EditCampaignPage({ params }: { params: Params }) {
               <label className="form-label">Nome da Campanha *</label>
               <input name="name" className="input" defaultValue={campaign.name} required />
             </div>
-            <div className="form-group">
-              <label className="form-label">Descrição</label>
-              <textarea name="description" className="input textarea" rows={4} defaultValue={campaign.description || ""} placeholder="Descreva sua campanha..." />
-            </div>
+            <RichTextField
+                  name="description"
+                  label="Descrição da Campanha"
+                  initialContent={campaign.description}
+                  placeholder="Descreva sua campanha... Digite '/' para comandos..."
+                  minHeight="180px"
+                />
             <div className="grid-2">
               <div className="form-group">
                 <label className="form-label">Edição</label>

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { BlockEditor } from "@/components/editor";
+import type { JSONContent } from "@tiptap/core";
 
 interface Chapter {
   id: string;
@@ -310,19 +312,12 @@ export default function CampaignStory({ campaignId }: { campaignId: string }) {
               </div>
             </div>
 
-            {/* Textarea do conteúdo */}
-            <textarea
-              value={editingContent}
-              onChange={(e) => handleContentChange(e.target.value)}
-              placeholder="Escreva a história aqui...&#10;&#10;Dica: Use os botões de IA abaixo para expandir o texto, gerar ganchos narrativos, NPCs ou encontros temáticos."
-              style={{
-                flex: 1, minHeight: "300px", resize: "vertical",
-                padding: "var(--space-4)",
-                fontFamily: "var(--font-body)", fontSize: "var(--text-sm)",
-                lineHeight: 1.8, color: "var(--text-primary)",
-                background: "var(--bg-elevated)", border: "1px solid var(--border-subtle)",
-                borderRadius: "var(--radius-sm)", outline: "none",
-              }}
+            {/* Editor Rich Text */}
+            <BlockEditor
+              content={editingContent}
+              onChange={(json: JSONContent) => handleContentChange(JSON.stringify(json))}
+              placeholder="Escreva a história aqui... Digite '/' para comandos..."
+              minHeight="350px"
             />
 
             {/* Toolbar IA */}

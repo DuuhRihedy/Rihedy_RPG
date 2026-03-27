@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { BlockEditor } from "@/components/editor";
+import type { JSONContent } from "@tiptap/core";
 
 interface Session {
   id: string;
@@ -225,13 +227,11 @@ export default function CampaignSessions({ campaignId }: { campaignId: string })
                         </div>
                         <div className="form-group">
                           <label className="form-label">Notas da Sessão</label>
-                          <textarea
-                            className="input"
-                            rows={6}
-                            value={editNotes}
-                            onChange={(e) => setEditNotes(e.target.value)}
-                            placeholder="O que aconteceu nesta sessão? Anote eventos importantes, decisões dos jogadores, NPCs encontrados..."
-                            style={{ resize: "vertical", minHeight: "120px", height: "auto" }}
+                          <BlockEditor
+                            content={editNotes}
+                            onChange={(json: JSONContent) => setEditNotes(JSON.stringify(json))}
+                            placeholder="O que aconteceu nesta sessão? Digite '/' para comandos..."
+                            minHeight="180px"
                           />
                         </div>
                         <div style={{ display: "flex", gap: "var(--space-2)", justifyContent: "flex-end" }}>
@@ -247,9 +247,12 @@ export default function CampaignSessions({ campaignId }: { campaignId: string })
                             <div style={{ fontSize: "var(--text-xs)", fontWeight: 700, color: "var(--dnd-red)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "var(--space-1)" }}>
                               📝 Notas do Mestre
                             </div>
-                            <p style={{ fontSize: "var(--text-sm)", color: "var(--text-secondary)", lineHeight: 1.7, margin: 0, whiteSpace: "pre-wrap" }}>
-                              {session.notes}
-                            </p>
+                            <BlockEditor
+                              content={session.notes}
+                              editable={false}
+                              showMenuBar={false}
+                              minHeight="auto"
+                            />
                           </div>
                         ) : (
                           <p style={{ fontSize: "var(--text-sm)", color: "var(--text-muted)", fontStyle: "italic", marginBottom: "var(--space-3)" }}>
