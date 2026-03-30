@@ -1,0 +1,116 @@
+🌐 Hub RPG — Tradução de Descrições (multi-key rotation)
+══════════════════════════════════════════════════════
+Batch: 10 | Delay: 6000ms | Max req: 900
+Providers: gemini → groq (OpenRouter excluído)
+
+📋 Features: ✅ Já está 100% traduzido
+🎯 Talentos: ✅ Já está 100% traduzido
+
+🛡️ Equipamentos: 1 descrições faltando
+  [1/1] 1 reg via gemini/RPG Vercel... ✅ 0/1 (req 1/900)
+
+📖 Magias: 393 descrições faltando
+  [1/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 2/900)
+  [2/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 3/900)
+  [3/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 4/900)
+  [4/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 5/900)
+  [5/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 6/900)
+  [6/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 7/900)
+  [7/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 8/900)
+  [8/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 9/900)
+  [9/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 10/900)
+  [10/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 11/900)
+  [11/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 12/900)
+  [12/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 13/900)
+  [13/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 14/900)
+  [14/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 15/900)
+  [15/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 16/900)
+  [16/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 17/900)
+  [17/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 18/900)
+  [18/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 19/900)
+  [19/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 20/900)
+  [20/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 21/900)
+  [21/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 22/900)
+  [22/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 23/900)
+  [23/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 24/900)
+  [24/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 25/900)
+  [25/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 26/900)
+  [26/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 27/900)
+  [27/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 28/900)
+  [28/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 29/900)
+  [29/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 30/900)
+  [30/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 31/900)
+  [31/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 32/900)
+  [32/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 33/900)
+  [33/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 34/900)
+  [34/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 35/900)
+  [35/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 36/900)
+  [36/40] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 37/900)
+  [37/40] 10 reg via gemini/Hub 1... ✅ 10/10 (req 38/900)
+  [38/40] 10 reg via gemini/Teste API... ✅ 10/10 (req 39/900)
+  [39/40] 10 reg via gemini/Limit Project... ✅ 10/10 (req 40/900)
+  [40/40] 3 reg via gemini/Hub 1... ✅ 3/3 (req 41/900)
+
+✨ Itens Mágicos: 997 descrições faltando
+  [1/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 42/900)
+  [2/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 43/900)
+  [3/100] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 44/900)
+  [4/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 45/900)
+  [5/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 46/900)
+  [6/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 47/900)
+  [7/100] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 48/900)
+  [8/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 49/900)
+  [9/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 50/900)
+  [10/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 51/900)
+  [11/100] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 52/900)
+  [12/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 53/900)
+  [13/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 54/900)
+  [14/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 55/900)
+  [15/100] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 56/900)
+  [16/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 57/900)
+  [17/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 58/900)
+  [18/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 59/900)
+  [19/100] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 60/900)
+  [20/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 61/900)
+  [21/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 62/900)
+  [22/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 63/900)
+  [23/100] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 64/900)
+  [24/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 65/900)
+  [25/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 66/900)
+  [26/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 67/900)
+  [27/100] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 68/900)
+  [28/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 69/900)
+  [29/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 70/900)
+  [30/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 71/900)
+  [31/100] 10 reg via gemini/RPG Vercel... ✅ 10/10 (req 72/900)
+  [32/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 73/900)
+  [33/100] 10 reg via gemini/Teste API... ✅ 10/10 (req 74/900)
+  [34/100] 10 reg via gemini/Limit Project... ✅ 10/10 (req 75/900)
+  [35/100] 10 reg via gemini/RPG Vercel...     🔒 Key "RPG Vercel" bloqueada por 1h (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+  [35/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 76/900)
+  [36/100] 10 reg via gemini/Teste API...     🔒 Key "Teste API" bloqueada por 1h (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+  [36/100] 10 reg via gemini/Limit Project...     🔒 Key "Limit Project" bloqueada por 1h (rate limit)
+    ↻ Tentando próxima key (retry 2/4)...
+  [36/100] 10 reg via gemini/Hub 1... ✅ 10/10 (req 77/900)
+  [37/100] 10 reg via gemini/Hub 1...     🔒 Key "Hub 1" bloqueada por 1h (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+  [37/100] 10 reg via groq/Hub RPG... ✅ 10/10 (req 78/900)
+  [38/100] 10 reg via groq/Hub RPG... ✅ 10/10 (req 79/900)
+  [39/100] 10 reg via groq/Hub RPG... ✅ 10/10 (req 80/900)
+  [40/100] 10 reg via groq/Hub RPG... ✅ 10/10 (req 81/900)
+  [41/100] 10 reg via groq/Hub RPG...     🔒 Key "Hub RPG" bloqueada por 1h (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...

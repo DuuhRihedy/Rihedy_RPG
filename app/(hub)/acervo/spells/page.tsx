@@ -2,6 +2,7 @@ import { searchSpells, getSpellFilters } from "@/lib/actions/srd";
 import { translateSchool, translateClassList, translateSpellLevel, classesMap } from "@/lib/translations";
 import Link from "next/link";
 import AcervoEditionSync from "@/components/AcervoEditionSync";
+import Pagination from "@/components/Pagination";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -15,11 +16,16 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
   const school = params.school || undefined;
   const className = params.class || undefined;
   const edition = params.edition || undefined;
+  const sort = params.sort || "name-asc";
+  const page = params.page ? parseInt(params.page) : 1;
+  const pageSize = 50;
 
-  const [spells, filters] = await Promise.all([
-    searchSpells(query, level, school, className, edition),
+  const [spellResult, filters] = await Promise.all([
+    searchSpells(query, level, school, className, edition, page, pageSize, sort),
     getSpellFilters(),
   ]);
+
+  const spells = spellResult.data;
 
   return (
     <div className="page-container">
@@ -30,7 +36,7 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
             <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>
           </div>
           <h1>📖 Magias</h1>
-          <p>{spells.length} resultados</p>
+          <p>{spellResult.total} resultados</p>
         </div>
       </div>
 
@@ -67,6 +73,12 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
           {filters.classes.map((c) => (
             <option key={c} value={c}>{classesMap[c] || c}</option>
           ))}
+        </select>
+        <select name="sort" className="input select" defaultValue={sort}>
+          <option value="name-asc">Alfabética (A-Z)</option>
+          <option value="name-desc">Alfabética (Z-A)</option>
+          <option value="level-asc">Nível (Menor p/ Maior)</option>
+          <option value="level-desc">Nível (Maior p/ Menor)</option>
         </select>
         <button type="submit" className="btn btn-primary">Buscar</button>
       </form>
@@ -105,6 +117,7 @@ export default async function SpellsPage({ searchParams }: { searchParams: Searc
             ))
           )}
         </div>
+        <Pagination currentPage={spellResult.page} totalPages={spellResult.totalPages} totalItems={spellResult.total} />
       </div>
     </div>
   );

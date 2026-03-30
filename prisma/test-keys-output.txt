@@ -1,0 +1,19 @@
+Testando 4 keys Gemini...
+
+❌ Teste API: 429 → {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+❌ Limit Project: 429 → {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+❌ Hub 1: 429 → {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+❌ RPG Vercel: 429 → {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+✅ Groq/Hub RPG: OK → "Oi, como posso ajudar você hoje?"

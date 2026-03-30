@@ -1,0 +1,21 @@
+🌐 Hub RPG — Tradução de Descrições (multi-key rotation)
+══════════════════════════════════════════════════════
+Batch: 10 | Delay: 5000ms | Max req: 900
+Providers: groq (OpenRouter excluído)
+
+📋 Features: ✅ Já está 100% traduzido
+🎯 Talentos: ✅ Já está 100% traduzido
+
+🛡️ Equipamentos: 1 descrições faltando
+  [1/1] 1 reg via groq/Hub RPG... ✅ 0/1 (req 1/900)
+📖 Magias: ✅ Já está 100% traduzido
+
+✨ Itens Mágicos: 597 descrições faltando
+  [1/60] 10 reg via groq/Hub RPG... ✅ 10/10 (req 2/900)
+  [2/60] 10 reg via groq/Hub RPG... ✅ 10/10 (req 3/900)
+  [3/60] 10 reg via groq/Hub RPG...     🔒 Key "Hub RPG" bloqueada por 1h (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...

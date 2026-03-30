@@ -2,6 +2,7 @@ import { searchMagicItems, getMagicItemFilters } from "@/lib/actions/srd";
 import { translateRarity, translateCategory } from "@/lib/translations";
 import Link from "next/link";
 import AcervoEditionSync from "@/components/AcervoEditionSync";
+import Pagination from "@/components/Pagination";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -9,13 +10,19 @@ export const dynamic = 'force-dynamic';
 export default async function MagicItemsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; rarity?: string; category?: string; edition?: string }>;
+  searchParams: Promise<{ q?: string; rarity?: string; category?: string; edition?: string; page?: string; sort?: string }>;
 }) {
   const params = await searchParams;
-  const [items, filters] = await Promise.all([
-    searchMagicItems(params.q, params.rarity, params.category, params.edition),
+  const page = params.page ? parseInt(params.page as string) : 1;
+  const pageSize = 50;
+  const sort = params.sort || "name-asc";
+
+  const [itemResult, filters] = await Promise.all([
+    searchMagicItems(params.q, params.rarity, params.category, params.edition, page, pageSize, sort),
     getMagicItemFilters(),
   ]);
+
+  const items = itemResult.data;
 
   const rarityColors: Record<string, string> = {
     Common: "var(--text-secondary)",
@@ -33,7 +40,7 @@ export default async function MagicItemsPage({
         <div>
           <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>
           <h1>✨ Itens Mágicos</h1>
-          <p>{items.length} itens encontrados</p>
+          <p>{itemResult.total} itens encontrados</p>
         </div>
       </div>
 
@@ -62,6 +69,10 @@ export default async function MagicItemsPage({
           {filters.categories.map((c) => (
             <option key={c} value={c}>{translateCategory(c)}</option>
           ))}
+        </select>
+        <select name="sort" className="input select" defaultValue={sort}>
+          <option value="name-asc">Alfabética (A-Z)</option>
+          <option value="name-desc">Alfabética (Z-A)</option>
         </select>
         <button type="submit" className="btn btn-primary">Buscar</button>
       </form>
@@ -94,6 +105,7 @@ export default async function MagicItemsPage({
           ))
         )}
       </div>
+      <Pagination currentPage={itemResult.page} totalPages={itemResult.totalPages} totalItems={itemResult.total} />
     </div>
   );
 }

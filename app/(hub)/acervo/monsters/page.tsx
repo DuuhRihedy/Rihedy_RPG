@@ -2,6 +2,7 @@ import { searchMonsters, getMonsterFilters } from "@/lib/actions/srd";
 import { translateSize, translateCreatureType, translateAlignment, creatureTypesMap } from "@/lib/translations";
 import Link from "next/link";
 import AcervoEditionSync from "@/components/AcervoEditionSync";
+import Pagination from "@/components/Pagination";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -15,11 +16,17 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
   const crMin = params.cr_min ? parseFloat(params.cr_min) : undefined;
   const crMax = params.cr_max ? parseFloat(params.cr_max) : undefined;
   const edition = params.edition || undefined;
+  const sort = params.sort || "name-asc";
 
-  const [monsters, filters] = await Promise.all([
-    searchMonsters(query, type, crMin, crMax, edition),
+  const page = params.page ? parseInt(params.page) : 1;
+  const pageSize = 50;
+
+  const [monsterResult, filters] = await Promise.all([
+    searchMonsters(query, type, crMin, crMax, edition, page, pageSize, sort),
     getMonsterFilters(),
   ]);
+
+  const monsters = monsterResult.data;
 
   return (
     <div className="page-container">
@@ -30,7 +37,7 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
             <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>
           </div>
           <h1>🐉 Monstros</h1>
-          <p>{monsters.length} resultados</p>
+          <p>{monsterResult.total} resultados</p>
         </div>
       </div>
 
@@ -78,6 +85,13 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
           step="0.25"
           style={{ maxWidth: "90px" }}
         />
+        <select name="sort" className="input select" defaultValue={sort}>
+          <option value="name-asc">Alfabética (A-Z)</option>
+          <option value="name-desc">Alfabética (Z-A)</option>
+          <option value="cr-asc">Missão Básica (ND Menor p/ Maior)</option>
+          <option value="cr-desc">Bosses (ND Maior p/ Menor)</option>
+          <option value="hp-desc">Tanques (Mais PV)</option>
+        </select>
         <button type="submit" className="btn btn-primary">Buscar</button>
       </form>
 
@@ -123,6 +137,7 @@ export default async function MonstersPage({ searchParams }: { searchParams: Sea
             ))
           )}
         </div>
+        <Pagination currentPage={monsterResult.page} totalPages={monsterResult.totalPages} totalItems={monsterResult.total} />
       </div>
     </div>
   );

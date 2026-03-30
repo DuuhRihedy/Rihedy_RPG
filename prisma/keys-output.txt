@@ -1,0 +1,10 @@
+🔑 Keys configuradas no banco:
+═══════════════════════════════════════
+  gemini       | Limit Project        | uso: 39 | ✅ OK
+  gemini       | RPG Vercel           | uso: 41 | ✅ OK
+  gemini       | Hub 1                | uso: 41 | ✅ OK
+  gemini       | Teste API            | uso: 41 | ✅ OK
+  groq         | Hub RPG              | uso: 28 | ✅ OK
+  openrouter   | Hub RPG              | uso: 0 | ✅ OK
+
+Total: 6 keys

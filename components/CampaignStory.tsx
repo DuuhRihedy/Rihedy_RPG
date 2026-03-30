@@ -314,6 +314,7 @@ export default function CampaignStory({ campaignId }: { campaignId: string }) {
 
             {/* Editor Rich Text */}
             <BlockEditor
+              key={activeId}
               content={editingContent}
               onChange={(json: JSONContent) => handleContentChange(JSON.stringify(json))}
               placeholder="Escreva a história aqui... Digite '/' para comandos..."

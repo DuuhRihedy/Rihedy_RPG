@@ -1,6 +1,7 @@
 import { searchFeats, getFeatFilters } from "@/lib/actions/srd";
 import Link from "next/link";
 import AcervoEditionSync from "@/components/AcervoEditionSync";
+import Pagination from "@/components/Pagination";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -8,13 +9,19 @@ export const dynamic = 'force-dynamic';
 export default async function FeatsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; edition?: string }>;
+  searchParams: Promise<{ q?: string; edition?: string; page?: string; sort?: string }>;
 }) {
   const params = await searchParams;
-  const [feats, filters] = await Promise.all([
-    searchFeats(params.q, params.edition),
+  const page = params.page ? parseInt(params.page as string) : 1;
+  const pageSize = 50;
+  const sort = params.sort || "name-asc";
+
+  const [featResult, filters] = await Promise.all([
+    searchFeats(params.q, params.edition, page, pageSize, sort),
     getFeatFilters(),
   ]);
+
+  const feats = featResult.data;
 
   const featTypes: Record<string, string> = {
     General: "Geral",
@@ -40,7 +47,7 @@ export default async function FeatsPage({
         <div>
           <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>
           <h1>🎯 Talentos (Feats)</h1>
-          <p>{feats.length} talentos encontrados</p>
+          <p>{featResult.total} talentos encontrados</p>
         </div>
       </div>
 
@@ -57,6 +64,10 @@ export default async function FeatsPage({
           {filters.editions.map((e) => (
             <option key={e} value={e}>D&D {e}</option>
           ))}
+        </select>
+        <select name="sort" className="input select" defaultValue={sort}>
+          <option value="name-asc">Alfabética (A-Z)</option>
+          <option value="name-desc">Alfabética (Z-A)</option>
         </select>
         <button type="submit" className="btn btn-primary">Buscar</button>
       </form>
@@ -87,6 +98,7 @@ export default async function FeatsPage({
           ))
         )}
       </div>
+      <Pagination currentPage={featResult.page} totalPages={featResult.totalPages} totalItems={featResult.total} />
     </div>
   );
 }

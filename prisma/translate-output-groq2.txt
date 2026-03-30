@@ -1,0 +1,85 @@
+🌐 Hub RPG — Tradução de Descrições (multi-key rotation)
+══════════════════════════════════════════════════════
+Batch: 5 | Delay: 75000ms | Max req: 900
+Providers: groq (OpenRouter excluído)
+
+📋 Features: ✅ Já está 100% traduzido
+🎯 Talentos: ✅ Já está 100% traduzido
+
+🛡️ Equipamentos: 1 descrições faltando
+  [1/1] 1 reg via groq/Hub RPG... ✅ 0/1 (req 1/900)
+📖 Magias: ✅ Já está 100% traduzido
+
+✨ Itens Mágicos: 577 descrições faltando
+  [1/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 2/900)
+  [2/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 3/900)
+  [3/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 4/900)
+  [4/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 5/900)
+  [5/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 6/900)
+  [6/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 7/900)
+  [7/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 8/900)
+  [8/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 9/900)
+  [9/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 10/900)
+  [10/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 11/900)
+  [11/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 12/900)
+  [12/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 13/900)
+  [13/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 14/900)
+  [14/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 15/900)
+  [15/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 16/900)
+  [16/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 17/900)
+  [17/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 18/900)
+  [18/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 19/900)
+  [19/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 20/900)
+  [20/116] 5 reg via groq/Hub RPG...     🔒 Key "Hub RPG" bloqueada por 1h (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...
+  [23/116] 5 reg via groq/Hub RPG... ✅ 5/5 (req 21/900)
+  [24/116] 5 reg via groq/Hub RPG...     🔒 Key "Hub RPG" bloqueada por 1h (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 1h).
+   ⏳ Aguardando 5 min...

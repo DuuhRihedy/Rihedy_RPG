@@ -2,6 +2,7 @@ import { searchEquipment, getEquipmentFilters } from "@/lib/actions/srd";
 import { translateCategory } from "@/lib/translations";
 import Link from "next/link";
 import AcervoEditionSync from "@/components/AcervoEditionSync";
+import Pagination from "@/components/Pagination";
 import "../acervo.css";
 
 export const dynamic = 'force-dynamic';
@@ -9,13 +10,19 @@ export const dynamic = 'force-dynamic';
 export default async function EquipmentPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; category?: string; edition?: string }>;
+  searchParams: Promise<{ q?: string; category?: string; edition?: string; page?: string; sort?: string }>;
 }) {
   const params = await searchParams;
-  const [equipment, filters] = await Promise.all([
-    searchEquipment(params.q, params.category, params.edition),
+  const page = params.page ? parseInt(params.page as string) : 1;
+  const pageSize = 50;
+  const sort = params.sort || "name-asc";
+
+  const [equipmentResult, filters] = await Promise.all([
+    searchEquipment(params.q, params.category, params.edition, page, pageSize, sort),
     getEquipmentFilters(),
   ]);
+  
+  const equipment = equipmentResult.data;
 
   return (
     <div className="page-container">
@@ -24,7 +31,7 @@ export default async function EquipmentPage({
         <div>
           <Link href="/acervo" className="btn btn-ghost btn-sm">← Acervo</Link>
           <h1>🛡️ Equipamentos</h1>
-          <p>{equipment.length} itens encontrados</p>
+          <p>{equipmentResult.total} itens encontrados</p>
         </div>
       </div>
 
@@ -47,6 +54,12 @@ export default async function EquipmentPage({
           {filters.categories.map((c) => (
             <option key={c} value={c}>{translateCategory(c)}</option>
           ))}
+        </select>
+        <select name="sort" className="input select" defaultValue={sort}>
+          <option value="name-asc">Alfabética (A-Z)</option>
+          <option value="name-desc">Alfabética (Z-A)</option>
+          <option value="weight-asc">Mais Leves</option>
+          <option value="weight-desc">Mais Pesados</option>
         </select>
         <button type="submit" className="btn btn-primary">Buscar</button>
       </form>
@@ -78,6 +91,7 @@ export default async function EquipmentPage({
           ))
         )}
       </div>
+      <Pagination currentPage={equipmentResult.page} totalPages={equipmentResult.totalPages} totalItems={equipmentResult.total} />
     </div>
   );
 }

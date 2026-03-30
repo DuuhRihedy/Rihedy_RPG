@@ -4,7 +4,7 @@ import { prisma } from "@/lib/db";
 
 // ── Magias ───────────────────────────
 
-export async function searchSpells(query?: string, level?: number, school?: string, className?: string, edition?: string) {
+export async function searchSpells(query?: string, level?: number, school?: string, className?: string, edition?: string, page: number = 1, pageSize: number = 50, sort: string = "name-asc") {
   const where: Record<string, unknown> = {};
 
   if (query) {
@@ -28,11 +28,23 @@ export async function searchSpells(query?: string, level?: number, school?: stri
     where.edition = edition;
   }
 
-  return prisma.srdSpell.findMany({
-    where,
-    orderBy: [{ name: "asc" }, { level: "asc" }],
-    take: 100,
-  });
+  let orderBy: any = [{ namePtBr: "asc" }];
+  
+  if (sort === "name-desc") orderBy = [{ namePtBr: "desc" }];
+  else if (sort === "level-asc") orderBy = [{ level: "asc" }, { namePtBr: "asc" }];
+  else if (sort === "level-desc") orderBy = [{ level: "desc" }, { namePtBr: "asc" }];
+
+  const [data, total] = await Promise.all([
+    prisma.srdSpell.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.srdSpell.count({ where }),
+  ]);
+
+  return { data, total, page, totalPages: Math.ceil(total / pageSize) };
 }
 
 export async function getSpell(index: string) {
@@ -59,7 +71,7 @@ export async function getSpellFilters() {
 
 // ── Monstros ─────────────────────────
 
-export async function searchMonsters(query?: string, type?: string, crMin?: number, crMax?: number, edition?: string) {
+export async function searchMonsters(query?: string, type?: string, crMin?: number, crMax?: number, edition?: string, page: number = 1, pageSize: number = 50, sort: string = "name-asc") {
   const where: Record<string, unknown> = {};
 
   if (query) {
@@ -81,25 +93,38 @@ export async function searchMonsters(query?: string, type?: string, crMin?: numb
     where.edition = edition;
   }
 
-  return prisma.srdMonster.findMany({
-    where,
-    orderBy: [{ name: "asc" }, { challengeRating: "asc" }],
-    take: 100,
-    select: {
-      id: true,
-      index: true,
-      name: true,
-      namePtBr: true,
-      size: true,
-      type: true,
-      alignment: true,
-      armorClass: true,
-      hitPoints: true,
-      challengeRating: true,
-      xp: true,
-      edition: true,
-    },
-  });
+  let orderBy: any = [{ namePtBr: "asc" }];
+  
+  if (sort === "name-desc") orderBy = [{ namePtBr: "desc" }];
+  else if (sort === "cr-asc") orderBy = [{ challengeRating: "asc" }, { namePtBr: "asc" }];
+  else if (sort === "cr-desc") orderBy = [{ challengeRating: "desc" }, { namePtBr: "asc" }];
+  else if (sort === "hp-desc") orderBy = [{ hitPoints: "desc" }, { namePtBr: "asc" }];
+
+  const [data, total] = await Promise.all([
+    prisma.srdMonster.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+      select: {
+        id: true,
+        index: true,
+        name: true,
+        namePtBr: true,
+        size: true,
+        type: true,
+        alignment: true,
+        armorClass: true,
+        hitPoints: true,
+        challengeRating: true,
+        xp: true,
+        edition: true,
+      },
+    }),
+    prisma.srdMonster.count({ where }),
+  ]);
+
+  return { data, total, page, totalPages: Math.ceil(total / pageSize) };
 }
 
 export async function getMonster(index: string) {
@@ -141,7 +166,7 @@ export async function getSrdStats() {
 
 // ── Equipamentos ──────────────────────
 
-export async function searchEquipment(query?: string, category?: string, edition?: string) {
+export async function searchEquipment(query?: string, category?: string, edition?: string, page: number = 1, pageSize: number = 50, sort: string = "name-asc") {
   const where: Record<string, unknown> = {};
   if (query) {
     where.OR = [
@@ -153,11 +178,23 @@ export async function searchEquipment(query?: string, category?: string, edition
   if (category) where.category = { equals: category, mode: "insensitive" };
   if (edition) where.edition = edition;
 
-  return prisma.srdEquipment.findMany({
-    where,
-    orderBy: [{ name: "asc" }, { category: "asc" }],
-    take: 100,
-  });
+  let orderBy: any = [{ namePtBr: "asc" }];
+  
+  if (sort === "name-desc") orderBy = [{ namePtBr: "desc" }];
+  else if (sort === "weight-asc") orderBy = [{ weight: "asc" }, { namePtBr: "asc" }];
+  else if (sort === "weight-desc") orderBy = [{ weight: "desc" }, { namePtBr: "asc" }];
+
+  const [data, total] = await Promise.all([
+    prisma.srdEquipment.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.srdEquipment.count({ where }),
+  ]);
+
+  return { data, total, page, totalPages: Math.ceil(total / pageSize) };
 }
 
 export async function getEquipment(index: string) {
@@ -185,7 +222,7 @@ export async function getEquipmentFilters() {
 
 // ── Itens Mágicos ─────────────────────
 
-export async function searchMagicItems(query?: string, rarity?: string, category?: string, edition?: string) {
+export async function searchMagicItems(query?: string, rarity?: string, category?: string, edition?: string, page: number = 1, pageSize: number = 50, sort: string = "name-asc") {
   const where: Record<string, unknown> = {};
   if (query) {
     where.OR = [
@@ -198,11 +235,20 @@ export async function searchMagicItems(query?: string, rarity?: string, category
   if (category) where.category = { equals: category, mode: "insensitive" };
   if (edition) where.edition = edition;
 
-  return prisma.srdMagicItem.findMany({
-    where,
-    orderBy: [{ name: "asc" }, { rarity: "asc" }],
-    take: 100,
-  });
+  let orderBy: any = [{ namePtBr: "asc" }];
+  if (sort === "name-desc") orderBy = [{ namePtBr: "desc" }];
+
+  const [data, total] = await Promise.all([
+    prisma.srdMagicItem.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.srdMagicItem.count({ where }),
+  ]);
+
+  return { data, total, page, totalPages: Math.ceil(total / pageSize) };
 }
 
 export async function getMagicItem(index: string) {
@@ -236,7 +282,7 @@ export async function getClass(index: string) {
 
 // ── Feats ─────────────────────────────
 
-export async function searchFeats(query?: string, edition?: string) {
+export async function searchFeats(query?: string, edition?: string, page: number = 1, pageSize: number = 50, sort: string = "name-asc") {
   const where: Record<string, unknown> = {};
   if (query) {
     where.OR = [
@@ -247,11 +293,20 @@ export async function searchFeats(query?: string, edition?: string) {
   }
   if (edition) where.edition = edition;
 
-  return prisma.srdFeat.findMany({
-    where,
-    orderBy: { name: "asc" },
-    take: 100,
-  });
+  let orderBy: any = [{ namePtBr: "asc" }];
+  if (sort === "name-desc") orderBy = [{ namePtBr: "desc" }];
+
+  const [data, total] = await Promise.all([
+    prisma.srdFeat.findMany({
+      where,
+      orderBy,
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    }),
+    prisma.srdFeat.count({ where }),
+  ]);
+
+  return { data, total, page, totalPages: Math.ceil(total / pageSize) };
 }
 
 export async function getFeatFilters() {

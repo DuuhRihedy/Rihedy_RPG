@@ -12,13 +12,13 @@ import { PrismaNeon } from "@prisma/adapter-neon";
 const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
-const BATCH_SIZE = 10;       // registros por request
-const DELAY_MS = 6000;       // 6s entre requests (mais rápido c/ rotação de keys)
+const BATCH_SIZE = 3;        // registros por request (reduzido p/ TPM limit)
+const DELAY_MS = 120000;     // 2min entre requests (nunca estoura 12k TPM Groq)
 const MAX_REQUESTS = 900;    // 4 keys × 250 RPD = 1000, reserva 100
 const MAX_RETRIES = 4;       // retries por batch com backoff
 
 // Providers permitidos na rotação (ordem de prioridade)
-const ALLOWED_PROVIDERS = ["gemini", "groq"] as const;
+const ALLOWED_PROVIDERS = ["groq"] as const; // Gemini esgotado hoje, usando só Groq
 
 // URLs base por provider
 const API_URLS: Record<string, (key: string, model: string) => string> = {
@@ -89,12 +89,12 @@ async function getNextKey(): Promise<PoolKey | null> {
 
 async function blockKey(keyId: string, label: string) {
   blockedKeys.add(keyId);
-  const blockUntil = new Date(Date.now() + 60 * 60 * 1000); // 1h
+  const blockUntil = new Date(Date.now() + 40 * 60 * 1000); // 40m
   await prisma.aiApiKey.updateMany({
     where: { id: keyId },
     data: { blockedUntil: blockUntil },
   });
-  console.log(`    🔒 Key "${label}" bloqueada por 1h (rate limit)`);
+  console.log(`    🔒 Key "${label}" bloqueada por 40m (rate limit)`);
 }
 
 // ── Glossário D&D 3.5/5e PT-BR ─────────────────────
@@ -426,7 +426,7 @@ async function main() {
         const poolKey = await getNextKey();
         if (!poolKey) {
           console.log(`\n🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.`);
-          console.log(`   Tente novamente mais tarde (keys desbloqueiam em 1h).`);
+          console.log(`   Tente novamente mais tarde (keys desbloqueiam em 40m).`);
           // Aguardar 5min e tentar de novo
           console.log(`   ⏳ Aguardando 5 min...`);
           await sleep(5 * 60 * 1000);
