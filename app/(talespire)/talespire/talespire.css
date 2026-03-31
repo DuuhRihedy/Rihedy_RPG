@@ -1,0 +1,636 @@
+/* ═══════════════════════════════════════════════════════
+   Hub RPG × Talespire — Symbiote Companion Styles
+   Otimizado para o painel lateral do Talespire (~380px)
+   Usa CSS vars nativas do Talespire quando disponíveis
+   ═══════════════════════════════════════════════════════ */
+
+:root {
+  /* Fallbacks caso rode fora do Talespire */
+  --ts-color-primary: #e8e0d0;
+  --ts-color-secondary: #a09880;
+  --ts-background-primary: #1a1a2e;
+  --ts-background-secondary: #252545;
+  --ts-background-tertiary: #2e2e52;
+  --ts-accent-primary: #d4af37;
+  --ts-accent-hover: #e6c44a;
+  --ts-accent-background: #3a3520;
+  --ts-button-background: #333362;
+  --ts-button-hover: #444480;
+  --ts-color-danger: #e74c3c;
+  --ts-link: #d4af37;
+  --ts-link-hover: #e6c44a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-inter, 'Inter', sans-serif);
+  background: var(--ts-background-primary);
+  color: var(--ts-color-primary);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ─────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--ts-background-tertiary);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ts-accent-primary); }
+
+/* ── Shell ─────────────────────────────── */
+.ts-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Toolbar (tabs) ────────────────────── */
+.ts-toolbar {
+  display: flex;
+  background: var(--ts-background-secondary);
+  border-bottom: 1px solid var(--ts-background-tertiary);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.ts-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 8px 4px 6px;
+  border: none;
+  background: transparent;
+  color: var(--ts-color-secondary);
+  cursor: pointer;
+  font-size: 10px;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  border-bottom: 2px solid transparent;
+  min-width: 0;
+}
+
+.ts-tab:hover {
+  color: var(--ts-color-primary);
+  background: var(--ts-background-tertiary);
+}
+
+.ts-tab.active {
+  color: var(--ts-accent-primary);
+  border-bottom-color: var(--ts-accent-primary);
+  background: rgba(212, 175, 55, 0.08);
+}
+
+.ts-tab-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.ts-tab-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Panels ────────────────────────────── */
+.ts-panels {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.ts-panel {
+  display: none;
+  height: 100%;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.ts-panel.active {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Status Bar ────────────────────────── */
+.ts-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: var(--ts-background-secondary);
+  border-top: 1px solid var(--ts-background-tertiary);
+  font-size: 10px;
+  color: var(--ts-color-secondary);
+  flex-shrink: 0;
+}
+
+.ts-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #e74c3c;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.ts-status-dot.connected {
+  background: #2ecc71;
+  box-shadow: 0 0 6px rgba(46, 204, 113, 0.5);
+}
+
+/* ── Cards ─────────────────────────────── */
+.ts-card {
+  background: var(--ts-background-secondary);
+  border: 1px solid var(--ts-background-tertiary);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.ts-card-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--ts-accent-primary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Inputs ────────────────────────────── */
+.ts-input {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--ts-background-primary);
+  border: 1px solid var(--ts-background-tertiary);
+  border-radius: 4px;
+  color: var(--ts-color-primary);
+  font-size: 13px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ts-input:focus {
+  border-color: var(--ts-accent-primary);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.15);
+}
+
+.ts-input::placeholder {
+  color: var(--ts-color-secondary);
+  opacity: 0.6;
+}
+
+/* ── Buttons ───────────────────────────── */
+.ts-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ts-btn-primary {
+  background: var(--ts-accent-primary);
+  color: #1a1a2e;
+}
+
+.ts-btn-primary:hover {
+  background: var(--ts-accent-hover);
+  transform: translateY(-1px);
+}
+
+.ts-btn-secondary {
+  background: var(--ts-button-background);
+  color: var(--ts-color-primary);
+}
+
+.ts-btn-secondary:hover {
+  background: var(--ts-button-hover);
+}
+
+.ts-btn-ghost {
+  background: transparent;
+  color: var(--ts-color-secondary);
+  border: 1px solid var(--ts-background-tertiary);
+}
+
+.ts-btn-ghost:hover {
+  color: var(--ts-color-primary);
+  border-color: var(--ts-accent-primary);
+}
+
+.ts-btn-sm {
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
+/* ── Dice Grid ─────────────────────────── */
+.ts-dice-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.ts-dice-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 12px 4px;
+  background: var(--ts-background-tertiary);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--ts-color-primary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.ts-dice-btn:hover {
+  border-color: var(--ts-accent-primary);
+  background: var(--ts-accent-background);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.ts-dice-btn:active {
+  transform: translateY(0);
+}
+
+.ts-dice-btn .ts-dice-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.ts-dice-btn .ts-dice-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--ts-color-secondary);
+}
+
+/* ── Dice Custom Row ───────────────────── */
+.ts-dice-custom {
+  display: flex;
+  gap: 6px;
+}
+
+.ts-dice-custom .ts-input {
+  flex: 1;
+}
+
+/* ── Roll History ──────────────────────── */
+.ts-roll-history {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ts-roll-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background: var(--ts-background-primary);
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.ts-roll-item-expr {
+  color: var(--ts-color-secondary);
+  font-family: var(--font-jetbrains, monospace);
+}
+
+.ts-roll-item-result {
+  font-weight: 700;
+  color: var(--ts-accent-primary);
+  font-size: 14px;
+}
+
+/* ── Search Results List ───────────────── */
+.ts-results {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ts-result-item {
+  padding: 8px 10px;
+  background: var(--ts-background-primary);
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ts-result-item:hover {
+  border-color: var(--ts-accent-primary);
+  background: var(--ts-accent-background);
+}
+
+.ts-result-name {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.ts-result-meta {
+  font-size: 11px;
+  color: var(--ts-color-secondary);
+}
+
+.ts-result-desc {
+  font-size: 12px;
+  color: var(--ts-color-secondary);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ── Detail View ───────────────────────── */
+.ts-detail-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ts-accent-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  padding: 0;
+  margin-bottom: 8px;
+}
+
+.ts-detail-back:hover {
+  text-decoration: underline;
+}
+
+.ts-detail-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  font-family: var(--font-cinzel, serif);
+}
+
+.ts-detail-subtitle {
+  font-size: 12px;
+  color: var(--ts-color-secondary);
+  margin-bottom: 10px;
+}
+
+.ts-detail-body {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ts-color-primary);
+}
+
+.ts-detail-body p {
+  margin-bottom: 8px;
+}
+
+.ts-detail-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.ts-detail-stat {
+  text-align: center;
+  padding: 8px 4px;
+  background: var(--ts-background-primary);
+  border-radius: 4px;
+}
+
+.ts-detail-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ts-accent-primary);
+}
+
+.ts-detail-stat-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ts-color-secondary);
+}
+
+/* ── Tags / Badges ─────────────────────── */
+.ts-badge {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ts-badge-35 {
+  background: rgba(212, 175, 55, 0.15);
+  color: var(--ts-accent-primary);
+}
+
+.ts-badge-5e {
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+}
+
+.ts-badge-school {
+  background: rgba(155, 89, 182, 0.15);
+  color: #bb86fc;
+}
+
+/* ── NPC Cards ─────────────────────────── */
+.ts-npc-card {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: var(--ts-background-primary);
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ts-npc-card:hover {
+  border-color: var(--ts-accent-primary);
+}
+
+.ts-npc-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--ts-background-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.ts-npc-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ts-npc-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.ts-npc-name {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-npc-detail {
+  font-size: 11px;
+  color: var(--ts-color-secondary);
+}
+
+/* ── Chat (AI) ─────────────────────────── */
+.ts-chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+
+.ts-chat-msg {
+  max-width: 90%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  animation: tsMsgIn 0.2s ease;
+}
+
+@keyframes tsMsgIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ts-chat-msg.user {
+  align-self: flex-end;
+  background: var(--ts-accent-background);
+  border: 1px solid var(--ts-accent-primary);
+  color: var(--ts-color-primary);
+}
+
+.ts-chat-msg.assistant {
+  align-self: flex-start;
+  background: var(--ts-background-secondary);
+  border: 1px solid var(--ts-background-tertiary);
+}
+
+.ts-chat-input-row {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.ts-chat-input-row .ts-input {
+  flex: 1;
+}
+
+/* ── Empty States ──────────────────────── */
+.ts-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--ts-color-secondary);
+}
+
+.ts-empty-icon {
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+.ts-empty-text {
+  font-size: 12px;
+}
+
+/* ── Loading ───────────────────────────── */
+.ts-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.ts-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--ts-background-tertiary);
+  border-top-color: var(--ts-accent-primary);
+  border-radius: 50%;
+  animation: tsSpin 0.6s linear infinite;
+}
+
+@keyframes tsSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Select ────────────────────────────── */
+.ts-select {
+  padding: 6px 8px;
+  background: var(--ts-background-primary);
+  border: 1px solid var(--ts-background-tertiary);
+  border-radius: 4px;
+  color: var(--ts-color-primary);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+
+.ts-select:focus {
+  border-color: var(--ts-accent-primary);
+}
+
+/* ── Filter Row ────────────────────────── */
+.ts-filter-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}

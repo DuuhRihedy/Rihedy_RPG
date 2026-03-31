@@ -19,6 +19,7 @@ type Params = Promise<{ id: string }>;
 
 export default async function CampaignDetailPage({ params }: { params: Params }) {
   const { id } = await params;
+
   const [campaign, availableNpcs] = await Promise.all([
     getCampaign(id),
     getAvailableNpcsForCampaign(id),

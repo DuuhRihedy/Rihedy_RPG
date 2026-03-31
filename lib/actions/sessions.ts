@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { getVisibilityFilter } from "@/lib/visibility";
 
 export async function getSessions(campaignId: string) {
   return prisma.session.findMany({
@@ -64,15 +65,17 @@ export async function deleteSession(id: string, campaignId: string) {
 }
 
 export async function getDashboardStats() {
+  const filter = await getVisibilityFilter();
+
   const [campaigns, npcs, sessions, aiChats] = await Promise.all([
-    prisma.campaign.count({ where: { status: "active" } }),
+    prisma.campaign.count({ where: { status: "active", ...filter } }),
     prisma.npc.count(),
     prisma.session.count(),
     prisma.chatHistory.count(),
   ]);
 
   const recentCampaign = await prisma.campaign.findFirst({
-    where: { status: "active" },
+    where: { status: "active", ...filter },
     orderBy: { updatedAt: "desc" },
     include: {
       _count: { select: { sessions: true, npcs: true } },

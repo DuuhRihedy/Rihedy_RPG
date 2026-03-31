@@ -17,8 +17,9 @@ export async function getCampaigns() {
 }
 
 export async function getCampaign(id: string) {
-  return prisma.campaign.findUnique({
-    where: { id },
+  const filter = await getVisibilityFilter();
+  return prisma.campaign.findFirst({
+    where: { id, ...filter },
     include: {
       sessions: { orderBy: { number: "desc" }, take: 20 },
       npcs: { include: { npc: true } },

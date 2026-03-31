@@ -6,6 +6,90 @@ datasource db {
   provider = "postgresql"
 }
 
+// ── Personagens (Fichas) ──────────
+
+model Character {
+  id               String   @id @default(cuid())
+  name             String
+  edition          String   @default("3.5") // "3.5" | "5e"
+  race             String?
+  class            String?  // Pode ser multiclass: "Fighter 5 / Wizard 3"
+  level            Int      @default(1)
+  alignment        String?
+  background       String?  // usado no 5e
+  deity            String?  // usado no 3.5
+  gender           String?
+  age              String?
+  height           String?
+  weight           String?
+  eyes             String?
+  hair             String?
+  skin             String?
+  imageUrl         String?
+  status           String   @default("active") // active, retired, dead
+
+  // Atributos base
+  str              Int      @default(10)
+  dex              Int      @default(10)
+  con              Int      @default(10)
+  intl             Int      @default(10)
+  wis              Int      @default(10)
+  cha              Int      @default(10)
+
+  // Combate
+  maxHp            Int      @default(8)
+  currentHp        Int      @default(8)
+  tempHp           Int      @default(0)
+  ac               Int      @default(10)
+  touchAc          Int?     // 3.5
+  flatFootedAc     Int?     // 3.5
+  initiative       Int      @default(0)
+  speed            Int      @default(30)
+
+  // D&D 3.5 específico
+  bab              Int?     // Base Attack Bonus
+  grapple          Int?
+  fortSave         Int?
+  refSave          Int?
+  willSave         Int?
+  spellResistance  Int?
+  damageReduction  String?
+
+  // D&D 5e específico
+  proficiencyBonus Int?
+  hitDice          String?  // "8d10"
+  hitDiceRemaining Int?
+  deathSaveSuccesses Int @default(0)
+  deathSaveFailures  Int @default(0)
+  inspiration      Boolean  @default(false)
+
+  // JSON fields (flexible para ambas edições)
+  savingThrows     String?  // JSON: 5e saves { str: { proficient, value }, ... }
+  skills           String?  // JSON: 3.5 ranks ou 5e proficiencies
+  feats            String?  // JSON: [{ name, description, source }]
+  features         String?  // JSON: [{ name, description, level, source }]
+  equipment        String?  // JSON: [{ name, quantity, weight, equipped, description }]
+  weapons          String?  // JSON: [{ name, attackBonus, damage, type, properties }]
+  armor            String?  // JSON: { name, ac, type, equipped }
+  spellcasting     String?  // JSON: { ability, dc, attackBonus, slots, known/prepared }
+  spells           String?  // JSON: { 0: [...], 1: [...], ... } by level
+  proficiencies    String?  // JSON: { armor, weapons, tools, languages }
+  currency         String?  // JSON: { cp, sp, gp, pp }
+  traits           String?  // JSON: { personality, ideals, bonds, flaws } (5e)
+  notes            String?  // Notas livres do jogador
+
+  // Relações
+  createdById      String?
+  createdBy        User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  campaignId       String?
+  campaign         Campaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([edition])
+  @@index([campaignId])
+}
+
 // ── Usuários ──────────────────────
 
 model User {
@@ -19,6 +103,7 @@ model User {
 
   campaigns Campaign[]
   npcs      Npc[]
+  characters Character[]
 }
 
 // ── Campanhas ──────────────────────
@@ -43,6 +128,7 @@ model Campaign {
   documents   Document[]
   links       Link[]
   chapters    Chapter[]
+  characters  Character[]
 }
 
 // ── Sessões ────────────────────────

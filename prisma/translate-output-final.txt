@@ -12,3 +12,119 @@ Providers: groq (OpenRouter excluído)
 
 ✨ Itens Mágicos: 468 descrições faltando
   [1/156] 3 reg via groq/Hub RPG... ✅ 3/3 (req 2/900)
+  [2/156] 3 reg via groq/Hub RPG...     🔒 Key "Hub RPG" bloqueada por 40m (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+  [4/156] 3 reg via groq/Hub RPG... ✅ 3/3 (req 3/900)
+  [5/156] 3 reg via groq/Hub RPG... ✅ 3/3 (req 4/900)
+  [6/156] 3 reg via groq/Hub RPG...     🔒 Key "Hub RPG" bloqueada por 40m (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+  [8/156] 3 reg via groq/Hub RPG... ✅ 3/3 (req 5/900)
+  [9/156] 3 reg via groq/Hub RPG...     🔒 Key "Hub RPG" bloqueada por 40m (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+  [11/156] 3 reg via groq/Hub RPG... ✅ 3/3 (req 6/900)
+  [12/156] 3 reg via groq/Hub RPG...     🔒 Key "Hub RPG" bloqueada por 40m (rate limit)
+    ↻ Tentando próxima key (retry 1/4)...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
+
+🚫 Nenhuma key disponível! Todas bloqueadas ou esgotadas.
+   Tente novamente mais tarde (keys desbloqueiam em 40m).
+   ⏳ Aguardando 5 min...
