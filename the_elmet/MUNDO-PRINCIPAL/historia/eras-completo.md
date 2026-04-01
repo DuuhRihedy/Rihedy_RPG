@@ -73,9 +73,8 @@ ultima_atualizacao: 2026-03-28
 |---|---|---|---|---|---|
 | **1ª** | Guerra dos Dragões | *The Elmet Birth* | Continental | Dagoness / Os Elementais | Elmer + Mako |
 | **2ª** | Guerra Elmet | *The WarElmet* | Global | Zuz / Murdok | Duuh / Indrakzuz |
-| **3ª** | Guerra do Tempo | *Elmet Pieces* | Elmetra (Ilhas) | Avatar do 13º Irmão | Brayan Indrakzuz |
-| **3.5** | Transição SSA | *Fim de Elmetra* | Global Transição | SSA / Acervo Oculto | *(Vários)* |
-| **4ª** | Guerra dos Mortais | *A New World* | Novo Mundo Reestruturado | Falha em IU | *(A definir)* |
+| **3ª** | Guerra do Tempo | *Aventura 3: A New World* | Elmetra (Ilhas) | Avatar do 13º / Meta Hunter | *(Vários)* |
+| **3.5**| Transição SSA | *Aventura 3.5: One Shot SSA* | Continente de Seymorth| SSA / Acervo Oculto | Equipe SSA |
 
 ---
 

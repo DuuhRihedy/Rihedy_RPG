@@ -44,9 +44,8 @@ O objetivo é utilizar o **Antigravity** para organizar **17 anos de lore disper
 - **Conflito de Eras:** A história é dividida em **5 Grandes Guerras**, cada uma servindo como cenário para campanhas distintas:
     1. Guerra dos Dragões
     2. Guerra Elmet
-    3. Guerra do Tempo
-    4. Guerra dos Mortais *(Em construção)*
-    5. Guerra Mundial *(Em construção)*
+    3. Guerra do Tempo (Aventura 3: A New World - Elmetra)
+    4. Transição SSA (Aventura 3.5: One-shot Operação Seymorth)
 
 ### Mundos Menores
 - Eduardo também possui **mundos menores** além de Elmeria
@@ -440,9 +439,9 @@ Ao processar arquivos deste diretório, o assistente deve:
 16. ✅ Migrar `The Elmet Returns.docx` → incorporado nos resumos existentes
 17. ✅ Migrar `Cópia de Enredo_.docx` → `MUNDO-PRINCIPAL/locais/local-magnamorth.md`
 18. ✅ Criar `MUNDO-PRINCIPAL/locais/local-mandamorth.md` (4ª cidade de Seymorth)
-19. ✅ Criar `MUNDO-PRINCIPAL/historia/eras-completo.md` (timeline de todas as 5 eras)
-20. ✅ Criar `CAMPANHAS/the-elmet-ascension/campanha-resumo.md` (5ª Guerra)
-21. ✅ Criar `CAMPANHAS/a-new-world/campanha-resumo.md` (4ª Guerra)
+19. ✅ Criar `MUNDO-PRINCIPAL/historia/eras-completo.md` (timeline corrigida das eras)
+20. ❌ (Removido: the-elmet-ascension era um erro conceitual)
+21. ✅ Criar `CAMPANHAS/a-new-world/campanha-resumo.md` (Aventura 3)
 22. ⚠️ `Arquivos Soltos_/` e `Aventura SSA/` — pastas não encontradas no diretório atual (podem ter sido movidas)
 23. ✅ Expandir NPCs de cidades → 17 NPCs adicionais (Firaga x3, Rufus, Shadow, Paradoxal, Anfitrião, Jaina, Rev. Oz, Irmandade Metamorfos, Mindra, Duuh, Cooper, Murdok, Vacoon, Ancient, IA Diuh)
 24. ✅ Criar `MUNDO-PRINCIPAL/lore/lore-completa.md` (cosmogonia + raças + organizações + artefatos + mistérios)

@@ -1,9 +1,9 @@
 ---
 id: CAMP_002
-nome: A New World - Campanha Elmetra
+nome: A New World - Aventura 3
 mundo: Elmeria (Elmetra)
-era: 4ª Guerra
-tags: [campanha, Elmetra, ilhas-flutuantes, meta-hunter]
+era: 3ª Guerra
+tags: [campanha, Elmetra, ilhas-flutuantes, meta-hunter, aventura-3]
 status: em construção
 links_relacionados:
   - "[[Elmetra]]"
@@ -13,12 +13,12 @@ links_relacionados:
 ultima_atualizacao: 2026-03-28
 ---
 
-# 🌌 A New World — Campanha Elmetra
+# 🌌 A New World — Aventura 3
 
 ---
 
 ## Visão Geral
-- **Era:** 4ª Guerra — Pós-extinção Elmet
+- **Era:** 3ª Guerra — Pós-extinção Elmet
 - **Status:** Em construção
 - **Tom:** Pós-apocalíptico, mistério, exploração, profecias
 - **Narrador in-game:** [[Meta Hunter]] / "A Máquina"

@@ -104,7 +104,7 @@ A lenda também diz que um dia **as chamas clamarão um novo dono**, para que el
 
 ---
 
-## Campanha — Aventura 4: "A New World"
+## Campanha — Aventura 3: "A New World"
 
 ### Setup
 O porta-voz do imperador, **[[Máquina da Morte]]** (Meta Hunter), selecionou um grupo de indivíduos especiais para um encontro com o imperador. Objetivo: acabar com rumores e lendas que atormentam o governante.
