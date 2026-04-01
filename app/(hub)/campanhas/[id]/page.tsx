@@ -54,7 +54,7 @@ export default async function CampaignDetailPage({ params }: { params: Params })
             </div>
             <h1 className="hub-hero-title">{campaign.name}</h1>
             {campaign.description && (
-              <p className="hub-hero-desc">{campaign.description}</p>
+              <div className="hub-hero-desc" dangerouslySetInnerHTML={{ __html: campaign.description }} />
             )}
           </div>
           <div className="campaign-detail-actions">
@@ -98,9 +98,9 @@ export default async function CampaignDetailPage({ params }: { params: Params })
                   <span className="card-title">📋 Sobre a Campanha</span>
                 </div>
                 {campaign.description ? (
-                  <p style={{ color: "var(--text-secondary)", fontSize: "var(--text-sm)", lineHeight: 1.7, margin: 0 }}>
-                    {campaign.description}
-                  </p>
+                  <div style={{ color: "var(--text-secondary)", fontSize: "var(--text-sm)", lineHeight: 1.7, margin: 0 }}
+                    dangerouslySetInnerHTML={{ __html: campaign.description }}
+                  />
                 ) : (
                   <p style={{ color: "var(--text-muted)", fontSize: "var(--text-sm)", textAlign: "center", padding: "var(--space-4) 0" }}>
                     Nenhuma descrição — <Link href={`/campanhas/${id}/editar`} style={{ color: "var(--dnd-gold)" }}>adicionar</Link>

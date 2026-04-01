@@ -1218,6 +1218,25 @@ code, pre {
   border-top: 2px solid #5a2d0c;
 }
 
+:root .sidebar-user-name {
+  color: #ede0c8;
+}
+
+:root .sidebar-user-role {
+  color: #c8a84e;
+}
+
+:root .sidebar-logout-btn {
+  color: rgba(237, 224, 200, 0.6);
+  border-color: #5a2d0c;
+}
+
+:root .sidebar-logout-btn:hover {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.1);
+}
+
 :root .edition-toggle {
   background: rgba(0, 0, 0, 0.3);
 }

@@ -12,8 +12,8 @@ import {
   toggleApiKey,
   unblockApiKey,
 } from "@/lib/actions/ai-config";
-import { PROVIDER_INFO, type ProviderName } from "@/lib/services/ai";
-import { getAdapter } from "@/lib/services/ai";
+import { PROVIDER_INFO, type ProviderName } from "@/lib/services/ai/types";
+import { getAdapter } from "@/lib/services/ai/adapters";
 
 const PROVIDERS: ProviderName[] = ["gemini", "groq", "openrouter"];
 

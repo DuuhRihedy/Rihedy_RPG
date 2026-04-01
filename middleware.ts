@@ -5,10 +5,20 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get("hub-rpg-session")?.value;
   const { pathname } = request.nextUrl;
   const isLoginPage = pathname === "/login";
-  const isPublicApi = pathname.startsWith("/api/health") || pathname === "/manifest.webmanifest";
+  const isPublicApi = 
+    pathname.startsWith("/api/health") || 
+    pathname.startsWith("/api/srd") || 
+    pathname.startsWith("/talespire") || 
+    pathname === "/manifest.webmanifest";
 
-  // Rotas públicas: não precisa de auth
-  if (isPublicApi) return NextResponse.next();
+  // Agrega cabeçalhos de CORS nas rotas do TaleSpire e SRD para evitar bloqueios no Chromium embarcado
+  if (isPublicApi) {
+    const response = NextResponse.next();
+    response.headers.set("Access-Control-Allow-Origin", "*");
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+    return response;
+  }
 
   if (!token) {
     if (isLoginPage) return NextResponse.next();

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cinzel, Inter, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 import "./layout.css";
@@ -56,13 +57,7 @@ export default function RootLayout({
       className={`${cinzel.variable} ${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("hub-rpg-theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}})()`,
-          }}
-        />
-      </head>
+      <head />
       <body>
         {children}
         <ServiceWorkerRegister />

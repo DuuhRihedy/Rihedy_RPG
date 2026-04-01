@@ -13,12 +13,12 @@ const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 const BATCH_SIZE = 3;        // registros por request (reduzido p/ TPM limit)
-const DELAY_MS = 120000;     // 2min entre requests (nunca estoura 12k TPM Groq)
+const DELAY_MS = 60000;      // 1min entre requests (rotação de keys cuida do rate limit)
 const MAX_REQUESTS = 900;    // 4 keys × 250 RPD = 1000, reserva 100
 const MAX_RETRIES = 4;       // retries por batch com backoff
 
 // Providers permitidos na rotação (ordem de prioridade)
-const ALLOWED_PROVIDERS = ["groq"] as const; // Gemini esgotado hoje, usando só Groq
+const ALLOWED_PROVIDERS = ["gemini", "groq"] as const; // Todas as keys disponíveis
 
 // URLs base por provider
 const API_URLS: Record<string, (key: string, model: string) => string> = {

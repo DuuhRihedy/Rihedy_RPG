@@ -179,6 +179,7 @@
 .sidebar-footer {
   padding: var(--space-3) var(--space-4);
   border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
 }
 
 .edition-toggle {
@@ -261,6 +262,12 @@
   border-color: var(--danger);
   color: var(--danger);
   background: rgba(239, 68, 68, 0.1);
+}
+
+/* ── Header Logout Button ────────────── */
+.header-logout-btn:hover {
+  color: var(--danger) !important;
+  background: rgba(239, 68, 68, 0.1) !important;
 }
 
 /* ── Header ───────────────────────────── */

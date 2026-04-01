@@ -77,6 +77,7 @@ export function BlockEditor({
     const parsedContent = parseContent(content);
 
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
             StarterKit.configure({
                 codeBlock: false,

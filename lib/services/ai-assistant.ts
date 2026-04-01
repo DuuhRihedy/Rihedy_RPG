@@ -287,16 +287,18 @@ async function searchSrdContext(query: string): Promise<string> {
   }
 }
 
-// ─── Contexto de Campanha ───────────────
+// ─── Contexto de Campanha (expandido com Documents + NPC backstories) ───
 
 async function getCampaignContext(campaignId: string): Promise<string> {
   try {
   const campaign = await prisma.campaign.findUnique({
     where: { id: campaignId },
     include: {
-      npcs: { include: { npc: true }, take: 10 },
+      npcs: { include: { npc: true }, take: 20 },
       sessions: { orderBy: { number: "desc" }, take: 3 },
       arcs: true,
+      documents: { take: 30, orderBy: { createdAt: "desc" } },
+      chapters: { orderBy: { sortOrder: "asc" }, take: 5 },
     },
   });
 
@@ -304,28 +306,53 @@ async function getCampaignContext(campaignId: string): Promise<string> {
 
   let ctx = `[CAMPANHA ATIVA] ${campaign.name}`;
   ctx += `\nEdição: ${campaign.edition} | Status: ${campaign.status}`;
-  if (campaign.description) ctx += `\nDescrição: ${campaign.description}`;
+  if (campaign.description) {
+    // Strip HTML tags for AI context
+    const descPlain = campaign.description.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    ctx += `\nDescrição: ${descPlain}`;
+  }
 
   if (campaign.npcs.length > 0) {
-    ctx += "\n\nNPCs da campanha:";
+    ctx += "\n\n=== NPCs da campanha ===";
     for (const cn of campaign.npcs) {
       const n = cn.npc;
-      ctx += `\n- ${n.name} (${n.race} ${n.class || ""} Nv${n.level || "?"}) — ${n.type === "ally" ? "Aliado" : n.type === "enemy" ? "Inimigo" : "Neutro"}`;
+      ctx += `\n- ${n.name} (${n.race || "?"} ${n.class || ""} Nv${n.level || "?"}) — ${n.type === "ally" ? "Aliado" : n.type === "enemy" ? "Inimigo" : "Neutro"}`;
+      if (n.backstory) ctx += `\n  Backstory: ${n.backstory.replace(/<[^>]*>/g, " ").substring(0, 300)}`;
+      if (n.gmNotes) ctx += `\n  Notas do Mestre: ${n.gmNotes.replace(/<[^>]*>/g, " ").substring(0, 200)}`;
     }
   }
 
   if (campaign.arcs.length > 0) {
-    ctx += "\n\nArcos narrativos:";
+    ctx += "\n\n=== Arcos narrativos ===";
     for (const arc of campaign.arcs) {
       ctx += `\n- ${arc.title} (${arc.status})`;
+      if (arc.description) ctx += `: ${arc.description.substring(0, 200)}`;
     }
   }
 
   if (campaign.sessions.length > 0) {
-    ctx += "\n\nÚltimas sessões:";
+    ctx += "\n\n=== Últimas sessões ===";
     for (const s of campaign.sessions) {
       ctx += `\n- Sessão ${s.number}: ${s.title}`;
       if (s.aiRecap) ctx += ` — ${s.aiRecap.substring(0, 200)}`;
+    }
+  }
+
+  // Documents (lore, história, locais, itens, facções, raças)
+  if (campaign.documents.length > 0) {
+    ctx += "\n\n=== LORE E WORLDBUILDING DA CAMPANHA ===";
+    for (const doc of campaign.documents) {
+      const docContent = doc.content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+      ctx += `\n\n[${doc.type.toUpperCase()}] ${doc.name}:\n${docContent.substring(0, 1500)}`;
+    }
+  }
+
+  // Chapters (módulos narrativos)
+  if (campaign.chapters.length > 0) {
+    ctx += "\n\n=== CAPÍTULOS / MÓDULOS NARRATIVOS ===";
+    for (const ch of campaign.chapters) {
+      const chContent = ch.content.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+      ctx += `\n\n[CAPÍTULO] ${ch.title}:\n${chContent.substring(0, 2000)}`;
     }
   }
 

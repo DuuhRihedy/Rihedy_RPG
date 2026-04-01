@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { getTodayRequestCount } from "@/lib/actions/assistant";
+import { logout } from "@/lib/actions/auth";
 
 export function Header() {
   const [requestCount, setRequestCount] = useState<number | null>(null);
@@ -55,7 +57,12 @@ export function Header() {
           <span>IA: {requestCount !== null ? requestCount : "…"}/250</span>
         </div>
         <ThemeToggle />
-        <button className="btn btn-ghost btn-sm">⚙️</button>
+        <Link href="/configuracoes" className="btn btn-ghost btn-sm" title="Configurações">⚙️</Link>
+        <form action={logout}>
+          <button type="submit" className="btn btn-ghost btn-sm header-logout-btn" title="Sair">
+            🚪
+          </button>
+        </form>
       </div>
     </header>
   );

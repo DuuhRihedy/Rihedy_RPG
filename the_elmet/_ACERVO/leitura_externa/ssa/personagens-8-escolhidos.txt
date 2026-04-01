@@ -1,0 +1,82 @@
+================================================================================
+📜 FICHA TÁTICA: OS 8 ESCOLHIDOS DA SSA (OPERACIONAL)
+================================================================================
+
+Este documento contém os dados rápidos dos 8 convocados para a missão inicial
+em Seymorth.
+
+--------------------------------------------------------------------------------
+[SSA-01] ANARKY (O Anarquista)
+--------------------------------------------------------------------------------
+PAPEL: Hacker / Líder de Comunicação
+ATRIBUTOS: INT 30 (+10), FOR 24 (+7), CAR 22 (+6)
+PERÍCIAS: Blefar, Tecnologia, Usar Computador (+20)
+ATAQUES: Chi (2d6+7) / Pulso Cibernético (1d10)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[SSA-04] MORLAN DRONIAS (A Destruidora)
+--------------------------------------------------------------------------------
+PAPEL: Engenheira / Especialista em Explosivos (Instalação da REDE)
+ATRIBUTOS: Base 20 (+5) em todos. RES: Imunidade a Dano Comum.
+PERÍCIAS: Tecnologia, Engenharia, Bombas (+20)
+ATAQUES: Espada (2d6+7) / Bombas Magnéticas (Vários efeitos)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[SSA-07] LUNA SAPHIRE (A Arquivadora)
+--------------------------------------------------------------------------------
+PAPEL: Especialista em Lore e História / Suporte Regional
+ATRIBUTOS: RES 30 (+10), CAR 20 (+5), SAB 18 (+4)
+PERÍCIAS: Diplomacia, Obter Informação, Lore, Item Mágico (+20)
+ATAQUES: Garras Mecânicas (2d4) / Esferas Táticas (1d4+4)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[SSA-10] PSYWAVE (Uma Lockwood)
+--------------------------------------------------------------------------------
+PAPEL: Infiltradora / Living Weapon
+ATRIBUTOS: AGI 20 (+5), INT 18 (+4), SAB 14 (+2)
+PERÍCIAS: Esconder, Mover Silêncio, Psiônico (+20)
+ATAQUES: 4 Correntes Vivas (2d6+10) / Esferas Psiônicas (1d8+5)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[SSA-13] LIU SATO (A Doutora / Healer)
+--------------------------------------------------------------------------------
+PAPEL: Médica / Sucessora Elmet da Luz
+ATRIBUTOS: SAB 18 (+4), RES 16 (+3). Sentir Motivação (+30)
+PERÍCIAS: Tratar Ferimentos, Religião, Item Mágico (+20)
+ATAQUES: Luvas de Choque (1d8+1) / 2 Pistolas (1d8/1d8)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[SSA-14] YILSA SOLARI (The Comet)
+--------------------------------------------------------------------------------
+PAPEL: Pilota do Iate / Especialista Cósmica
+ATRIBUTOS: AGI 20 (+5), FOR 16 (+3), INT 16 (+3)
+PERÍCIAS: Navegar, Pilotar, Dirigir (+20). Telemática (+20)
+ATAQUES: Bastão Cinético (2d8+3) / Rifle de Precisão (1d10+10)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[SSA-20] ALEX COLIN (Iron Cooper)
+--------------------------------------------------------------------------------
+PAPEL: Comandante Tático e Estrategista
+ATRIBUTOS: FOR 18 (+4), AGI 18 (+4), INT 16 (+3), SAB 16 (+3)
+PERÍCIAS: Geografia, Engenharia, Tática, Observar (+20)
+ATAQUES: Bastão de Ar (1d8) / Canhão de Pulso (2d6)
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+[SSA-21] THE HERO (Tratio)
+--------------------------------------------------------------------------------
+PAPEL: O Convidado Divino / Garantia de Ordem
+ATRIBUTOS: FOR 30 (+10), RES 30 (+10), CAR 20 (+5), AGI 20 (+5)
+HP: 300 / CA: 20 | Inviolável (Redução de Dano Absoluta)
+ATAQUES: Espada Luminosa (4d6+10) / Arco Luminoso (2d10+5)
+--------------------------------------------------------------------------------
+
+================================================================================
+ARQUIVO CONFIDENCIAL - USO EXCLUSIVO DO MESTRE
+================================================================================

@@ -2,10 +2,14 @@ import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
 
 function createPrismaClient() {
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
+  const rawUrl = process.env.DATABASE_URL;
+  if (!rawUrl) {
     throw new Error("DATABASE_URL is not set");
   }
+  
+  // Limpa aspas extras que o dotenv no Windows pode incluir "postgres://..."
+  const connectionString = rawUrl.replace(/^["']|["']$/g, "");
+  
   const adapter = new PrismaNeon({ connectionString });
   return new PrismaClient({ adapter });
 }

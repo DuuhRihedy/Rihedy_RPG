@@ -72,7 +72,10 @@ export default async function CampanhasPage() {
               </div>
               <h3 className="campaign-card-name">{campaign.name}</h3>
               {campaign.description && (
-                <p className="campaign-card-desc">{campaign.description}</p>
+                <div 
+                  className="campaign-card-desc" 
+                  dangerouslySetInnerHTML={{ __html: campaign.description }} 
+                />
               )}
               <div className="campaign-card-stats">
                 <span>📖 {campaign._count.sessions} sessões</span>

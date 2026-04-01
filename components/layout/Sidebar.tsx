@@ -39,6 +39,7 @@ const NAV_ITEMS = [
       { href: "/ferramentas/encontros", icon: "⚔️", label: "Encontros & Loot" },
       { href: "/ferramentas/calculadoras", icon: "🧮", label: "Calculadoras" },
       { href: "/ferramentas/mapas", icon: "🗺️", label: "Geradores de Mapas" },
+      { href: "/regras-da-casa", icon: "📜", label: "Regras da Casa" },
     ],
   },
   {

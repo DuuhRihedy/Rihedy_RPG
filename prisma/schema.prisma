@@ -644,3 +644,18 @@ model SrdLanguage {
   script          String? // "Common", "Elvish", etc.
   source          String  @default("SRD")
 }
+
+// ── Regras da Casa ─────────────────────
+model HouseRule {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  icon        String   @default("📜")
+  category    String   @default("geral") // combate, roleplay, exploração, magia, geral
+  summary     String?  // resumo curto para o card
+  content     String   // rich-text HTML (Blocksmith)
+  pinned      Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
