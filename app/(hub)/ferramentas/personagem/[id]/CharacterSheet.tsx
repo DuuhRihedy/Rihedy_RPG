@@ -14,6 +14,14 @@ const ABILITY_FULL: Record<string, string> = {
 
 function mod(score: number): number { return Math.floor((score - 10) / 2); }
 function fmtMod(m: number): string { return m >= 0 ? `+${m}` : `${m}`; }
+function safeJson<T>(value: string | null, fallback: T): T {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value) as T;
+  } catch {
+    return fallback;
+  }
+}
 
 interface CharacterData {
   id: string;
@@ -34,6 +42,7 @@ interface CharacterData {
   initiative: number; speed: number;
   bab: number | null; grapple: number | null;
   fortSave: number | null; refSave: number | null; willSave: number | null;
+  spellResistance?: number | null;
   proficiencyBonus: number | null;
   hitDice: string | null;
   deathSaveSuccesses: number; deathSaveFailures: number;
@@ -54,7 +63,6 @@ interface CharacterData {
 
 export default function CharacterSheet({ character: initial }: { character: CharacterData }) {
   const [char, setChar] = useState(initial);
-  const [editing, setEditing] = useState(false);
   const router = useRouter();
 
   async function saveHp(hp: number) {
@@ -69,11 +77,22 @@ export default function CharacterSheet({ character: initial }: { character: Char
     await updateCharacter(char.id, { status: next });
   }
 
-  const currency = char.currency ? JSON.parse(char.currency) : { cp: 0, sp: 0, gp: 0, pp: 0 };
-  const weaponsList = char.weapons ? JSON.parse(char.weapons) : [];
-  const equipList = char.equipment ? JSON.parse(char.equipment) : [];
-  const featsList = char.feats ? JSON.parse(char.feats) : [];
-  const featuresList = char.features ? JSON.parse(char.features) : [];
+  const currency = safeJson(char.currency, { cp: 0, sp: 0, gp: 0, pp: 0 });
+  const weaponsList = safeJson<any[]>(char.weapons, []);
+  const equipList = safeJson<any[]>(char.equipment, []);
+  const featsList = safeJson<any[]>(char.feats, []);
+  const featuresList = safeJson<any[]>(char.features, []);
+  const skillsData = safeJson<Record<string, Record<string, number>> | Record<string, number>>(char.skills, {});
+  const skillSections = Array.isArray(skillsData)
+    ? []
+    : Object.entries(skillsData).every(([, value]) => typeof value === "number")
+      ? [{ title: "Pericias", entries: Object.entries(skillsData as Record<string, number>) }]
+      : Object.entries(skillsData as Record<string, Record<string, number>>)
+          .map(([title, section]) => ({
+            title: title.charAt(0).toUpperCase() + title.slice(1),
+            entries: Object.entries(section || {}),
+          }))
+          .filter((section) => section.entries.length > 0);
   const is35 = char.edition === "3.5";
 
   return (
@@ -153,6 +172,24 @@ export default function CharacterSheet({ character: initial }: { character: Char
             <div className="sheet-stat-label">BAB</div>
           </div>
         )}
+        {is35 && char.grapple !== null && (
+          <div className="sheet-stat-box">
+            <div className="sheet-stat-value">{fmtMod(char.grapple)}</div>
+            <div className="sheet-stat-label">Agarrar</div>
+          </div>
+        )}
+        {is35 && char.damageReduction && (
+          <div className="sheet-stat-box">
+            <div className="sheet-stat-value">{char.damageReduction}</div>
+            <div className="sheet-stat-label">RD</div>
+          </div>
+        )}
+        {is35 && char.spellResistance !== null && (
+          <div className="sheet-stat-box">
+            <div className="sheet-stat-value">{char.spellResistance}</div>
+            <div className="sheet-stat-label">RM</div>
+          </div>
+        )}
         {!is35 && char.proficiencyBonus !== null && (
           <div className="sheet-stat-box">
             <div className="sheet-stat-value">+{char.proficiencyBonus}</div>
@@ -205,7 +242,7 @@ export default function CharacterSheet({ character: initial }: { character: Char
         ) : (
           <div className="sheet-saves-row">
             {ABILITY_NAMES.map((ab) => {
-              const saves = char.savingThrows ? JSON.parse(char.savingThrows) : {};
+              const saves = safeJson<Record<string, { proficient?: boolean; value?: number }>>(char.savingThrows, {});
               const key = ab === "intl" ? "int" : ab;
               const save = saves[key];
               return (
@@ -218,6 +255,21 @@ export default function CharacterSheet({ character: initial }: { character: Char
           </div>
         )}
       </div>
+
+      {/* Skills */}
+      {skillSections.length > 0 && (
+        <div className="sheet-section">
+          <h3 className="sheet-section-title">Pericias</h3>
+          <div className="sheet-feats-list">
+            {skillSections.map((section) => (
+              <div key={section.title} className="sheet-feat-item">
+                <strong>{section.title}</strong>
+                <p>{section.entries.map(([name, value]) => `${name} ${fmtMod(value)}`).join(" / ")}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Weapons */}
       {weaponsList.length > 0 && (
@@ -232,7 +284,10 @@ export default function CharacterSheet({ character: initial }: { character: Char
                 <tr key={i}>
                   <td>{w.name}</td>
                   <td>{fmtMod(w.attackBonus || 0)}</td>
-                  <td>{w.damage}</td>
+                  <td>
+                    {w.damage}
+                    {w.properties ? <div className="text-muted">{w.properties}</div> : null}
+                  </td>
                   <td>{w.type}</td>
                 </tr>
               ))}

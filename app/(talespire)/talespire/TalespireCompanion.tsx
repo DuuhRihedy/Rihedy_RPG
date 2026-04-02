@@ -106,6 +106,7 @@ export default function TalespireCompanion() {
   // ── Talespire API Init ─────────────────
   useEffect(() => {
     function onTsInit() {
+      console.log("🎲 Hub RPG: TaleSpire API Initialized");
       setTsConnected(true);
       // Get player name
       try {
@@ -123,7 +124,7 @@ export default function TalespireCompanion() {
                 const total = evaluateResult(group.result);
                 const entry: RollEntry = {
                   id: ++rollIdRef.current,
-                  expr: group.name || "???",
+                  expr: group.name || "Resultado",
                   result: total,
                   details: JSON.stringify(group.result),
                   timestamp: Date.now(),
@@ -146,8 +147,8 @@ export default function TalespireCompanion() {
           if (event?.kind === "hasInitialized") onTsInit();
         });
       }
-      // Check if already initialized
-      if (api?.players?.whoAmI) {
+      // Check if already initialized (common in dev/refresh)
+      if (api?.players?.whoAmI || api?.dice?.putDiceInTray) {
         onTsInit();
       }
     }
@@ -172,13 +173,21 @@ export default function TalespireCompanion() {
   const rollDice = useCallback((expr: string) => {
     const api = window.TS || window.com?.bouncyrock?.talespire;
 
-    if (api?.dice?.putDiceInTray) {
-      // Build roll descriptors and send to Talespire
-      api.dice.putDiceInTray([{ name: expr, roll: expr }], true).catch((e: any) => {
-        console.warn("TS dice error:", e);
+    if (api?.dice?.putDiceInTray && api?.dice?.makeRollDescriptors) {
+      try {
+        // TaleSpire exige RollDescriptors oficiais para a rolagem física
+        const descriptors = api.dice.makeRollDescriptors(expr);
+        // O segundo parâmetro 'true' faz com que os dados rolem imediatamente
+        api.dice.putDiceInTray(descriptors, true).catch((e: any) => {
+          console.warn("TaleSpire Dice API failed, falling back to local:", e);
+          rollLocal(expr);
+        });
+      } catch (e) {
+        console.error("Error creating roll descriptors:", e);
         rollLocal(expr);
-      });
+      }
     } else {
+      console.log("🎲 Hub RPG: No TS API found, using local roll.");
       rollLocal(expr);
     }
   }, []);

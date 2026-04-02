@@ -1,12 +1,25 @@
 {
-  "manifestVersion": "v1",
-  "interopId": "com.hubrpg.talespire.companion",
-  "name": "Hub RPG — Companion",
-  "description": "Centro de Comando do Mestre dentro do Talespire. Acervo SRD D&D 3.5/5e, rolador de dados, fichas de NPCs e Assistente IA — tudo sem sair do jogo.",
-  "version": "1.0.0",
+  "manifestVersion": 1,
+  "name": "Hub RPG - Companion",
   "entryPoint": "https://hub-rpg.vercel.app/talespire",
-  "apiVersion": "v0.1",
-  "extras": ["colorStyles", "fonts", "icons", "diceFinder"],
-  "capabilities": ["runInBackground"],
-  "loadTargetBehavior": "popup"
+  "summary": "Centro de Comando do Mestre dentro do TaleSpire. Acervo SRD D&D 3.5e/5e, rolador de dados, fichas de NPCs e Assistente IA.",
+  "version": "1.0.0",
+  "interop": {
+    "id": "073db1d0-ded7-4afb-9b08-c08d79e6e466"
+  },
+  "icons": {
+    "64x64": "/icon.png",
+    "notification": "/notification.png"
+  },
+  "environment": {
+    "loadTargetBehavior": "currentTab",
+    "capabilities": [
+      "runInBackground"
+    ],
+    "extras": [
+      "colorStyles",
+      "fonts",
+      "diceFinder"
+    ]
+  }
 }
