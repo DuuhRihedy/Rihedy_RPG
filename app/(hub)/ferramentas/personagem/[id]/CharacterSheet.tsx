@@ -42,6 +42,7 @@ interface CharacterData {
   initiative: number; speed: number;
   bab: number | null; grapple: number | null;
   fortSave: number | null; refSave: number | null; willSave: number | null;
+  damageReduction?: string | null;
   spellResistance?: number | null;
   proficiencyBonus: number | null;
   hitDice: string | null;
