@@ -8,7 +8,8 @@ links_relacionados:
   - "[[Plazamorth]]"
   - "[[PayMaster]]"
   - "[[Reverendo Oz]]"
-  - "[[Dragon's Roar]]"
+  - "[[Jaina]]"
+  - "[[Guilda dos Ladrões]]"
 ---
 
 # O Anfitrião (The Host) — Dono do Cassino Royal
@@ -30,9 +31,11 @@ Enigmático e carismático. Organiza e **conhece quase tudo sobre o próprio mun
 ## Relacionamentos
 - [[PayMaster]]: Tesoureiro do Cassino
 - [[Reverendo Oz]]: Sumo sacerdote do culto negro que mora no Cassino
-- [[Dragon's Roar]]: A "alma" da caverna
+- [[Jaina]]: **Braço armado** — a [[Guilda dos Ladrões]] faz o serviço sujo do Anfitrião em troca de **25% de todos os lucros da cidade**. Plazamorth funciona como um estado mafioso: Anfitrião governa com informação, Guilda executa com violência.
+- **Dragon's Roar**: Banda famosa residente do Cassino Royal. Cantam as passagens e histórias de [[Aiushta Enchantress]] (SSA-02, "A Atriz"). Entretenimento principal do estabelecimento.
 
 ## Notas do Mestre
 - O Anfitrião é o NPC "sabe-tudo" — cuidado para não entregar informação demais de graça
 - Tudo tem preço no Cassino Royal
 - Excelente quest-giver neutro
+- Apesar de achar que sabe tudo, a [[Irmandade dos Metamorfos]] (que opera sob a cidade) sabe infinitamente mais que ele

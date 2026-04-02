@@ -24,7 +24,7 @@ Apesar das guerras mancharem os céus, essa devastação nunca foi um mero insti
 
 Para não sucumbirem inteiramente à extinção ou à escravidão cega, as raças mais inteligentes organizaram **Clãs Menores Especializados**, que prestavam serviços de alto valor logístico aos dragões:
 * **Clã da Sabedoria/Tecnologia (A Ciência):** Composto por raças voltadas ao estudo de runas mágicas arcanas e táticas, como os *Ilumians*.
-* **Clã da Informação e Diplomacia (A Espionagem):** Composto por raças furtivas e inconstantes, primariamente os *Metamorfos (Changeling)*.
+* **Clã da Informação e Diplomacia (A Espionagem):** Composto por raças furtivas e inconstantes, primariamente os *Metamorfos (Changeling)*. Este clã nunca foi extinto — na era moderna (3.5), sobrevive como a **[[Irmandade dos Metamorfos]]**, operando nas sombras de [[Plazamorth]] com conhecimento de toda a história do universo desde a 1ª Guerra até o presente.
 
 > **Legado Histórico:** Milênios mais tarde (Na 4ª/5ª Era), a corporação militar Ditadora que conhecemos como **S.S.A.** usaria o modelo funcional exato desses antigos "Clãs Menores" invisíveis da 1ª Era para estruturar suas super-divisões globais (Setor de Finanças, Ciência, Guerra, Diplomacia, etc).
 

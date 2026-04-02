@@ -108,7 +108,7 @@ Criação dos 10 Irmãos — o Elmet perfeito em um único ser. Escolheu o lado 
 Ser interdimensional do Vácuo (onde anjos e demônios guerreiam). Aliado de Zuz e conselheiro de Dagoness. Ativou a Máquina Vida.
 
 ### [[Natzurune]]
-"Deus caído" — ser metade humano, metade animal, envolto em sombras. Venerado pelo culto negro em [[Plazamorth]]. Ancestral do [[Irmão Darius]] da Irmandade dos Metamorfos.
+**2º Elmet da Sombra** (publicamente conhecido como "Deus caído" — ser metade humano, metade animal, envolto em sombras). Venerado pelo culto negro em [[Plazamorth]], mas **nunca quis ser adorado** — os Elmets não eram deuses. Foi ressuscitado na Aventura 3 sem poderes Elmet. Ao retornar, **destruiu o próprio símbolo** em repúdio ao culto. Dissipou-se quando os Elmets derrotaram o 13º Irmão de vez. Ninguém no mundo sabe a verdade exceto a [[Irmandade dos Metamorfos]]. Ancestral do [[Irmão Darius]].
 
 ### [[Meta Hunter]]
 "A Morte", "Deus do Novo Mundo". Natureza completamente desconhecida. Acompanhado pelo "Soldado de Amarelo". Porta-voz do imperador de Elmetra.

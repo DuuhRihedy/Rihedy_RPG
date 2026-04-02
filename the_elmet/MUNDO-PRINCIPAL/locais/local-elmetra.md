@@ -13,7 +13,7 @@ links_relacionados:
 
 # Elmetra — O Mundo das Ilhas Flutuantes
 
-> *Cenário da 4ª Guerra / Aventura "A New World"*
+> *Cenário da 3ª Guerra / Aventura 3: \"A New World\"*
 
 ---
 

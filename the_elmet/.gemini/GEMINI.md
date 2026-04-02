@@ -406,6 +406,15 @@ links_relacionados: []
 
 ## 📐 Regras de Escrita para a IA
 
+### 🔴 REGRA MASTER (INVIOLÁVEL)
+> **Eduardo é o único criador de conteúdo dentro de `the_elmet/`.**
+> A IA **NUNCA** escreve arquivos diretamente no diretório `the_elmet/`.
+> O fluxo é: **Eduardo pede → IA sugere (como artefato de conversa) → Eduardo revisa → Eduardo decide se/como salvar.**
+> A IA pode: sugerir, revisar, organizar, apontar inconsistências, propor ideias.
+> A IA NÃO pode: criar, editar ou deletar arquivos em `the_elmet/` sem permissão explícita.
+
+### Regras Gerais
+
 Ao processar arquivos deste diretório, o assistente deve:
 
 1. **Respeitar a Retroatividade:** 17 anos de história significam que nomes e eventos antigos têm peso e **não devem ser alterados sem consulta** ao Eduardo

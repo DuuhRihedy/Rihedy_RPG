@@ -24,9 +24,14 @@ Mulher **respeitada em todo o continente**. Sua fama decorre de como seus servi�
 Controla **[[Project X]]** e **[[Project 23]]** — dois protótipos androides cruéis e destrutivos. **Nada pode parar os 2 monstros a não ser a própria Jaina**.
 
 ## Motivações
-- **Quer:** Manter a reputação impecável da Guilda
+- **Quer:** Manter a reputação impecável da Guilda e o domínio operacional de Plazamorth
 - **Teme:** *(Desconhecido)*
 - **Segredo:** Quem criou os androides? De onde veio essa tecnologia?
+
+## Relacionamentos
+- [[O Anfitrião]]: **Patrão de fato** — a Guilda faz o serviço sujo do Cassino Royal e em troca leva **25% de todos os lucros da cidade**. Plazamorth é um estado mafioso com dois pilares: informação (Anfitrião) e execução (Guilda).
+- [[Project X]]: Guarda-costas e matador primário
+- [[Project 23]]: Patrulheira e rastreadora
 
 ## Notas do Mestre
 - Jaina = perigo absoluto como inimiga, aliada valiosíssima se convencida

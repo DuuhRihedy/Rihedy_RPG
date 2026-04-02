@@ -36,6 +36,12 @@ Antigamente, Plazamorth era o centro do **Culto Negro**, onde veneravam um "Deus
 
 A cidade deixou de ser formalmente o centro do culto após o seu símbolo sagrado desaparecer misteriosamente de seu local de guarda. Desde então, a religiosidade deu lugar ao pragmatismo criminoso e ao entretenimento.
 
+### Estrutura de Poder Real
+Plazamorth funciona como um **estado mafioso de dois pilares**:
+- **[[O Anfitrião]]** (Cassino Royal) — governa com **informação**
+- **[[Jaina]] / [[Guilda dos Ladrões]]** — executa com **violência**
+- A Guilda faz o serviço sujo do Anfitrião e em troca leva **25% de todos os lucros da cidade**.
+
 ---
 
 ## Pontos de Interesse
@@ -58,7 +64,9 @@ Um local arqueológico onde resquícios do antigo culto a Natzurune e da Era dos
 
 - Plazamorth é o coração do submundo de Seymorth.
 - A instalação da REDE pela SSA aqui será vista como uma ameaça ao anonimato dos negócios da Guilda.
-- O sumiço do símbolo de Natzurune é um mistério aberto que pode ser explorado na campanha.
+- **VERDADE OCULTA (Símbolo):** O símbolo de Natzurune NÃO foi roubado — foi **destruído pelo próprio Natzurune** em repúdio ao culto. Ninguém no mundo sabe disso exceto a [[Irmandade dos Metamorfos]].
+- **VERDADE OCULTA (Natzurune):** Natzurune NÃO era um "deus caído". Era o **2º portador do poder Elmet de Sombra**. Foi ressuscitado na Aventura 3 sem poderes Elmet e dissipou-se quando os Elmets derrotaram o 13º Irmão de vez. Os Elmets nunca quiseram ser adorados — não eram deuses.
+- **VERDADE OCULTA (Poder):** A [[Irmandade dos Metamorfos]] (subterrânea) sabe mais que o [[O Anfitrião|Anfitrião]] (que acha que sabe tudo) e mais que a própria SSA.
 
 ---
 

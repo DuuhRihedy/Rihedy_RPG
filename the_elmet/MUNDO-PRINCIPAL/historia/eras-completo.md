@@ -57,11 +57,13 @@ ultima_atualizacao: 2026-03-28
 - **SSA:** Organização mundial que busca a unificação e pacificação dos continentes.
 - Os Elmets originais deixam de existir, cessando o ciclo de reencarnação.
 
-## 4ª Era — O Novo Mundo ("A New World")
+## 4ª Era — O Avanço Pós-SSA
 - O estágio avançado do mundo pós-reunificação da SSA
 - **[[Meta Hunter]]** ("O Caçador", 11º Irmão) surge como figura misteriosa
 - **[[Ancient]]** — último dragão vivo no universo
-- → **4ª Guerra: Guerra dos Mortais**
+- → **4ª Guerra: Guerra dos Mortais** *(Aventura 4 — planejada para o futuro)*
+
+> **Nota:** "A New World" é o nome da **Aventura 3** (3ª Era / Elmetra). A 4ª Era é um período posterior, cuja campanha jogável ainda não foi definida.
 
 ---
 
