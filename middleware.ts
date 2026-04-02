@@ -5,9 +5,14 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get("hub-rpg-session")?.value;
   const { pathname } = request.nextUrl;
   const isLoginPage = pathname === "/login";
+  const isTalespireApi =
+    pathname.startsWith("/api/characters") ||
+    pathname.startsWith("/api/npcs") ||
+    pathname.startsWith("/api/assistant/chat");
   const isPublicApi = 
     pathname.startsWith("/api/health") || 
     pathname.startsWith("/api/srd") || 
+    isTalespireApi ||
     pathname.startsWith("/talespire") || 
     pathname === "/manifest.webmanifest";
 

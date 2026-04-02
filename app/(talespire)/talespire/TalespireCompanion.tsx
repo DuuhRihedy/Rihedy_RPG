@@ -13,6 +13,7 @@ declare global {
   interface Window {
     TS: any;
     com: any;
+    TaleSpire: any;
   }
 }
 
@@ -102,19 +103,40 @@ export default function TalespireCompanion() {
   const [chatInput, setChatInput] = useState("");
   const [chatLoading, setChatLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const getTsApi = useCallback(() => {
+    if (typeof window === "undefined") return null;
+    return window.TS || window.TaleSpire || window.com?.bouncyrock?.talespire || null;
+  }, []);
 
   // ── Talespire API Init ─────────────────
   useEffect(() => {
+    let initialized = false;
+
+    function hasTsApi(api: any) {
+      return !!(
+        api?.players?.whoAmI ||
+        api?.dice?.putDiceInTray ||
+        api?.dice?.makeRollDescriptors ||
+        api?.symbiote?.onStateChangeEvent
+      );
+    }
+
     function onTsInit() {
+      if (initialized) return;
+      initialized = true;
       console.log("🎲 Hub RPG: TaleSpire API Initialized");
       setTsConnected(true);
       // Get player name
       try {
-        const api = window.TS || window.com?.bouncyrock?.talespire;
+        const api = getTsApi();
         if (api?.players?.whoAmI) {
           api.players.whoAmI().then((me: any) => {
             setTsPlayer(me?.player?.name || "Mestre");
+          }).catch(() => {
+            setTsPlayer("Mestre");
           });
+        } else {
+          setTsPlayer("Mestre");
         }
         // Subscribe to dice results
         if (api?.dice?.onRollResults) {
@@ -141,18 +163,29 @@ export default function TalespireCompanion() {
 
     // Listen for TS init event
     if (typeof window !== "undefined") {
-      const api = window.TS || window.com?.bouncyrock?.talespire;
+      const api = getTsApi();
       if (api?.symbiote?.onStateChangeEvent) {
         api.symbiote.onStateChangeEvent.push((event: any) => {
           if (event?.kind === "hasInitialized") onTsInit();
         });
       }
       // Check if already initialized (common in dev/refresh)
-      if (api?.players?.whoAmI || api?.dice?.putDiceInTray) {
+      if (hasTsApi(api)) {
         onTsInit();
       }
     }
-  }, []);
+    const interval = window.setInterval(() => {
+      const api = getTsApi();
+      if (hasTsApi(api)) {
+        onTsInit();
+        window.clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => {
+      window.clearInterval(interval);
+    };
+  }, [getTsApi]);
 
   // ── Evaluate dice result tree ──────────
   function evaluateResult(node: any): number {
@@ -171,7 +204,7 @@ export default function TalespireCompanion() {
 
   // ── Roll Dice ──────────────────────────
   const rollDice = useCallback((expr: string) => {
-    const api = window.TS || window.com?.bouncyrock?.talespire;
+    const api = getTsApi();
 
     if (api?.dice?.putDiceInTray && api?.dice?.makeRollDescriptors) {
       try {
@@ -190,7 +223,7 @@ export default function TalespireCompanion() {
       console.log("🎲 Hub RPG: No TS API found, using local roll.");
       rollLocal(expr);
     }
-  }, []);
+  }, [getTsApi]);
 
   function rollLocal(expr: string) {
     // Local fallback when not in Talespire
@@ -250,6 +283,9 @@ export default function TalespireCompanion() {
       if (res.ok) {
         const data = await res.json();
         setNpcs(data.npcs || []);
+      } else {
+        console.error("NPCs API returned", res.status);
+        setNpcs([]);
       }
     } catch (e) {
       console.error("NPCs load error:", e);
@@ -270,6 +306,9 @@ export default function TalespireCompanion() {
       if (res.ok) {
         const data = await res.json();
         setChars(data.characters || []);
+      } else {
+        console.error("Characters API returned", res.status);
+        setChars([]);
       }
     } catch (e) {
       console.error("Characters load error:", e);
@@ -284,11 +323,11 @@ export default function TalespireCompanion() {
 
   // ── Send to Talespire Chat ─────────────
   const sendToChat = useCallback((text: string) => {
-    const api = window.TS || window.com?.bouncyrock?.talespire;
+    const api = getTsApi();
     if (api?.chat?.send) {
       api.chat.send(text);
     }
-  }, []);
+  }, [getTsApi]);
 
   // ── AI Chat ────────────────────────────
   const sendAiMessage = useCallback(async () => {
