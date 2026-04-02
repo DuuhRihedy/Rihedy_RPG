@@ -202,33 +202,9 @@ export default function TalespireCompanion() {
     return 0;
   }
 
-  // ── Roll Dice ──────────────────────────
-  const rollDice = useCallback((expr: string) => {
-    const api = getTsApi();
-
-    if (api?.dice?.putDiceInTray && api?.dice?.makeRollDescriptors) {
-      try {
-        // TaleSpire exige RollDescriptors oficiais para a rolagem física
-        const descriptors = api.dice.makeRollDescriptors(expr);
-        // O segundo parâmetro 'true' faz com que os dados rolem imediatamente
-        api.dice.putDiceInTray(descriptors, true).catch((e: any) => {
-          console.warn("TaleSpire Dice API failed, falling back to local:", e);
-          rollLocal(expr);
-        });
-      } catch (e) {
-        console.error("Error creating roll descriptors:", e);
-        rollLocal(expr);
-      }
-    } else {
-      console.log("🎲 Hub RPG: No TS API found, using local roll.");
-      rollLocal(expr);
-    }
-  }, [getTsApi]);
-
-  function rollLocal(expr: string) {
-    // Local fallback when not in Talespire
-    const match = expr.match(/(\d+)?d(\d+)([+-]\d+)?/i);
-    if (!match) return;
+  function buildRollFromExpression(expr: string) {
+    const match = expr.trim().match(/^(\d+)?d(\d+)([+-]\d+)?$/i);
+    if (!match) return null;
 
     const count = parseInt(match[1] || "1");
     const sides = parseInt(match[2]);
@@ -236,20 +212,84 @@ export default function TalespireCompanion() {
 
     let total = mod;
     const rolls: number[] = [];
+
     for (let i = 0; i < count; i++) {
-      const r = Math.floor(Math.random() * sides) + 1;
-      rolls.push(r);
-      total += r;
+      const value = Math.floor(Math.random() * sides) + 1;
+      rolls.push(value);
+      total += value;
     }
 
+    const details = `[${rolls.join(", ")}]${mod ? ` ${mod > 0 ? "+" : ""}${mod}` : ""}`;
+    const diceNode = { kind: `d${sides}`, results: rolls };
+    const resultNode = mod
+      ? { operator: "+", operands: [diceNode, { value: mod }] }
+      : diceNode;
+
+    return {
+      total,
+      details,
+      resultsGroups: [{ name: expr, result: resultNode }],
+    };
+  }
+
+  function pushLocalRoll(expr: string, total: number, details: string) {
     const entry: RollEntry = {
       id: ++rollIdRef.current,
       expr,
       result: total,
-      details: `[${rolls.join(", ")}]${mod ? ` ${mod > 0 ? "+" : ""}${mod}` : ""}`,
+      details,
       timestamp: Date.now(),
     };
     setRollHistory((prev) => [entry, ...prev].slice(0, 50));
+  }
+
+  // ── Roll Dice ──────────────────────────
+  const rollDice = useCallback((expr: string) => {
+    const api = getTsApi();
+    const builtRoll = buildRollFromExpression(expr);
+
+    if (api?.dice?.putDiceInTray && api?.dice?.makeRollDescriptors) {
+      try {
+        // TaleSpire exige RollDescriptors oficiais para a rolagem física
+        const descriptors = api.dice.makeRollDescriptors(expr);
+        // O segundo parâmetro 'true' faz com que os dados rolem imediatamente
+        api.dice.putDiceInTray(descriptors, false).catch((e: any) => {
+          console.warn("TaleSpire Dice API failed, falling back to symbiote result:", e);
+          if (builtRoll && api?.dice?.sendDiceResult) {
+            api.dice.sendDiceResult(builtRoll.resultsGroups).catch((sendError: any) => {
+              console.warn("sendDiceResult failed, using local history only:", sendError);
+            });
+            pushLocalRoll(expr, builtRoll.total, builtRoll.details);
+            return;
+          }
+          rollLocal(expr);
+        });
+      } catch (e) {
+        console.error("Error creating roll descriptors:", e);
+        if (builtRoll && api?.dice?.sendDiceResult) {
+          api.dice.sendDiceResult(builtRoll.resultsGroups).catch((sendError: any) => {
+            console.warn("sendDiceResult failed, using local history only:", sendError);
+          });
+          pushLocalRoll(expr, builtRoll.total, builtRoll.details);
+          return;
+        }
+        rollLocal(expr);
+      }
+    } else if (builtRoll && api?.dice?.sendDiceResult) {
+      api.dice.sendDiceResult(builtRoll.resultsGroups).catch((e: any) => {
+        console.warn("sendDiceResult failed, using local history only:", e);
+      });
+      pushLocalRoll(expr, builtRoll.total, builtRoll.details);
+    } else {
+      console.log("🎲 Hub RPG: No TS API found, using local roll.");
+      rollLocal(expr);
+    }
+  }, [getTsApi]);
+
+  function rollLocal(expr: string) {
+    const builtRoll = buildRollFromExpression(expr);
+    if (!builtRoll) return;
+    pushLocalRoll(expr, builtRoll.total, builtRoll.details);
   }
 
   // ── SRD Search ─────────────────────────
